@@ -13,6 +13,7 @@
     "core-js": "^3.34.0",
     "pinia-plugin-persistedstate": "^4.7.1",
     "roboto-fontface": "*",
+    "vee-validate": "^4.15.1",
     "vue": "^3.4.21",
     "vuetify": "^3.5.8"
   },

@@ -1,40 +1,102 @@
 <template>
-  <v-footer height="40" app>
-    <a
-      v-for="item in items"
-      :key="item.title"
-      :href="item.href"
-      :title="item.title"
-      class="d-inline-block mx-2 social-link"
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      <v-icon
-        :icon="item.icon"
-        :size="item.icon === '$vuetify' ? 24 : 16"
-      />
-    </a>
+  <v-footer class="bg-dark-grey">
+    <v-container>
+      <v-row justify="space-between">
+        
+        <v-col cols="12" sm="4" md="3" >
+          <v-toolbar-title class="font-weight-bold text-primary mb-4">
+            🐾 Animal Shelter
+          </v-toolbar-title>
+          
+          <div class="d-flex flex-column align-start">
+            <v-btn variant="text" to="/about-us">About Us</v-btn>
+            <v-btn variant="text" to="/help-us" >Help us</v-btn>
+            <v-btn variant="text" to="/find-a-pet" >Find a Pet</v-btn>
+            <v-btn variant="text" to="/favorites" >Favorites</v-btn>
+          </div>
+        </v-col>
 
-    <div
-      class="text-caption text-disabled"
-      style="position: absolute; right: 16px;"
-    >
-      &copy; 2016-{{ (new Date()).getFullYear() }} <span class="d-none d-sm-inline-block">Vuetify, LLC</span>
-      —
-      <a
-        class="text-decoration-none on-surface"
-        href="https://vuetifyjs.com/about/licensing/"
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        MIT License
-      </a>
-    </div>
+        <v-col cols="12" sm="6">
+          <h3 class="text-h6 font-weight-bold mb-2">Subscribe</h3>
+          <v-form @submit.prevent="submit">
+            <v-text-field 
+              v-model="email" 
+              :error-messages="emailError" 
+              label="E-mail"
+              variant="outlined"
+              density="comfortable"
+              rounded="lg"
+              required
+              class="mb-2"
+            ></v-text-field>
+
+            <v-btn color="primary" variant="elevated" rounded="lg" type="submit" class="px-6 mb-4">
+              Join
+            </v-btn>
+            
+            <v-checkbox 
+              density="compact"
+              hide-details
+              class="text-caption text-medium-emphasis"
+              v-model="checkbox1"
+            >
+              <template #label>
+                <span class="text-caption">
+                  By clicking Join and send I agree to the processing of my personal data.
+                </span>
+              </template>
+            </v-checkbox>
+          </v-form>
+        </v-col>
+
+        <v-col
+          cols="12"
+          sm="2"
+          class="text-left"
+        >
+          <a
+            v-for="item in items"
+            :key="item.title"
+            :href="item.href"
+            :title="item.title"
+            class="d-inline-block mx-2 social-link"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <v-icon
+              :icon="item.icon"
+              :size="item.icon === '$vuetify' ? 32 : 24"
+            />
+          </a>
+        </v-col>
+      </v-row>
+
+      <!-- botton row with desired functional about privacy e.t.c -->
+      <v-row class="justify-center">
+        <v-col
+          cols="3">
+          <p>&copy; {{ new Date().getFullYear() }}</p>
+        </v-col>
+        <v-col cols="3">
+          <a href="/" variant="text" size="small" class="text-none">Privacy Policy</a>
+        </v-col>
+        <v-col cols="3">
+          <a href="/" variant="text" size="small" class="text-none">Terms of Use</a>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-footer>
 </template>
 
 <script setup lang="ts">
-  const items = [
+import { useField, useForm } from 'vee-validate'
+import { ref, watch } from 'vue';
+const checkbox1  = ref(false);
+
+watch(checkbox1 , (newValue) => {
+  console.log(newValue)
+})
+const items = [
     {
       title: 'Vuetify Documentation',
       icon: `$vuetify`,
@@ -65,15 +127,27 @@
       icon: `mdi-reddit`,
       href: 'https://reddit.com/r/vuetifyjs',
     },
-  ]
+  ];
+
+const { handleSubmit } = useForm({
+  validationSchema: {
+    email(value: string) {
+      if (/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i.test(value)) return true
+      return 'Must be a valid e-mail.'
+    }
+  },
+})
+
+
+
+
+const { value: email, errorMessage: emailError } = useField<string>('email')
+
+const submit = handleSubmit(values => {
+  alert(JSON.stringify(values, null, 2))
+})
 </script>
 
 <style scoped lang="sass">
-  .social-link :deep(.v-icon)
-    color: rgba(var(--v-theme-on-background), var(--v-disabled-opacity))
-    text-decoration: none
-    transition: .2s ease-in-out
 
-    &:hover
-      color: rgba(25, 118, 210, 1)
 </style>
