@@ -1,43 +1,66 @@
 <template>
-  <v-footer class="bg-dark-grey">
+  <v-footer class="bg-dark grey text-white py-10">
     <v-container>
       <v-row justify="space-between">
         
-        <v-col cols="12" sm="4" md="3" >
-          <v-toolbar-title class="font-weight-bold text-primary mb-4">
+        <v-col cols="7" sm="4" md="3" class="order-1">
+          <v-toolbar-title class="font-weight-bold text-primary mb-4 px-0">
             🐾 Animal Shelter
           </v-toolbar-title>
           
-          <div class="d-flex flex-column align-start">
-            <v-btn variant="text" to="/about-us">About Us</v-btn>
-            <v-btn variant="text" to="/help-us" >Help us</v-btn>
-            <v-btn variant="text" to="/find-a-pet" >Find a Pet</v-btn>
-            <v-btn variant="text" to="/favorites" >Favorites</v-btn>
+          <div class="d-flex flex-column align-start custom-links">
+            <v-btn variant="text" to="/about-us" class="text-none px-0 text-grey-lighten-1">About Us</v-btn>
+            <v-btn variant="text" to="/help-us" class="text-none px-0 text-grey-lighten-1">Help us</v-btn>
+            <v-btn variant="text" to="/find-a-pet" class="text-none px-0 text-grey-lighten-1">Find a Pet</v-btn>
+            <v-btn variant="text" to="/favorites" class="text-none px-0 text-grey-lighten-1">Favorites</v-btn>
           </div>
         </v-col>
 
-        <v-col cols="12" sm="6">
+        <v-col
+          cols="5"
+          sm="2"
+          class="order-2 order-sm-3 d-flex flex-column align-end align-sm-center justify-start pt-4 pt-sm-0"
+        >
+          <div class="d-flex flex-column align-end align-sm-center gap-2">
+            <a
+              v-for="item in items"
+              :key="item.title"
+              :href="item.href"
+              :title="item.title"
+              class="d-inline-block my-1 social-link text-white"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <v-icon
+                :icon="item.icon"
+                :size="item.icon === '$vuetify' ? 32 : 24"
+              />
+            </a>
+          </div>
+        </v-col>
+
+        <v-col cols="12" sm="6" class="order-3 order-sm-2 mt-6 mt-sm-0">
           <h3 class="text-h6 font-weight-bold mb-2">Subscribe</h3>
           <v-form @submit.prevent="submit">
             <v-text-field 
               v-model="email" 
               :error-messages="emailError" 
               label="E-mail"
-              variant="outlined"
+              variant="underlined"
               density="comfortable"
-              rounded="lg"
               required
-              class="mb-2"
-              :disabled="!checkbox1"
+              class="mb-2 theme-dark-input"
+              :disabled="!isReadyToJoin"
             ></v-text-field>
 
             <v-btn
-              color="primary"
-              variant="elevated"
+              color="white"
+              variant="outlined"
               rounded="lg"
               type="submit"
-              class="px-6 mb-4"
-              :disabled="!checkbox1"
+              block
+              class="px-6 mb-4 text-none"
+              :disabled="!isReadyToJoin"
             >
               Join
             </v-btn>
@@ -45,11 +68,11 @@
             <v-checkbox 
               density="compact"
               hide-details
-              class="text-caption text-medium-emphasis"
-              v-model="checkbox1"
+              v-model="isReadyToJoin"
+              class="text-caption text-grey-lighten-1"
             >
               <template #label>
-                <span class="text-caption">
+                <span class="text-caption text-grey-lighten-1">
                   By clicking Join and send I agree to the processing of my personal data.
                 </span>
               </template>
@@ -57,39 +80,17 @@
           </v-form>
         </v-col>
 
-        <v-col
-          cols="12"
-          sm="2"
-          class="d-flex align-center justify-center  flex-column"
-        >
-          <a
-            v-for="item in items"
-            :key="item.title"
-            :href="item.href"
-            :title="item.title"
-            class="d-inline-block mx-2 social-link"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <v-icon
-              :icon="item.icon"
-              :size="item.icon === '$vuetify' ? 32 : 24"
-            />
-          </a>
-        </v-col>
       </v-row>
 
-      <!-- botton row with desired functional about privacy e.t.c -->
-      <v-row class="justify-center">
-        <v-col
-          cols="3">
-          <p>&copy; {{ new Date().getFullYear() }}</p>
+      <v-row class="text-caption text-grey-lighten-1 text-center text-sm-left" align="center" justify="center">
+        <v-col cols="4" sm="4" class="text-sm-right ">
+          <a>&copy; {{ new Date().getFullYear() }}</a>
         </v-col>
-        <v-col cols="3">
-          <a href="/" variant="text" size="small" class="text-none">Privacy Policy</a>
+        <v-col cols="4" sm="4" class="text-sm-center text-center">
+          <a href="/privacy-policy" class="text-none text-grey-lighten-1">Privacy Policy</a>
         </v-col>
-        <v-col cols="3">
-          <a href="/" variant="text" size="small" class="text-none">Terms of Use</a>
+        <v-col cols="4" sm="4" class="text-sm-left text-left">
+          <a href="/terms-of-use" class="text-none text-grey-lighten-1">Terms of Use</a>
         </v-col>
       </v-row>
     </v-container>
@@ -97,45 +98,23 @@
 </template>
 
 <script setup lang="ts">
-import { useField, useForm } from 'vee-validate'
-import { ref, watch } from 'vue';
-const checkbox1  = ref(false);
+import { useField, useForm } from 'vee-validate';
+import { ref } from 'vue';
 
-watch(checkbox1 , (newValue) => {
-  console.log(newValue)
-})
 const items = [
     {
       title: 'Vuetify Documentation',
-      icon: `$vuetify`,
-      href: 'https://vuetifyjs.com/',
+      icon: 'mdi-facebook',
+      href: 'https://facebook.com',
     },
     {
       title: 'Vuetify Support',
-      icon: 'mdi-shield-star-outline',
-      href: 'https://support.vuetifyjs.com/',
-    },
-    {
-      title: 'Vuetify X',
-      icon: `svg:M2.04875 3.00002L9.77052 13.3248L1.99998 21.7192H3.74882L10.5519 14.3697L16.0486 21.7192H22L13.8437 10.8137L21.0765 3.00002H19.3277L13.0624 9.76874L8.0001 3.00002H2.04875ZM4.62054 4.28821H7.35461L19.4278 20.4308H16.6937L4.62054 4.28821Z`,
-      href: 'https://x.com/vuetifyjs',
-    },
-    {
-      title: 'Vuetify GitHub',
-      icon: `mdi-github`,
-      href: 'https://github.com/vuetifyjs/vuetify',
-    },
-    {
-      title: 'Vuetify Discord',
-      icon: `mdi-discord`,
-      href: 'https://community.vuetifyjs.com/',
-    },
-    {
-      title: 'Vuetify Reddit',
-      icon: `mdi-reddit`,
-      href: 'https://reddit.com/r/vuetifyjs',
-    },
+      icon: 'mdi-instagram',
+      href: 'https://instagram.com',
+    }
   ];
+
+const isReadyToJoin = ref(false);
 
 const { handleSubmit } = useForm({
   validationSchema: {
@@ -146,9 +125,6 @@ const { handleSubmit } = useForm({
   },
 })
 
-
-
-
 const { value: email, errorMessage: emailError } = useField<string>('email')
 
 const submit = handleSubmit(values => {
@@ -156,6 +132,20 @@ const submit = handleSubmit(values => {
 })
 </script>
 
-<style scoped lang="sass">
+<style scoped>
+.gap-2 {
+  gap: 8px;
+}
+.decoration-none {
+  text-decoration: none;
+}
+.decoration-none:hover {
+  text-decoration: underline;
+}
 
+.custom-links .v-btn {
+  height: auto !important;
+  min-height: 2rem;
+  padding: 0;
+}
 </style>
