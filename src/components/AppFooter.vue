@@ -28,9 +28,17 @@
               rounded="lg"
               required
               class="mb-2"
+              :disabled="!checkbox1"
             ></v-text-field>
 
-            <v-btn color="primary" variant="elevated" rounded="lg" type="submit" class="px-6 mb-4">
+            <v-btn
+              color="primary"
+              variant="elevated"
+              rounded="lg"
+              type="submit"
+              class="px-6 mb-4"
+              :disabled="!checkbox1"
+            >
               Join
             </v-btn>
             
@@ -52,7 +60,7 @@
         <v-col
           cols="12"
           sm="2"
-          class="text-left"
+          class="d-flex align-center justify-center  flex-column"
         >
           <a
             v-for="item in items"
