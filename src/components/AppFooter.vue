@@ -55,7 +55,7 @@
             >
               <v-icon
                 :icon="item.icon"
-                :size="item.icon === '$vuetify' ? 32 : 24"
+                :size="item.icon === `$vuetify` ? 32 : 24"
               />
             </a>
           </div>
@@ -146,19 +146,19 @@
 </template>
 
 <script setup lang="ts">
-import { useField, useForm } from 'vee-validate';
-import { ref } from 'vue';
+import { useField, useForm } from "vee-validate";
+import { ref } from "vue";
 
 const items = [
     {
-      title: 'Vuetify Documentation',
-      icon: 'mdi-facebook',
-      href: 'https://facebook.com',
+      title: "Vuetify Documentation",
+      icon: "mdi-facebook",
+      href: "https://facebook.com",
     },
     {
-      title: 'Vuetify Support',
-      icon: 'mdi-instagram',
-      href: 'https://instagram.com',
+      title: "Vuetify Support",
+      icon: "mdi-instagram",
+      href: "https://instagram.com",
     }
   ];
 
@@ -167,17 +167,17 @@ const isReadyToJoin = ref(false);
 const { handleSubmit } = useForm({
   validationSchema: {
     email(value: string) {
-      if (/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i.test(value)) return true
-      return 'Must be a valid e-mail.'
+      if (/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i.test(value)) return true;
+      return "Must be a valid e-mail.";
     }
   },
-})
+});
 
-const { value: email, errorMessage: emailError } = useField<string>('email')
+const { value: email, errorMessage: emailError } = useField<string>("email");
 
 const submit = handleSubmit(values => {
-  alert(JSON.stringify(values, null, 2))
-})
+  alert(JSON.stringify(values, null, 2));
+});
 </script>
 
 <style scoped>
