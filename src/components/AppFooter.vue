@@ -2,17 +2,37 @@
   <v-footer class="bg-dark grey text-white py-10">
     <v-container>
       <v-row justify="space-between">
-        
-        <v-col cols="7" sm="4" md="3" class="order-1">
+        <v-col
+          cols="7"
+          sm="4"
+          md="3"
+          class="order-1"
+        >
           <v-toolbar-title class="font-weight-bold text-primary mb-4 px-0">
             🐾 Animal Shelter
           </v-toolbar-title>
           
           <div class="d-flex flex-column align-start custom-links">
-            <v-btn variant="text" to="/about-us" class="text-none px-0 text-grey-lighten-1">About Us</v-btn>
-            <v-btn variant="text" to="/help-us" class="text-none px-0 text-grey-lighten-1">Help us</v-btn>
-            <v-btn variant="text" to="/find-a-pet" class="text-none px-0 text-grey-lighten-1">Find a Pet</v-btn>
-            <v-btn variant="text" to="/favorites" class="text-none px-0 text-grey-lighten-1">Favorites</v-btn>
+            <v-btn
+              variant="text"
+              to="/about-us"
+              class="text-none px-0 text-grey-lighten-1"
+            >About Us</v-btn>
+            <v-btn
+              variant="text"
+              to="/help-us"
+              class="text-none px-0 text-grey-lighten-1"
+            >Help us</v-btn>
+            <v-btn
+              variant="text"
+              to="/find-a-pet"
+              class="text-none px-0 text-grey-lighten-1"
+            >Find a Pet</v-btn>
+            <v-btn
+              variant="text"
+              to="/favorites"
+              class="text-none px-0 text-grey-lighten-1"
+            >Favorites</v-btn>
           </div>
         </v-col>
 
@@ -39,7 +59,11 @@
           </div>
         </v-col>
 
-        <v-col cols="12" sm="6" class="order-3 order-sm-2 mt-6 mt-sm-0">
+        <v-col
+          cols="12"
+          sm="6"
+          class="order-3 order-sm-2 mt-6 mt-sm-0"
+        >
           <h3 class="text-h6 font-weight-bold mb-2">Subscribe</h3>
           <v-form @submit.prevent="submit">
             <v-text-field 
@@ -82,15 +106,37 @@
 
       </v-row>
 
-      <v-row class="text-caption text-grey-lighten-1 text-center text-sm-left" align="center" justify="center">
-        <v-col cols="4" sm="4" class="text-sm-right ">
+      <v-row
+        class="text-caption text-grey-lighten-1 text-center text-sm-left"
+        align="center"
+        justify="center"
+      >
+        <v-col
+          cols="4"
+          sm="4"
+          class="text-sm-right"
+        >
           <a>&copy; {{ new Date().getFullYear() }}</a>
         </v-col>
-        <v-col cols="4" sm="4" class="text-sm-center text-center">
-          <a href="/privacy-policy" class="text-none text-grey-lighten-1">Privacy Policy</a>
+        <v-col
+          cols="4"
+          sm="4"
+          class="text-sm-center text-center"
+        >
+          <a
+            href="/privacy-policy"
+            class="text-none text-grey-lighten-1"
+          >Privacy Policy</a>
         </v-col>
-        <v-col cols="4" sm="4" class="text-sm-left text-left">
-          <a href="/terms-of-use" class="text-none text-grey-lighten-1">Terms of Use</a>
+        <v-col
+          cols="4"
+          sm="4"
+          class="text-sm-left text-left"
+        >
+          <a
+            href="/terms-of-use"
+            class="text-none text-grey-lighten-1"
+          >Terms of Use</a>
         </v-col>
       </v-row>
     </v-container>
