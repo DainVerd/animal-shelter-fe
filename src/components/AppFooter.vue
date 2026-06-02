@@ -1,5 +1,5 @@
 <template>
-  <v-footer class="bg-dark grey text-white py-10">
+  <v-footer class="bg-main-grey text-white py-10">
     <v-container>
       <v-row justify="space-between">
         <v-col
