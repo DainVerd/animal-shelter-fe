@@ -1,81 +1,69 @@
-# Vuetify (Default)
+# About
 
-This is the official scaffolding tool for Vuetify, designed to give you a head start in building your new Vuetify application. It sets up a base template with all the necessary configurations and standard directory structure, enabling you to begin development without the hassle of setting up the project from scratch.
+Pet Project. A web responsive application project for an animal shelter. With authorization and authentication. The project uses personally belowed [Vue.js](https://vuejs.org/) with touch of TS as a base along with a [Vuetify](https://vuetifyjs.com/en/) component framework.
 
-## ❗️ Important Links
+BackEnd part of the project could be found in [this repository](https://github.com/DainVerd/animal-shelter-be)
 
-- 📄 [Docs](https://vuetifyjs.com/)
-- 🚨 [Issues](https://issues.vuetifyjs.com/)
-- 🏬 [Store](https://store.vuetifyjs.com/)
-- 🎮 [Playground](https://play.vuetifyjs.com/)
-- 💬 [Discord](https://community.vuetifyjs.com)
+- [About](#about)
+- [How to launch project locally](#how-to-launch-project-locally)
+- [Figma moq](#visual-identica-and-appierence)
+- [Naming convention of the project](#naming-convention)
+- [Tech stack](#tech-stack)
 
-## 💿 Install
+## How to launch project locally
 
-Set up your project using your preferred package manager. Use the corresponding command to install the dependencies:
+This section is dedicated to launch project locally on your machine.
 
-| Package Manager                                                | Command        |
-|---------------------------------------------------------------|----------------|
-| [yarn](https://yarnpkg.com/getting-started)                   | `yarn install` |
-| [npm](https://docs.npmjs.com/cli/v7/commands/npm-install)     | `npm install`  |
-| [pnpm](https://pnpm.io/installation)                          | `pnpm install` |
-| [bun](https://bun.sh/#getting-started)                        | `bun install`  |
+To launch project:
 
-After completing the installation, your environment is ready for Vuetify development.
+1. clone the repository  
+2. if you do not have Node.js, download and install it [from official site ,click](https://nodejs.org/en/download)  
+3. open project and launch command line  
+4. execute command in terminal  
 
-## ✨ Features
+  ```bash
+      npm install
+  ```
 
-- 🖼️ **Optimized Front-End Stack**: Leverage the latest Vue 3 and Vuetify 3 for a modern, reactive UI development experience. [Vue 3](https://v3.vuejs.org/) | [Vuetify 3](https://vuetifyjs.com/en/)
-- 🗃️ **State Management**: Integrated with [Pinia](https://pinia.vuejs.org/), the intuitive, modular state management solution for Vue.
-- 🚦 **Routing and Layouts**: Utilizes Vue Router for SPA navigation and vite-plugin-vue-layouts for organizing Vue file layouts. [Vue Router](https://router.vuejs.org/) | [vite-plugin-vue-layouts](https://github.com/JohnCampionJr/vite-plugin-vue-layouts)
-- 💻 **Enhanced Development Experience**: Benefit from TypeScript's static type checking and the ESLint plugin suite for Vue, ensuring code quality and consistency. [TypeScript](https://www.typescriptlang.org/) | [ESLint Plugin Vue](https://eslint.vuejs.org/)
-- ⚡ **Next-Gen Tooling**: Powered by Vite, experience fast cold starts and instant HMR (Hot Module Replacement). [Vite](https://vitejs.dev/)
-- 🧩 **Automated Component Importing**: Streamline your workflow with unplugin-vue-components, automatically importing components as you use them. [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components)
-- 🛠️ **Strongly-Typed Vue**: Use vue-tsc for type-checking your Vue components, and enjoy a robust development experience. [vue-tsc](https://github.com/johnsoncodehk/volar/tree/master/packages/vue-tsc)
+5. run project with command  
 
-These features are curated to provide a seamless development experience from setup to deployment, ensuring that your Vuetify application is both powerful and maintainable.
+  ```bash
+    npm run dev
+  ```
 
-## 💡 Usage
+6. open in browser `localhost:3000`
 
-This section covers how to start the development server and build your project for production.
+## Visual identica and appierence
 
-### Starting the Development Server
+This section is dedicated to store information about visual identica of the app. It is stored in free Figma Moq(Animal Shelter Web-site (Community)) what could [be found here](https://www.figma.com/design/loUPXFNFZ28JvDRt8djx4B/Animal-Shelter-Web-site--Community-?node-id=23-61390&t=5lkT9laGQdpebV1o-0)
 
-To start the development server with hot-reload, run the following command. The server will be accessible at [http://localhost:3000](http://localhost:3000):
+## Naming convention
 
-```bash
-yarn dev
+- Components in Vue.js must contain at least two words in its name. For example `AppFooter.vue`
+- If Component is a a page then need to add postfix `Page`, for example `LandingPage.vue`
+
+### ts only files
+
+Must be named in kebab case only
+
+### html and css
+
+names of custom css classes should be kebab case because it is industrial standart
+
+```css
+.my-fancy-class {
+    color: red;
+}
 ```
 
-(Repeat for npm, pnpm, and bun with respective commands.)
+## tech-stack
 
-> Add NODE_OPTIONS='--no-warnings' to suppress the JSON import warnings that happen as part of the Vuetify import mapping. If you are on Node [v21.3.0](https://nodejs.org/en/blog/release/v21.3.0) or higher, you can change this to NODE_OPTIONS='--disable-warning=5401'. If you don't mind the warning, you can remove this from your package.json dev script.
+This section is dedicated to store information about tech stack what is used in this project.
 
-### Building for Production
+Technologies are:
 
-To build your project for production, use:
-
-```bash
-yarn build
-```
-
-(Repeat for npm, pnpm, and bun with respective commands.)
-
-Once the build process is completed, your application will be ready for deployment in a production environment.
-
-## 💪 Support Vuetify Development
-
-This project is built with [Vuetify](https://vuetifyjs.com/en/), a UI Library with a comprehensive collection of Vue components. Vuetify is an MIT licensed Open Source project that has been made possible due to the generous contributions by our [sponsors and backers](https://vuetifyjs.com/introduction/sponsors-and-backers/). If you are interested in supporting this project, please consider:
-
-- [Requesting Enterprise Support](https://support.vuetifyjs.com/)
-- [Sponsoring John on Github](https://github.com/users/johnleider/sponsorship)
-- [Sponsoring Kael on Github](https://github.com/users/kaelwd/sponsorship)
-- [Supporting the team on Open Collective](https://opencollective.com/vuetify)
-- [Becoming a sponsor on Patreon](https://www.patreon.com/vuetify)
-- [Becoming a subscriber on Tidelift](https://tidelift.com/subscription/npm/vuetify)
-- [Making a one-time donation with Paypal](https://paypal.me/vuetify)
-
-## 📑 License
-[MIT](http://opensource.org/licenses/MIT)
-
-Copyright (c) 2016-present Vuetify, LLC
+- [Vue.js with TS](https://vuejs.org/)
+- [Vuetify 3](https://vuetifyjs.com/en/)
+- [Pinia](https://pinia.vuejs.org/)
+- [Vite as build tool](https://vite.dev/)
+- [SASS](https://sass-lang.com/documentation/syntax/)
