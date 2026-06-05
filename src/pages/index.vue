@@ -133,7 +133,7 @@
             <h4 class="text-h4">Visit us</h4>
           </v-col>
           <v-col cols="12">
-            <p class="text">
+            <p class="text-body-1">
               Adress: 64a, Thulehemsvägen, 224 67 Lund, Sweden
             </p>
           </v-col>
