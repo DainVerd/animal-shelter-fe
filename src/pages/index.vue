@@ -12,15 +12,17 @@
         <v-btn
           color="primary"
           append-icon="mdi-map-marker"
+          elevation="0"
+          variant="text"
         >
           Lund
         </v-btn>
 
         <!-- Видно только на sm+ (скрыто на xs) -->
-        <h2 class="text-h2 d-none d-sm-block">
+        <h1 :class = "(md)?'text-h1 d-none d-sm-block':'text-h2 d-none d-sm-block' ">
           Animal Shelter
-        </h2>
-        <p class="text-body-1 d-none d-sm-block">
+        </h1>
+        <p :class="(md)?'text-body-l d-none d-sm-block':'text-body-1 d-none d-sm-block'">
           to find the pets loving and reliable home
         </p>
       </v-col>
@@ -59,6 +61,7 @@
     <v-row>
       <v-col
         cols="6"
+        md="3"
       >
       <v-btn
         block
@@ -70,12 +73,13 @@
       </v-col>
       <v-col
         cols="6"
-       
+        md="3"
       >
       <v-btn 
         block
         color="primary"
         size="x-large"
+        
       >
         Find a  Dog
       </v-btn>
@@ -136,6 +140,7 @@
           sm="6"
           align="center"
           class="d-sm-flex justify-sm-center align-sm-center"
+          order-md="2"
         >
           <v-btn
             prepend-icon="mdi-facebook"
@@ -150,6 +155,7 @@
         <v-col
           cols="12"
           sm="6"
+          order-md="1"
         >
           <p class="text-body-1">
             Our Facebook group PetsPets  brings together adopted pet owners, volonteers, sponsors and animal walfare organization.
@@ -236,7 +242,7 @@
 import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
 
-const { mdAndUp, xs } = useDisplay();
+const { mdAndUp, xs , md} = useDisplay();
 const imgMaxWidth = computed(() => mdAndUp.value ? 420 : 271);
 
 const searchType = ref("");
