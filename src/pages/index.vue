@@ -55,7 +55,31 @@
           to find the pets loving and reliable home
         </p>
       </v-col>
-
+    </v-row>
+    <v-row>
+      <v-col
+        cols="6"
+      >
+      <v-btn
+        block
+        color="primary"
+        size="x-large"
+      >
+        Find a Cat
+      </v-btn>
+      </v-col>
+      <v-col
+        cols="6"
+       
+      >
+      <v-btn 
+        block
+        color="primary"
+        size="x-large"
+      >
+        Find a  Dog
+      </v-btn>
+      </v-col>
     </v-row>
 
     <!-- how many pets already at home block -->
