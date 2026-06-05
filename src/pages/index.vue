@@ -62,12 +62,19 @@
      <v-row>
       <v-col
         cols="12"
+        sm="6"
         align="center"
+        class="d-sm-flex justify-sm-center align-sm-center"
       >
-        <h2 class="text-h2">123</h2>
-        <p class="text-label">pets are already at home</p>
+        <div>
+          <h2 class="text-h2">123</h2>
+          <p class="text-label">pets are already at home</p>
+        </div>
       </v-col>
-      <v-col cols="12">
+      <v-col
+        cols="12"
+        sm="6"
+      >
         <p class="text-body-2">
           If you're considering adding a pet to your family, remember that adoption not only transforms the life of a shelter animal but can also be a deeply fulfilling and life-enriching experience for you.
         </p>
@@ -82,12 +89,15 @@
         <v-col cols="12">
           <p>cards component</p>
         </v-col>
-        <v-col cols="12">
+        <v-col
+          cols="12"
+          align="center"
+        >
           <v-btn
             color="primary"
             size="x-large"
             variant="outlined"
-            block
+            :block="xs"
             out
           >
             All Pets
@@ -99,7 +109,9 @@
        <v-row>
         <v-col
           cols="12"
+          sm="6"
           align="center"
+          class="d-sm-flex justify-sm-center align-sm-center"
         >
           <v-btn
             prepend-icon="mdi-facebook"
@@ -111,7 +123,10 @@
             Join Us
           </v-btn>
         </v-col>
-        <v-col cols="12">
+        <v-col
+          cols="12"
+          sm="6"
+        >
           <p class="text-body-1">
             Our Facebook group PetsPets  brings together adopted pet owners, volonteers, sponsors and animal walfare organization.
           </p>
@@ -131,12 +146,15 @@
           <v-col cols="12">
             image roundbin here stub
           </v-col>
-          <v-col cols="12">
+          <v-col
+            cols="12"
+            align="center"
+          >
             <v-btn
               color="primary"
               size="x-large"
               variant="outlined"
-              block
+              :block="xs"
               out
             >
             All Stories
@@ -146,7 +164,10 @@
 
         <!--How do block-->
         <v-row>
-          <v-col cols="12">
+          <v-col
+            cols="12"
+            align="center"
+          >
             <h3 class="text-h3">How to I take a pet home from the shelter?</h3>
           </v-col>
           <v-col cols="12">
@@ -162,7 +183,10 @@
           >
             <h4 class="text-h4">Visit us</h4>
           </v-col>
-          <v-col cols="12">
+          <v-col
+            cols="12"
+            sm="6"
+          >
             <p class="text-body-1">
               Adress: 64a, Thulehemsvägen, 224 67 Lund, Sweden
             </p>
@@ -170,7 +194,10 @@
           <v-col cols="12">
             LEAF MAP with coords stub
           </v-col>
-          <v-col cols="12">
+          <v-col
+            cols="12"
+            sm="9"
+          >
             <p class="text-body-2">
               There are still many friends waiting for their chance to bring love and joy into the lives of caring individuals and families. 
 
@@ -185,7 +212,7 @@
 import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
 
-const { mdAndUp } = useDisplay();
+const { mdAndUp, xs } = useDisplay();
 const imgMaxWidth = computed(() => mdAndUp.value ? 420 : 271);
 
 const searchType = ref("");
