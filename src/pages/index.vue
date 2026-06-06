@@ -31,6 +31,7 @@
       <v-col
         cols="9"
         sm="6"
+        md="6"
         class="d-flex justify-end"
       >
         <v-img
@@ -39,6 +40,8 @@
           :max-width="imgMaxWidth"
           rounded="xl"
           cover
+          :aspect-ratio="4/3"
+          width="100%"
         />
       </v-col>
 
@@ -236,21 +239,37 @@
           <v-col
             cols="12"
             sm="6"
+            md="6"
+            class="d-flex flex-column"
           >
             <p class="text-body-1">
-              Adress: 64a, Thulehemsvägen, 224 67 Lund, Sweden
+              <b>Adress: </b>64a, Thulehemsvägen, 224 67 Lund, Sweden
             </p>
-          </v-col>
-          <v-col cols="12">
-            LEAF MAP with coords stub
+
+            <p class="text-body-2 mt-auto d-none d-md-block">
+              There are still many friends waiting for their chance to bring love and joy into the lives of caring individuals and families. 
+            </p>
           </v-col>
           <v-col
             cols="12"
-            sm="9"
+            md="6"
+          >
+            <v-img
+              src="https://placehold.co/400x300"
+              alt="Leaf Map"
+              :aspect-ratio="4/3"
+              width="100%"
+              rounded="xl"
+              cover
+            />
+          </v-col>
+          <!-- only seen on xs/sm — under the pic -->
+          <v-col
+            cols="12"
+            class="d-block d-md-none"
           >
             <p class="text-body-2">
               There are still many friends waiting for their chance to bring love and joy into the lives of caring individuals and families. 
-
             </p>
           </v-col>
         </v-row>
