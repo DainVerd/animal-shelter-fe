@@ -121,15 +121,25 @@
           cols="12"
           align="center"
         >
-          <v-btn
-            color="primary"
-            size="x-large"
-            variant="outlined"
-            :block="xs"
-            out
-          >
-            All Pets
-          </v-btn>
+          <v-row justify="center">
+            <v-col md="auto"></v-col>
+            <v-col
+              cols="12"
+              sm="4"
+              md="4"
+            >
+              <v-btn
+                color="primary"
+                size="x-large"
+                variant="outlined"
+                block
+                out
+              >
+                All Pets
+              </v-btn>
+            </v-col>
+            <v-col md="auto"></v-col>
+          </v-row>
         </v-col>
       </v-row>
 
@@ -180,15 +190,25 @@
             cols="12"
             align="center"
           >
-            <v-btn
-              color="primary"
-              size="x-large"
-              variant="outlined"
-              :block="xs"
-              out
-            >
-            All Stories
-            </v-btn>
+            <v-row justify="center">
+              <v-col md="auto"></v-col>
+              <v-col
+                cols="12"
+                sm="4"
+                md="4"
+              >
+                <v-btn
+                  color="primary"
+                  size="x-large"
+                  variant="outlined"
+                  block
+                  out
+                >
+                  All Stories
+                </v-btn>
+              </v-col>
+              <v-col md="auto"></v-col>
+            </v-row>
           </v-col>
         </v-row>
 
