@@ -24,13 +24,10 @@
         cols="12"
         md="6"
       >
-        <v-img
-          src="https://placehold.co/400x300"
-          alt="Map"
-          :aspect-ratio="4/3"
-          width="100%"
-          rounded="xl"
-          cover
+        <LeafletMap
+          :lat="55.7047"
+          :lng="13.1910"
+          marker-label="PetsPets Shelter"
         />
       </v-col>
       <v-col
@@ -45,3 +42,6 @@
     </v-row>
   </section>
 </template>
+<script setup lang="ts">
+  import LeafletMap from "@/components/LeafletMap.vue";
+</script>
