@@ -16,7 +16,8 @@
     "roboto-fontface": "*",
     "vee-validate": "^4.15.1",
     "vue": "^3.4.21",
-    "vuetify": "^3.5.8"
+    "vuetify": "^3.5.8",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@babel/types": "^7.24.0",
