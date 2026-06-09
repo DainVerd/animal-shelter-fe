@@ -4,7 +4,7 @@
       <v-col
         cols="3"
         sm="6"
-        class="d-flex flex-column"
+        class="d-flex flex-column align-start"
         style="gap: 16px"
       >
         <v-btn
@@ -12,6 +12,8 @@
           append-icon="mdi-map-marker"
           elevation="0"
           variant="text"
+          class="ps-0 justify-start"
+          @click="scrollToMap"
         >
           Lund
         </v-btn>
@@ -91,5 +93,12 @@
 
   const { mdAndUp, md } = useDisplay();
   const imgMaxWidth = computed(() => mdAndUp.value ? 420 : 271);
+
+  const scrollToMap = () => {
+  const mapElement = document.getElementById("map-section");
+  if (mapElement) {
+    mapElement.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+};
 
 </script>
