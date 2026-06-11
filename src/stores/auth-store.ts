@@ -1,102 +1,92 @@
 import { defineStore } from "pinia";
+import { ref, computed } from "vue";
 import type { UserProfile } from "../models/user-profile";
 import type { UserRoleContext } from "../models/user-role-context";
-import { GenericAbortSignal } from "axios";
-import { meService } from "../services/me-service";
 import { authService } from "../services/auth-service";
+import { meService } from "../services/me-service";
 
-export const useAuthStore = defineStore("auth", {
-  state: () => ({
-    accessToken: null as string | null,
-    user: null as UserProfile | null,
-    activeContext: null as UserRoleContext | null,
-  }),
+export const useAuthStore = defineStore(
+  "auth",
+  () => {
+    // --- State (теперь это ref) ---
+    const accessToken = ref<string | null>(null);
+    const user = ref<UserProfile | null>(null);
+    const activeContext = ref<UserRoleContext | null>(null);
 
-  getters: {
-    isContextSelected: (state): boolean => !!state.activeContext,
-    isAuthenticated: (state): boolean => !!state.accessToken,
-    currentRoleCode: (state): string | null => state.activeContext?.role || null,
-  },
+    // --- Getters (теперь это computed) ---
+    const isAuthenticated = computed(() => !!accessToken.value);
+    const isContextSelected = computed(() => !!activeContext.value);
+    const currentRole = computed(() => activeContext.value?.role || null);
 
-  actions: {
-    setAuthData(token: string, user: UserProfile) {
-      this.accessToken = token;
-      this.user = user;
-    },
+    // --- Actions (теперь это обычные функции) ---
+    function setAuthData(token: string, userData: UserProfile) {
+      accessToken.value = token;
+      user.value = userData;
+    }
 
-    setActiveContext(context: UserRoleContext) {
-      this.activeContext = context;
-    },
-
-    async fetchUserProfile(signal?: GenericAbortSignal) {
+    async function fetchUserProfile(signal?: AbortSignal) {
       try {
         const response = await meService.getCurrentUser(signal);
-
         if (response.isSuccess && response.data) {
-          this.user = response.data as unknown as UserProfile;
+          user.value = response.data as UserProfile;
 
-          const activeRoleFromBackend = response.data.activeRole;
-
-          if (activeRoleFromBackend) {
-            const matchingContext = this.user?.availableContexts?.find(
-              (c) => c.role === activeRoleFromBackend,
+          // Логика подбора контекста
+          const activeRole = (response.data as any).activeRole;
+          if (activeRole) {
+            const found = user.value.availableContexts?.find(
+              (c) => c.role === activeRole,
             );
-
-            if (matchingContext) {
-              this.activeContext = matchingContext;
-            } else {
-              this.activeContext = {
-                role: activeRoleFromBackend,
-                organizationId: "",
-                organizationName: "",
-              };
-            }
+            activeContext.value = found || {
+              role: activeRole,
+              organizationId: "",
+              organizationName: "",
+            };
           }
         }
-      } catch (error: any) {
-        if (error.name !== "CanceledError") {
-          console.error("Error fetching user profile:", error);
-        }
+      } catch (e) {
+        console.error(e);
       }
-    },
+    }
 
-    /**
-     * this action is triggered by apiclient interceptor when hits 401
-     */
-    async refreshToken() {
-      try {
-        const response = await authService.refreshToken();
-
-        if (response.isSuccess && response.data) {
-          this.accessToken = response.data.accessToken;
-          return response.data.accessToken;
-        } else {
-          this.accessToken = null;
-          this.user = null;
-          this.activeContext = null;
-          throw new Error("Refresh token invalid");
-        }
-      } catch (error) {
-        this.accessToken = null;
-        this.user = null;
-        this.activeContext = null;
-        throw error;
+    async function login(model: any) {
+      const response = await authService.signIn(model);
+      if (response.isSuccess && response.data) {
+        accessToken.value = response.data.accessToken;
+        await fetchUserProfile();
       }
-    },
+      return response;
+    }
 
-    async logout() {
+    function logoutStateOnly() {
+      accessToken.value = null;
+      user.value = null;
+      activeContext.value = null;
+    }
+
+    async function logout() {
       try {
         await authService.signOut();
-      } catch (error) {
-        console.error("Failed to notify backend about sign-out:", error);
+      } catch (e) {
+        console.error(e);
       } finally {
-        // clear state
-        this.accessToken = null;
-        this.user = null;
-        this.activeContext = null;
+        logoutStateOnly();
       }
-    },
-  },
+    }
 
-  persist: true, // to save data in local storage
-});
+    return {
+      accessToken,
+      user,
+      activeContext,
+      isAuthenticated,
+      isContextSelected,
+      currentRole,
+      setAuthData,
+      fetchUserProfile,
+      login,
+      logout,
+    };
+  },
+  {
+    persist: true,
+  } as any
+);

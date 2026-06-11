@@ -2,10 +2,11 @@ import UserRoleContext from "./user-role-context";
 
 
 export interface UserProfile {
-  id: string;
+  id: number;
   email: string;
   userName: string;
-  availableContexts: UserRoleContext[]; 
+  activeRole: string;
+  availableContexts?: UserRoleContext[]; 
 }
 
 export default UserProfile;

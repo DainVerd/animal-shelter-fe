@@ -34,10 +34,10 @@
         <v-text-field
           v-model="password"
           :error-messages="errors.password"
-          :type="showPassword ? 'text' : 'password'"
+          :type="showPassword ? `text` : `password`"
           label="Password"
           prepend-inner-icon="mdi-lock-outline"
-          :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+          :append-inner-icon="showPassword ? `mdi-eye-off` : `mdi-eye`"
           @click:append-inner="showPassword = !showPassword"
           variant="outlined"
           color="primary"
@@ -52,6 +52,15 @@
             Forgot password?
           </a>
         </div>
+        <v-alert
+          v-if="backendError"
+          type="error"
+          variant="tonal"
+          density="compact"
+          class="mb-4 text-body-2"
+        >
+          {{ backendError }}
+        </v-alert>
 
         <v-btn
           type="submit"
@@ -66,7 +75,7 @@
 
       <div class="text-center mt-6">
         <p class="text-body-2 text-grey-darken-1">
-          Don't have an account?
+          Don"t have an account?
           <a
             href="#"
             class="text-primary text-decoration-none font-weight-medium"
@@ -83,9 +92,15 @@
 import { ref } from "vue";
 import { useForm, useField } from "vee-validate";
 import * as yup from "yup";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "../../stores/auth-store";
 
-// UI Toggles
+// UI Toggles & State
 const showPassword = ref(false);
+const backendError = ref<string | null>(null); // Хранилище для ошибок от бэкенда
+
+const router = useRouter();
+const authStore = useAuthStore();
 
 // 1. Define Validation Schema with Yup
 const schema = yup.object({
@@ -110,17 +125,27 @@ const { value: password } = useField<string>("password");
 
 // 4. Submit Handler (Only runs if validation passes)
 const onSubmit = handleSubmit(async (values) => {
+  backendError.value = null; // Сбрасываем ошибку перед новым запросом
+
   try {
-    // values object is fully typed: { email, password }
-    console.log("Form validated successfully! Sending payloads:", values);
+    console.log("values",values);
+    // Вызываем реальный логин через Pinia Store
+    const response = await authStore.login({
+      email: values.email,
+      password: values.password
+    });
 
-    // Mock API call to backend endpoints
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    // TODO: Connect Axios/Fetch pipeline to ASP.NET Core Identity API / Auth Endpoint
-    
+    if (response.isSuccess) {
+      // Логин успешен! Перекидываем на главную страницу (панель управления)
+      router.push("/dashboard"); 
+    } else {
+      // Ошибка от бэкенда (например, 400 Bad Request из-за неверного пароля)
+      // Предполагаем, что твой BaseResponse возвращает массив errorMessages
+      backendError.value = response.errorMessages?.[0] || "Invalid email or password.";
+    }
   } catch (error) {
     console.error("Backend login error", error);
+    backendError.value = "Unable to connect to the server. Please try again later.";
   }
 });
 </script>

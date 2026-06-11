@@ -2,6 +2,7 @@ import apiClient from "../api/api-clients";
 import { BaseResponse } from "../models/base-response";
 import type { GenericAbortSignal } from "axios";
 import { SignInResponse } from "../models/sign-in-response";
+import SignInViewModel from "../models/views/sign-in-view";
 
 export const authService = {
   /**
@@ -23,6 +24,18 @@ export const authService = {
     const response = await apiClient.post<BaseResponse<SignInResponse>>(
       "/v1/authenticate/refresh-token",
       { signal: signal },
+    );
+
+    return response.data;
+  },
+
+  async signIn(
+    model: SignInViewModel,
+  ): Promise<BaseResponse<SignInResponse>> {
+    console.log("model", model)
+    const response = await apiClient.post<BaseResponse<SignInResponse>>(
+      "/v1/authenticate/sign-in",
+      { ...model}
     );
 
     return response.data;

@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios';
-import { useAuthStore } from '@/stores/authStore'; 
+import { useAuthStore } from '../stores/auth-store'; 
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'https://localhost:7001/api', 
