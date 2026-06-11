@@ -13,9 +13,9 @@ export const useAuthStore = defineStore("auth", {
   }),
 
   getters: {
-    isContextSelected: (state) => !!state.activeContext,
-    isAuthenticated: (state) => !!state.accessToken,
-    currentRoleCode: (state) => state.activeContext?.role || null,
+    isContextSelected: (state): boolean => !!state.activeContext,
+    isAuthenticated: (state): boolean => !!state.accessToken,
+    currentRoleCode: (state): string | null => state.activeContext?.role || null,
   },
 
   actions: {
@@ -90,7 +90,7 @@ export const useAuthStore = defineStore("auth", {
       } catch (error) {
         console.error("Failed to notify backend about sign-out:", error);
       } finally {
-        // Чистим стейт напрямую
+        // clear state
         this.accessToken = null;
         this.user = null;
         this.activeContext = null;
