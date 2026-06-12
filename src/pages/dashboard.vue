@@ -110,13 +110,10 @@ import { useAuthStore } from "../stores/auth-store";
 const router = useRouter();
 const authStore = useAuthStore();
 
-// Управление боковым меню
 const drawer = ref(true);
 
-// Логика выхода из системы
 const handleLogout = async () => {
   await authStore.logout();
-  // После очистки стейта перекидываем обратно на форму логина
   router.push("/login");
 };
 </script>

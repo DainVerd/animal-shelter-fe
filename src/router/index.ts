@@ -22,10 +22,10 @@ router.beforeEach((to, from, next) => {
   const requiresGuest = to.meta.requiresGuest;
 
   if (requiresAuth && !isAuthenticated) {
-    // Если страница требует авторизации, а токена нет — на логин
-    next("/login") ;
+    // if page need auth but token does not exist , navigate to sign in page
+    next("/sign-in") ;
   } else if (requiresGuest && isAuthenticated) {
-    // Если залогинен и лезет на страницу логина — на главную (или в админку)
+    // if log in, but wants to navigate to log in page navigate user to dashboard
     next("/") ;
   } else {
     next();

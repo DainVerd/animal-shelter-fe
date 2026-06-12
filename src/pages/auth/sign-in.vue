@@ -128,8 +128,7 @@ const onSubmit = handleSubmit(async (values) => {
   backendError.value = null;
 
   try {
-    console.log("values",values);
-    // Вызываем реальный логин через Pinia Store
+
     const response = await authStore.login({
       email: values.email,
       password: values.password
