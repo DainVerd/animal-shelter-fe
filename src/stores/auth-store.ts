@@ -8,7 +8,7 @@ import { meService } from "../services/me-service";
 export const useAuthStore = defineStore(
   "auth",
   () => {
-    // --- State (теперь это ref) ---
+    // --- State  ---
     const accessToken = ref<string | null>(null);
     const user = ref<UserProfile | null>(null);
     const activeContext = ref<UserRoleContext | null>(null);
@@ -18,7 +18,7 @@ export const useAuthStore = defineStore(
     const isContextSelected = computed(() => !!activeContext.value);
     const currentRole = computed(() => activeContext.value?.role || null);
 
-    // --- Actions (теперь это обычные функции) ---
+    // --- Actions ---
     function setAuthData(token: string, userData: UserProfile) {
       accessToken.value = token;
       user.value = userData;
@@ -30,7 +30,7 @@ export const useAuthStore = defineStore(
         if (response.isSuccess && response.data) {
           user.value = response.data as UserProfile;
 
-          // Логика подбора контекста
+          // logic to find person
           const activeRole = (response.data as any).activeRole;
           if (activeRole) {
             const found = user.value.availableContexts?.find(
