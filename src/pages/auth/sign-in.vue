@@ -97,7 +97,7 @@ import { useAuthStore } from "../../stores/auth-store";
 
 // UI Toggles & State
 const showPassword = ref(false);
-const backendError = ref<string | null>(null); // Хранилище для ошибок от бэкенда
+const backendError = ref<string | null>(null);
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -125,7 +125,7 @@ const { value: password } = useField<string>("password");
 
 // 4. Submit Handler (Only runs if validation passes)
 const onSubmit = handleSubmit(async (values) => {
-  backendError.value = null; // Сбрасываем ошибку перед новым запросом
+  backendError.value = null;
 
   try {
     console.log("values",values);
@@ -136,11 +136,10 @@ const onSubmit = handleSubmit(async (values) => {
     });
 
     if (response.isSuccess) {
-      // Логин успешен! Перекидываем на главную страницу (панель управления)
+      // login is sucessfull! navigate user to dashboard page
       router.push("/dashboard"); 
     } else {
-      // Ошибка от бэкенда (например, 400 Bad Request из-за неверного пароля)
-      // Предполагаем, что твой BaseResponse возвращает массив errorMessages
+      // BE error
       backendError.value = response.errorMessages?.[0] || "Invalid email or password.";
     }
   } catch (error) {
