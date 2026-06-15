@@ -9,14 +9,28 @@
 <template>
   <v-layout class="bg-grey-lighten-4 rounded rounded-md">
     <v-main>
-      <v-container fluid class="pa-6">
+      <v-container
+        fluid
+        class="pa-6"
+      >
         <v-row>
           <v-col cols="12">
-            <v-card elevation="2" rounded="xl" class="pa-4">
+            <v-card
+              elevation="2"
+              rounded="xl"
+              class="pa-4"
+            >
               <v-card-item>
                 <template v-slot:prepend>
-                  <v-avatar color="primary" size="large" class="mr-3">
-                    <v-icon icon="mdi-shield-crown" color="white"></v-icon>
+                  <v-avatar
+                    color="primary"
+                    size="large"
+                    class="mr-3"
+                  >
+                    <v-icon
+                      icon="mdi-shield-crown"
+                      color="white"
+                    ></v-icon>
                   </v-avatar>
                 </template>
                 <v-card-title class="text-h5 font-weight-bold">
@@ -24,7 +38,11 @@
                 </v-card-title>
                 <v-card-subtitle class="mt-1">
                   Active Role: 
-                  <v-chip color="success" size="small" class="ml-1 font-weight-bold">
+                  <v-chip
+                    color="success"
+                    size="small"
+                    class="ml-1 font-weight-bold"
+                  >
                     {{ authStore.user?.activeRole || "SuperAdmin" }}
                   </v-chip>
                 </v-card-subtitle>
@@ -38,23 +56,59 @@
         </v-row>
 
         <v-row>
-          <v-col cols="12" md="4">
-            <v-card elevation="1" rounded="lg" class="pa-4 text-center">
-              <v-icon icon="mdi-paw" size="48" color="info" class="mb-2"></v-icon>
+          <v-col
+            cols="12"
+            md="4"
+          >
+            <v-card
+              elevation="1"
+              rounded="lg"
+              class="pa-4 text-center"
+            >
+              <v-icon
+                icon="mdi-paw"
+                size="48"
+                color="info"
+                class="mb-2"
+              ></v-icon>
               <div class="text-h4 font-weight-bold">42</div>
               <div class="text-subtitle-1 text-grey">Animals in Shelter</div>
             </v-card>
           </v-col>
-          <v-col cols="12" md="4">
-            <v-card elevation="1" rounded="lg" class="pa-4 text-center">
-              <v-icon icon="mdi-account-check" size="48" color="success" class="mb-2"></v-icon>
+          <v-col
+            cols="12"
+            md="4"
+          >
+            <v-card
+              elevation="1"
+              rounded="lg"
+              class="pa-4 text-center"
+            >
+              <v-icon
+                icon="mdi-account-check"
+                size="48"
+                color="success"
+                class="mb-2"
+              ></v-icon>
               <div class="text-h4 font-weight-bold">12</div>
               <div class="text-subtitle-1 text-grey">Active Volunteers</div>
             </v-card>
           </v-col>
-          <v-col cols="12" md="4">
-            <v-card elevation="1" rounded="lg" class="pa-4 text-center">
-              <v-icon icon="mdi-alert-circle-outline" size="48" color="warning" class="mb-2"></v-icon>
+          <v-col
+            cols="12"
+            md="4"
+          >
+            <v-card
+              elevation="1"
+              rounded="lg"
+              class="pa-4 text-center"
+            >
+              <v-icon
+                icon="mdi-alert-circle-outline"
+                size="48"
+                color="warning"
+                class="mb-2"
+              ></v-icon>
               <div class="text-h4 font-weight-bold">3</div>
               <div class="text-subtitle-1 text-grey">Pending Requests</div>
             </v-card>
@@ -66,10 +120,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { useAuthStore } from "../stores/auth-store";
+  import { useAuthStore } from "../stores/auth-store";
 
-const router = useRouter();
-const authStore = useAuthStore();
+  const authStore = useAuthStore();
 </script>
