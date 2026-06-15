@@ -5,6 +5,8 @@ import type { UserRoleContext } from "../models/user-role-context";
 import { authService } from "../services/auth-service";
 import { meService } from "../services/me-service";
 
+import router from "../router";
+
 export const useAuthStore = defineStore(
   "auth",
   () => {
@@ -13,7 +15,7 @@ export const useAuthStore = defineStore(
     const user = ref<UserProfile | null>(null);
     const activeContext = ref<UserRoleContext | null>(null);
 
-    // --- Getters (теперь это computed) ---
+    // --- Getters (now is computed) ---
     const isAuthenticated = computed(() => !!accessToken.value);
     const isContextSelected = computed(() => !!activeContext.value);
     const currentRole = computed(() => activeContext.value?.role || null);
@@ -50,10 +52,15 @@ export const useAuthStore = defineStore(
 
     async function login(model: any) {
       const response = await authService.signIn(model);
+      
       if (response.isSuccess && response.data) {
+        // 1. save token
         accessToken.value = response.data.accessToken;
+        
+        // 2. load user profile from BE
         await fetchUserProfile();
       }
+      
       return response;
     }
 
@@ -73,6 +80,44 @@ export const useAuthStore = defineStore(
       }
     }
 
+    async function switchContext(targetRole: string) {
+      if (!user.value || !user.value.availableContexts) {
+        return;
+      }
+
+      const foundContext = user.value.availableContexts.find(
+        (context) => context.role === targetRole
+      );
+
+      // If we want to switch to the same role or role was not found - do nothing
+      if (!foundContext || activeContext.value?.role === targetRole) {
+        return;
+      }
+
+      try {
+        // 1. Sending data to BE to get new token from selected role
+        const response = await meService.selectRole(targetRole);
+
+        if (response.isSuccess && response.data) {
+          // 2. setting new token after success
+          accessToken.value = response.data.token;
+          
+          // 3. update UI context
+          activeContext.value = foundContext;
+          
+          // 4. update user profile 
+          await fetchUserProfile();
+
+          // 5. redirect user to dashboard
+          router.push("/");
+        } else {
+          console.error("Failed to change role. BE returned error");
+        }
+      } catch (e) {
+        console.error("Exception during role change request:", e);
+      }
+    }
+
     return {
       accessToken,
       user,
@@ -84,6 +129,7 @@ export const useAuthStore = defineStore(
       fetchUserProfile,
       login,
       logout,
+      switchContext
     };
   },
   {

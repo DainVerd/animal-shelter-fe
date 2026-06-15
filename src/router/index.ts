@@ -19,13 +19,21 @@ router.beforeEach((to) => {
   const authStore = useAuthStore();
   
   const isAuthenticated = authStore.isAuthenticated;
+  const isContextSelected = authStore.isContextSelected;
   const requiresAuth = to.meta.requiresAuth;
   const requiresGuest = to.meta.requiresGuest;
 
+  // 1. if page want auth and user is not auth quit
   if (requiresAuth && !isAuthenticated) {
     return "/auth/sign-in";
   } 
   
+  // 2. If user is auth and goes to system but not selected still role 
+  if (requiresAuth && isAuthenticated && !isContextSelected && to.path !== "/auth/select-role") {
+    return "/auth/select-role";
+  }
+
+  // 3. if auth with role, but goes to sign in page
   if (requiresGuest && isAuthenticated) {
     return "/";
   }
