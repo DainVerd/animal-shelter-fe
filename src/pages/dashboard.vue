@@ -7,44 +7,7 @@
 </route>
 
 <template>
-  <v-layout class="bg-grey-lighten-4 rounded rounded-md" style="min-height: 100vh;">
-    <v-app-bar color="primary" elevation="2">
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title class="font-weight-bold">Shelter Admin</v-toolbar-title>
-      
-      <v-spacer></v-spacer>
-      
-      <v-btn 
-        prepend-icon="mdi-logout" 
-        variant="text" 
-        @click="handleLogout"
-      >
-        Sign Out
-      </v-btn>
-    </v-app-bar>
-
-    <v-navigation-drawer v-model="drawer" elevation="1">
-      <v-list density="compact" nav>
-        <v-list-item
-          prepend-icon="mdi-view-dashboard"
-          title="Dashboard"
-          value="dashboard"
-          active
-          color="primary"
-        ></v-list-item>
-        <v-list-item
-          prepend-icon="mdi-paw"
-          title="Animals"
-          value="animals"
-        ></v-list-item>
-        <v-list-item
-          prepend-icon="mdi-account-group"
-          title="Users"
-          value="users"
-        ></v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
+  <v-layout class="bg-grey-lighten-4 rounded rounded-md">
     <v-main>
       <v-container fluid class="pa-6">
         <v-row>
@@ -109,11 +72,4 @@ import { useAuthStore } from "../stores/auth-store";
 
 const router = useRouter();
 const authStore = useAuthStore();
-
-const drawer = ref(true);
-
-const handleLogout = async () => {
-  await authStore.logout();
-  router.push("/login");
-};
 </script>
