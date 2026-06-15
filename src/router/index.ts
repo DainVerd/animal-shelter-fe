@@ -5,16 +5,17 @@
  */
 
 // Composables
-import { createRouter, createWebHistory } from "vue-router/auto";
+import { createRouter, createWebHistory } from "vue-router";
+import { routes } from "vue-router/auto-routes";
 import { setupLayouts } from "virtual:generated-layouts";
-import { useAuthStore } from "../stores/auth-store"; 
+import { useAuthStore } from "../stores/auth-store";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  extendRoutes: setupLayouts,
+  routes: setupLayouts(routes),
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to) => {
   const authStore = useAuthStore();
   
   const isAuthenticated = authStore.isAuthenticated;
@@ -22,13 +23,11 @@ router.beforeEach((to, from, next) => {
   const requiresGuest = to.meta.requiresGuest;
 
   if (requiresAuth && !isAuthenticated) {
-    // if page need auth but token does not exist , navigate to sign in page
-    next("/auth/sign-in") ;
-  } else if (requiresGuest && isAuthenticated) {
-    // if log in, but wants to navigate to log in page navigate user to dashboard
-    next("/") ;
-  } else {
-    next();
+    return "/auth/sign-in";
+  } 
+  
+  if (requiresGuest && isAuthenticated) {
+    return "/";
   }
 });
 
