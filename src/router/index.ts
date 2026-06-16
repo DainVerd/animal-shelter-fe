@@ -30,6 +30,10 @@ router.beforeEach(async (to, from , next) => {
     return next("/auth/select-role");
   }
 
+  if (authStore.isAuthenticated && to.path === "/") {
+    return next("/dashboard");
+  }
+
   if (
     authStore.isAuthenticated && 
     authStore.currentRole && 
