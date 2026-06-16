@@ -43,7 +43,7 @@
                     size="small"
                     class="ml-1 font-weight-bold"
                   >
-                    {{ authStore.user?.activeRole || "SuperAdmin" }}
+                    {{ formatRoleName(authStore.user?.activeRole || UserRole.User) }}
                   </v-chip>
                 </v-card-subtitle>
               </v-card-item>
@@ -120,7 +120,9 @@
 </template>
 
 <script setup lang="ts">
+  import UserRole from "../enums/user-role";
   import { useAuthStore } from "../stores/auth-store";
+  import { formatRoleName } from "../utils/role-formatter";
 
   const authStore = useAuthStore();
 </script>

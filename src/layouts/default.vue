@@ -105,7 +105,7 @@
               size="small"
               class="mr-4 font-weight-bold text-primary"
             >
-              {{ authStore.currentRole || "No Role" }}
+              {{ formatRoleName(authStore.currentRole || "No Role") }}
             </v-chip>
 
             <v-btn
@@ -203,7 +203,7 @@
         <v-list-item
           prepend-icon="mdi-view-dashboard"
           title="Dashboard"
-          to="/"
+          to="/dashboard"
           color="primary"
         ></v-list-item>
         <v-list-item
@@ -237,6 +237,7 @@
   import { ref } from "vue";
   import { useRouter } from "vue-router";
   import { useAuthStore } from "../stores/auth-store";
+import { formatRoleName } from "../utils/role-formatter";
 
   const router = useRouter();
   const authStore = useAuthStore();
