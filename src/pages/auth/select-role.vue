@@ -50,7 +50,7 @@
           variant="text"
           color="error"
           class="text-none"
-          @click="authStore.logout()"
+          @click="signOut"
         >
           Back (Quit)
         </v-btn>
@@ -65,9 +65,13 @@
 
     const authStore = useAuthStore();
     const router = useRouter();
-    
+
     const selectRole = async (role: string) => {
         await authStore.switchContext(role);
         router.push("/dashboard");
+    };
+    const signOut = async() => {
+      await authStore.logout();
+      router.push("/");
     };
 </script>

@@ -78,10 +78,9 @@ export const useAuthStore = defineStore(
         if (response.isSuccess && response.data) {
           accessToken.value = response.data.token;
           
-          // Прямо обновляем активную роль в профиле пользователя
+          // update current role of user
           user.value.activeRole = targetRole;
           
-          router.push("/");
         }
       } catch (e) {
         console.error("Error in role change", e);
