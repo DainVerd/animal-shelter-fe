@@ -178,7 +178,7 @@
     </v-expand-transition>
 
     <v-navigation-drawer
-      v-if="authStore.isAuthenticated"
+      v-if="showSideMenu()"
       v-model="isSidebarOpen"
       :rail="isRail"
       permanent
@@ -246,6 +246,18 @@
   const isSidebarOpen = ref(true); 
   const isRail = ref(false);      
 
+
+  const showSideMenu = (): boolean => {
+    if (!authStore.isAuthenticated)
+      return false;
+
+    const currentPath = router.currentRoute.value.path;
+    if (currentPath.includes(`/auth/`))
+      return false;
+
+    return Boolean(authStore.currentRole && authStore.currentRole.length > 0);
+  };
+
   const closeMenuAndNavigate = (path: string) => {
     isMenuOpen.value = false;
     router.push(path);
@@ -257,12 +269,12 @@
     router.push("/auth/sign-in");
   };
 
-  // Метод переключения роли
+  // to switch role
   const handleRoleSwitch = async (targetRole: string) => {
     if (targetRole === authStore.currentRole) {
       return;
     }
-    // Вызывает экшен стора, выполняющий запрос к .NET и роутинг на "/"
+    
     await authStore.switchContext(targetRole);
   };
 </script>

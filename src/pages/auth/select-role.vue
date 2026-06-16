@@ -61,11 +61,13 @@
 
 <script setup lang="ts">
     import { useAuthStore } from "../../stores/auth-store";
+    import { useRouter } from "vue-router";
 
     const authStore = useAuthStore();
-
+    const router = useRouter();
+    
     const selectRole = async (role: string) => {
-      console.log("role", role);
         await authStore.switchContext(role);
+        router.push("/dashboard");
     };
 </script>
