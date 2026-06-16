@@ -58,7 +58,7 @@
 
           <template v-else>
             <v-menu 
-              v-if="authStore.user?.availableContexts && authStore.user.availableContexts.length > 1" 
+              v-if="authStore.user?.availableRoles && authStore.user.availableRoles.length > 1" 
               transition="slide-y-transition"
             >
               <template v-slot:activator="{ props }">
@@ -83,16 +83,16 @@
                 theme="light"
               >
                 <v-list-item
-                  v-for="context in authStore.user.availableContexts"
-                  :key="context.role"
-                  @click="handleRoleSwitch(context.role)"
-                  :active="context.role === authStore.currentRole"
+                  v-for="role in authStore.user.availableRoles"
+                  :key="role"
+                  @click="handleRoleSwitch(role)"
+                  :active="role === authStore.currentRole"
                   color="primary"
                   rounded="md"
                   class="mb-1"
                 >
                   <v-list-item-title class="text-body-2 font-weight-bold">
-                    {{ context.role }}
+                    {{ role }}
                   </v-list-item-title>
                 </v-list-item>
               </v-list>
