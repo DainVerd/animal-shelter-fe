@@ -57,13 +57,57 @@
           </template>
 
           <template v-else>
+            <v-menu 
+              v-if="authStore.user?.availableContexts && authStore.user.availableContexts.length > 1" 
+              transition="slide-y-transition"
+            >
+              <template v-slot:activator="{ props }">
+                <v-chip
+                  v-bind="props"
+                  color="white"
+                  variant="elevated"
+                  size="small"
+                  class="mr-4 font-weight-bold text-primary"
+                  style="cursor: pointer;"
+                  append-icon="mdi-chevron-down"
+                >
+                  {{ authStore.currentRole || "Select Role" }}
+                </v-chip>
+              </template>
+
+              <v-list
+                density="compact"
+                class="mt-1 pa-2"
+                rounded="lg"
+                elevation="3"
+                theme="light"
+              >
+                <v-list-item
+                  v-for="context in authStore.user.availableContexts"
+                  :key="context.role"
+                  @click="handleRoleSwitch(context.role)"
+                  :active="context.role === authStore.currentRole"
+                  color="primary"
+                  rounded="md"
+                  class="mb-1"
+                >
+                  <v-list-item-title class="text-body-2 font-weight-bold">
+                    {{ context.role }}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+
             <v-chip
+              v-else
               color="white"
               variant="elevated"
               size="small"
-              class="mr-4 font-weight-bold text-primary">
-              {{ authStore.user?.activeRole || 'Admin' }}
+              class="mr-4 font-weight-bold text-primary"
+            >
+              {{ authStore.currentRole || "No Role" }}
             </v-chip>
+
             <v-btn
               color="white"
               variant="outlined"
@@ -98,35 +142,35 @@
               rounded="lg"
               block
               class="custom-menu-btn text-none justify-start text-grey-darken-4"
-              @click="closeMenuAndNavigate(`/about-us`)"
+              @click="closeMenuAndNavigate('/about-us')"
             >About Us</v-btn>
             <v-btn
               variant="outlined"
               rounded="lg"
               block
               class="custom-menu-btn text-none justify-start text-grey-darken-4"
-              @click="closeMenuAndNavigate(`/help-us`)"
+              @click="closeMenuAndNavigate('/help-us')"
             >Help Us</v-btn>
             <v-btn
               variant="outlined"
               rounded="lg"
               block
               class="custom-menu-btn text-none justify-start text-grey-darken-4"
-              @click="closeMenuAndNavigate(`/find-a-pet`)"
+              @click="closeMenuAndNavigate('/find-a-pet')"
             >Find a Pet</v-btn>
             <v-btn
               variant="outlined"
               rounded="lg"
               block
               class="custom-menu-btn text-none justify-start text-grey-darken-4"
-              @click="closeMenuAndNavigate(`/favorites`)"
+              @click="closeMenuAndNavigate('/favorites')"
             >Favorites</v-btn>
             <v-btn
               variant="outlined"
               rounded="lg"
               block
               class="custom-menu-btn text-none justify-start text-grey-darken-4"
-              @click="closeMenuAndNavigate(`/auth/sign-in`)"
+              @click="closeMenuAndNavigate('/auth/sign-in')"
             >Log In</v-btn>
           </div>
         </v-container>
@@ -210,6 +254,15 @@
   const handleLogout = async () => {
     isMenuOpen.value = false;
     await authStore.logout();
-    router.push(`/auth/sign-in`);
+    router.push("/auth/sign-in");
+  };
+
+  // Метод переключения роли
+  const handleRoleSwitch = async (targetRole: string) => {
+    if (targetRole === authStore.currentRole) {
+      return;
+    }
+    // Вызывает экшен стора, выполняющий запрос к .NET и роутинг на "/"
+    await authStore.switchContext(targetRole);
   };
 </script>
