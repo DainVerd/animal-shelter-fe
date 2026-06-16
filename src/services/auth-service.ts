@@ -32,7 +32,6 @@ export const authService = {
   async signIn(
     model: SignInViewModel,
   ): Promise<BaseResponse<SignInResponse>> {
-    console.log("model", model)
     const response = await apiClient.post<BaseResponse<SignInResponse>>(
       "/v1/authenticate/sign-in",
       { ...model}

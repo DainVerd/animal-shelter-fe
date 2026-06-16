@@ -25,7 +25,7 @@ apiClient.interceptors.response.use(
       
       try {
         const authStore = useAuthStore();
-        await authStore.refreshToken(); 
+        await authStore.refreshAccessToken(); 
         
  
         return apiClient(originalRequest);

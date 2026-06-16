@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import type { UserProfile } from "../models/user-profile";
-import type { UserRoleContext } from "../models/user-role-context";
 import { authService } from "../services/auth-service";
 import { meService } from "../services/me-service";
 
@@ -13,12 +12,10 @@ export const useAuthStore = defineStore(
     // --- State  ---
     const accessToken = ref<string | null>(null);
     const user = ref<UserProfile | null>(null);
-    const activeContext = ref<UserRoleContext | null>(null);
-
+   
     // --- Getters (now is computed) ---
     const isAuthenticated = computed(() => !!accessToken.value);
-    const isContextSelected = computed(() => !!activeContext.value);
-    const currentRole = computed(() => activeContext.value?.role || null);
+    const currentRole = computed(() => user.value?.activeRole || null);
 
     // --- Actions ---
     function setAuthData(token: string, userData: UserProfile) {
@@ -31,19 +28,6 @@ export const useAuthStore = defineStore(
         const response = await meService.getCurrentUser(signal);
         if (response.isSuccess && response.data) {
           user.value = response.data as UserProfile;
-
-          // logic to find person
-          const activeRole = (response.data as any).activeRole;
-          if (activeRole) {
-            const found = user.value.availableContexts?.find(
-              (c) => c.role === activeRole,
-            );
-            activeContext.value = found || {
-              role: activeRole,
-              organizationId: "",
-              organizationName: "",
-            };
-          }
         }
       } catch (e) {
         console.error(e);
@@ -67,7 +51,6 @@ export const useAuthStore = defineStore(
     function logoutStateOnly() {
       accessToken.value = null;
       user.value = null;
-      activeContext.value = null;
     }
 
     async function logout() {
@@ -80,56 +63,64 @@ export const useAuthStore = defineStore(
       }
     }
 
-    async function switchContext(targetRole: string) {
-      if (!user.value || !user.value.availableContexts) {
+   async function switchContext(targetRole: string) {
+      if (!user.value || !user.value.availableRoles.includes(targetRole)) {
         return;
       }
 
-      const foundContext = user.value.availableContexts.find(
-        (context) => context.role === targetRole
-      );
-
-      // If we want to switch to the same role or role was not found - do nothing
-      if (!foundContext || activeContext.value?.role === targetRole) {
+      if (user.value.activeRole === targetRole) {
         return;
       }
 
       try {
-        // 1. Sending data to BE to get new token from selected role
         const response = await meService.selectRole(targetRole);
 
         if (response.isSuccess && response.data) {
-          // 2. setting new token after success
           accessToken.value = response.data.token;
           
-          // 3. update UI context
-          activeContext.value = foundContext;
+          // Прямо обновляем активную роль в профиле пользователя
+          user.value.activeRole = targetRole;
           
-          // 4. update user profile 
-          await fetchUserProfile();
-
-          // 5. redirect user to dashboard
           router.push("/");
-        } else {
-          console.error("Failed to change role. BE returned error");
         }
       } catch (e) {
-        console.error("Exception during role change request:", e);
+        console.error("Error in role change", e);
       }
+    }
+
+    async function refreshAccessToken() {
+      try {
+        const response = await authService.refreshToken();
+
+        // check if we got the data
+        if (response.isSuccess && response.data) {
+          // setting new access token
+          accessToken.value = response.data.accessToken;
+
+          return true;
+        }
+      } catch (e) {
+        console.error("Error during token refresh:", e);
+      }
+
+      // if cookie is expired or back end returned 401/500
+      // drop auth
+      logoutStateOnly();
+
+      return false;
     }
 
     return {
       accessToken,
       user,
-      activeContext,
       isAuthenticated,
-      isContextSelected,
       currentRole,
       setAuthData,
       fetchUserProfile,
       login,
       logout,
-      switchContext
+      switchContext,
+      refreshAccessToken
     };
   },
   {
