@@ -57,13 +57,57 @@
           </template>
 
           <template v-else>
+            <v-menu 
+              v-if="authStore.user?.availableRoles && authStore.user.availableRoles.length > 1" 
+              transition="slide-y-transition"
+            >
+              <template v-slot:activator="{ props }">
+                <v-chip
+                  v-bind="props"
+                  color="white"
+                  variant="elevated"
+                  size="small"
+                  class="mr-4 font-weight-bold text-primary"
+                  style="cursor: pointer;"
+                  append-icon="mdi-chevron-down"
+                >
+                  {{ authStore.currentRole || "Select Role" }}
+                </v-chip>
+              </template>
+
+              <v-list
+                density="compact"
+                class="mt-1 pa-2"
+                rounded="lg"
+                elevation="3"
+                theme="light"
+              >
+                <v-list-item
+                  v-for="role in authStore.user.availableRoles"
+                  :key="role"
+                  @click="handleRoleSwitch(role)"
+                  :active="role === authStore.currentRole"
+                  color="primary"
+                  rounded="md"
+                  class="mb-1"
+                >
+                  <v-list-item-title class="text-body-2 font-weight-bold">
+                    {{ role }}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+
             <v-chip
+              v-else
               color="white"
               variant="elevated"
               size="small"
-              class="mr-4 font-weight-bold text-primary">
-              {{ authStore.user?.activeRole || 'Admin' }}
+              class="mr-4 font-weight-bold text-primary"
+            >
+              {{ formatRoleName(authStore.currentRole || "No Role") }}
             </v-chip>
+
             <v-btn
               color="white"
               variant="outlined"
@@ -98,35 +142,35 @@
               rounded="lg"
               block
               class="custom-menu-btn text-none justify-start text-grey-darken-4"
-              @click="closeMenuAndNavigate(`/about-us`)"
+              @click="closeMenuAndNavigate('/about-us')"
             >About Us</v-btn>
             <v-btn
               variant="outlined"
               rounded="lg"
               block
               class="custom-menu-btn text-none justify-start text-grey-darken-4"
-              @click="closeMenuAndNavigate(`/help-us`)"
+              @click="closeMenuAndNavigate('/help-us')"
             >Help Us</v-btn>
             <v-btn
               variant="outlined"
               rounded="lg"
               block
               class="custom-menu-btn text-none justify-start text-grey-darken-4"
-              @click="closeMenuAndNavigate(`/find-a-pet`)"
+              @click="closeMenuAndNavigate('/find-a-pet')"
             >Find a Pet</v-btn>
             <v-btn
               variant="outlined"
               rounded="lg"
               block
               class="custom-menu-btn text-none justify-start text-grey-darken-4"
-              @click="closeMenuAndNavigate(`/favorites`)"
+              @click="closeMenuAndNavigate('/favorites')"
             >Favorites</v-btn>
             <v-btn
               variant="outlined"
               rounded="lg"
               block
               class="custom-menu-btn text-none justify-start text-grey-darken-4"
-              @click="closeMenuAndNavigate(`/auth/sign-in`)"
+              @click="closeMenuAndNavigate('/auth/sign-in')"
             >Log In</v-btn>
           </div>
         </v-container>
@@ -134,7 +178,7 @@
     </v-expand-transition>
 
     <v-navigation-drawer
-      v-if="authStore.isAuthenticated"
+      v-if="showSideMenu()"
       v-model="isSidebarOpen"
       :rail="isRail"
       permanent
@@ -159,7 +203,7 @@
         <v-list-item
           prepend-icon="mdi-view-dashboard"
           title="Dashboard"
-          to="/"
+          to="/dashboard"
           color="primary"
         ></v-list-item>
         <v-list-item
@@ -193,6 +237,7 @@
   import { ref } from "vue";
   import { useRouter } from "vue-router";
   import { useAuthStore } from "../stores/auth-store";
+import { formatRoleName } from "../utils/role-formatter";
 
   const router = useRouter();
   const authStore = useAuthStore();
@@ -202,6 +247,18 @@
   const isSidebarOpen = ref(true); 
   const isRail = ref(false);      
 
+
+  const showSideMenu = (): boolean => {
+    if (!authStore.isAuthenticated)
+      return false;
+
+    const currentPath = router.currentRoute.value.path;
+    if (currentPath.includes(`/auth/`))
+      return false;
+
+    return Boolean(authStore.currentRole && authStore.currentRole.length > 0);
+  };
+
   const closeMenuAndNavigate = (path: string) => {
     isMenuOpen.value = false;
     router.push(path);
@@ -210,6 +267,15 @@
   const handleLogout = async () => {
     isMenuOpen.value = false;
     await authStore.logout();
-    router.push(`/auth/sign-in`);
+    router.push("/auth/sign-in");
+  };
+
+  // to switch role
+  const handleRoleSwitch = async (targetRole: string) => {
+    if (targetRole === authStore.currentRole) {
+      return;
+    }
+    
+    await authStore.switchContext(targetRole);
   };
 </script>

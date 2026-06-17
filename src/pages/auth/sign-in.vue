@@ -135,12 +135,18 @@ const onSubmit = handleSubmit(async (values) => {
     });
 
     if (response.isSuccess) {
-      // login is sucessfull! navigate user to dashboard page
-      router.push("/dashboard"); 
+    const roles = authStore.user?.availableRoles || [];
+debugger;
+    if (roles.length > 1) {
+      // if many roles navigate user to page for selecting roles
+      router.push("/auth/select-role");
+    } else if (roles.length === 1) {
+      // if only one role select it by default
+      await authStore.switchContext(roles[0]);
     } else {
-      // BE error
-      backendError.value = response.errorMessages?.[0] || "Invalid email or password.";
+      router.push("/");
     }
+  }
   } catch (error) {
     console.error("Backend login error", error);
     backendError.value = "Unable to connect to the server. Please try again later.";

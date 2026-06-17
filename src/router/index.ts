@@ -15,20 +15,34 @@ const router = createRouter({
   routes: setupLayouts(routes),
 });
 
-router.beforeEach((to) => {
+router.beforeEach(async (to, from , next) => {
   const authStore = useAuthStore();
-  
-  const isAuthenticated = authStore.isAuthenticated;
-  const requiresAuth = to.meta.requiresAuth;
-  const requiresGuest = to.meta.requiresGuest;
 
-  if (requiresAuth && !isAuthenticated) {
-    return "/auth/sign-in";
-  } 
-  
-  if (requiresGuest && isAuthenticated) {
-    return "/";
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    return next("/auth/sign-in");
   }
+
+  if (
+    authStore.isAuthenticated && 
+    !authStore.currentRole && 
+    to.path !== "/auth/select-role"
+  ) {
+    return next("/auth/select-role");
+  }
+
+  if (authStore.isAuthenticated && to.path === "/") {
+    return next("/dashboard");
+  }
+
+  if (
+    authStore.isAuthenticated && 
+    authStore.currentRole && 
+    to.path === "/auth/select-role"
+  ) {
+    return next("/dashboard"); 
+  }
+
+  next();
 });
 
 export default router;

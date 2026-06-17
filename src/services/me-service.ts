@@ -30,7 +30,7 @@ export const meService = {
   ): Promise<BaseResponse<TokenResponse>> {
     const response = await apiClient.post<BaseResponse<TokenResponse>>(
       "/v1/me/select-role",
-      { roleCode },
+       {roleCode: roleCode},
       { signal: signal },
     );
 
