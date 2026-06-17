@@ -27,16 +27,9 @@
             >
               <v-card-item>
                 <template v-slot:prepend>
-                  <v-avatar
-                    color="primary"
-                    size="large"
-                    class="mr-3"
-                  >
-                    <v-icon
-                      icon="mdi-shield-crown"
-                      color="white"
-                    ></v-icon>
-                  </v-avatar>
+                  <AvatarIcon
+                    :name="authStore.user?.userName"
+                  />
                 </template>
                 <v-card-title class="text-h5 font-weight-bold">
                   Welcome back, {{ authStore.user?.userName || "Admin" }}!
@@ -126,7 +119,8 @@
 </template>
 
 <script setup lang="ts">
-  import UserRole from "../enums/user-role";
+  import AvatarIcon from "../components/AvatarIcon.vue";
+import UserRole from "../enums/user-role";
   import { BreadcrumbItem } from "../models/bread-crumb-item";
   import { useAuthStore } from "../stores/auth-store";
   import { formatRoleName } from "../utils/role-formatter";
