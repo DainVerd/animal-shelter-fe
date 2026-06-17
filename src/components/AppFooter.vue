@@ -9,9 +9,7 @@
           class="order-1"
         >
           <v-toolbar-title class="font-weight-bold text-primary mb-4 px-0">
-           <div class="text-h5 font-weight-bold brand-logo">
-            <span class="text-blue-darken-1">Pets</span><span class="text-pink-accent-3">Pets</span>
-          </div>
+            <AppLogo is-dark-theme />
           </v-toolbar-title>
           
           <div class="d-flex flex-column align-start custom-links">

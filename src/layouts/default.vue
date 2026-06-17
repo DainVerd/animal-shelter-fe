@@ -12,8 +12,8 @@
           class="text-h5 font-weight-bold brand-logo"
           @click="closeMenuAndNavigate('/')"
         >
-          <span :class="authStore.isAuthenticated ? 'text-white' : 'text-primary'">Pets</span><span class="text-pink-accent-3">Pets</span>
         </div>
+        <AppLogo :is-dark-theme="authStore.isAuthenticated"/>
 
         <v-spacer></v-spacer>
 
