@@ -12,6 +12,7 @@ declare module 'vue' {
     HowToSection: typeof import('./components/sections/HowToSection.vue')['default']
     JoinUsSection: typeof import('./components/sections/JoinUsSection.vue')['default']
     LeafletMap: typeof import('./components/LeafletMap.vue')['default']
+    PageWrapper: typeof import('./components/PageWrapper.vue')['default']
     PetsSection: typeof import('./components/sections/PetsSection.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

@@ -7,6 +7,11 @@
 </route>
 
 <template>
+  <PageWrapper
+    title="Dashboard"
+    :breadcrumbs="pageBreadcrumbs"
+    :withCard="false"
+  >
   <v-layout class="bg-grey-lighten-4 rounded rounded-md">
     <v-main>
       <v-container
@@ -117,12 +122,18 @@
       </v-container>
     </v-main>
   </v-layout>
+  </PageWrapper>
 </template>
 
 <script setup lang="ts">
   import UserRole from "../enums/user-role";
+  import { BreadcrumbItem } from "../models/bread-crumb-item";
   import { useAuthStore } from "../stores/auth-store";
   import { formatRoleName } from "../utils/role-formatter";
 
   const authStore = useAuthStore();
+
+  const pageBreadcrumbs: BreadcrumbItem[] = [
+  { title: "Dashboard", to: "/dashboard" }
+];
 </script>
