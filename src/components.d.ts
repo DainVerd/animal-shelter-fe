@@ -20,6 +20,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     StatsSection: typeof import('./components/sections/StatsSection.vue')['default']
     StoriesSection: typeof import('./components/sections/StoriesSection.vue')['default']
+    UserMenu: typeof import('./components/UserMenu.vue')['default']
     VisitUsSection: typeof import('./components/sections/VisitUsSection.vue')['default']
   }
 }

@@ -7,7 +7,7 @@
       :theme="authStore.isAuthenticated ? 'dark' : 'light'"
       height="64"
     >
-      <v-container class="d-flex align-center fill-height">
+      <v-container class="d-flex align-center h-100 py-0">
         <div
           class="text-h5 font-weight-bold brand-logo"
           @click="closeMenuAndNavigate('/')"
@@ -17,7 +17,7 @@
 
         <v-spacer></v-spacer>
 
-        <div class="d-none d-md-flex align-center gap-1">
+        <div class="d-none d-md-flex align-center h-100 gap-4">
           <template v-if="!authStore.isAuthenticated">
             <v-btn
               variant="text"
@@ -52,7 +52,7 @@
               variant="elevated"
               rounded="lg"
               to="/auth/sign-up"
-              class="text-none ml-4"
+              class="text-none ml-2"
             >Sign Up</v-btn>
           </template>
 
@@ -67,11 +67,11 @@
                   color="white"
                   variant="elevated"
                   size="small"
-                  class="mr-4 font-weight-bold text-primary"
+                  class="font-weight-bold text-primary"
                   style="cursor: pointer;"
                   append-icon="mdi-chevron-down"
                 >
-                  {{ authStore.currentRole || "Select Role" }}
+                  {{ authStore.currentRole ? formatRoleName(authStore.currentRole) : "Select Role" }}
                 </v-chip>
               </template>
 
@@ -92,29 +92,13 @@
                   class="mb-1"
                 >
                   <v-list-item-title class="text-body-2 font-weight-bold">
-                    {{ role }}
+                    {{ formatRoleName(role) }}
                   </v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
 
-            <v-chip
-              v-else
-              color="white"
-              variant="elevated"
-              size="small"
-              class="mr-4 font-weight-bold text-primary"
-            >
-              {{ formatRoleName(authStore.currentRole || "No Role") }}
-            </v-chip>
-
-            <v-btn
-              color="white"
-              variant="outlined"
-              rounded="lg"
-              @click="handleLogout"
-              class="text-none"
-            >Sign Out</v-btn>
+            <UserMenu/>
           </template>
         </div>
 
@@ -237,7 +221,7 @@
   import { ref } from "vue";
   import { useRouter } from "vue-router";
   import { useAuthStore } from "../stores/auth-store";
-import { formatRoleName } from "../utils/role-formatter";
+  import { formatRoleName } from "../utils/role-formatter";
 
   const router = useRouter();
   const authStore = useAuthStore();
@@ -246,7 +230,6 @@ import { formatRoleName } from "../utils/role-formatter";
   
   const isSidebarOpen = ref(true); 
   const isRail = ref(false);      
-
 
   const showSideMenu = (): boolean => {
     if (!authStore.isAuthenticated)
@@ -279,3 +262,12 @@ import { formatRoleName } from "../utils/role-formatter";
     await authStore.switchContext(targetRole);
   };
 </script>
+
+<style scoped>
+.gap-4 {
+  gap: 16px;
+}
+.gap-3 {
+  gap: 12px;
+}
+</style>
