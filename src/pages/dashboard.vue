@@ -32,7 +32,7 @@
                   />
                 </template>
                 <v-card-title class="text-h5 font-weight-bold">
-                  Welcome back, {{ authStore.user?.userName || "Admin" }}!
+                  Welcome back, {{ authStore.user?.userName || "User" }}!
                 </v-card-title>
                 <v-card-subtitle class="mt-1">
                   Active Role: 
