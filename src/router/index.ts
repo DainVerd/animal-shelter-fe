@@ -9,6 +9,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import { routes } from "vue-router/auto-routes";
 import { setupLayouts } from "virtual:generated-layouts";
 import { useAuthStore } from "../stores/auth-store";
+import UserRole from "../enums/user-role";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,25 +19,31 @@ const router = createRouter({
 router.beforeEach(async (to, from , next) => {
   const authStore = useAuthStore();
 
+  const hasValidRole = authStore.currentRole && authStore.currentRole !== UserRole.NoRoleSelected;
+
+  // 1. protect routes without auth
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     return next("/auth/sign-in");
   }
 
+  // 2. if auth , but no valid role, force to select role
   if (
     authStore.isAuthenticated && 
-    !authStore.currentRole && 
+    !hasValidRole && 
     to.path !== "/auth/select-role"
   ) {
     return next("/auth/select-role");
   }
 
+  // 3. redirect to dashbaord
   if (authStore.isAuthenticated && to.path === "/") {
     return next("/dashboard");
   }
 
+  // 4. if valid role and auth user redirect to dashboard
   if (
     authStore.isAuthenticated && 
-    authStore.currentRole && 
+    hasValidRole && 
     to.path === "/auth/select-role"
   ) {
     return next("/dashboard"); 

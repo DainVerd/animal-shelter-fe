@@ -8,11 +8,6 @@
       height="64"
     >
       <v-container class="d-flex align-center h-100 py-0">
-        <div
-          class="text-h5 font-weight-bold brand-logo"
-          @click="closeMenuAndNavigate('/')"
-        >
-        </div>
         <AppLogo :is-dark-theme="authStore.isAuthenticated"/>
 
         <v-spacer></v-spacer>
@@ -58,7 +53,7 @@
 
           <template v-else>
             <v-menu 
-              v-if="authStore.user?.availableRoles && authStore.user.availableRoles.length > 1" 
+              v-if="showRoleSwitchMenu()" 
               transition="slide-y-transition"
             >
               <template v-slot:activator="{ props }">
@@ -222,6 +217,7 @@
   import { useRouter } from "vue-router";
   import { useAuthStore } from "../stores/auth-store";
   import { formatRoleName } from "../utils/role-formatter";
+import UserRole from "../enums/user-role";
 
   const router = useRouter();
   const authStore = useAuthStore();
@@ -247,10 +243,11 @@
     router.push(path);
   };
 
-  const handleLogout = async () => {
-    isMenuOpen.value = false;
-    await authStore.logout();
-    router.push("/auth/sign-in");
+  const showRoleSwitchMenu =():boolean => {
+    const hasAvailableRoles: boolean = authStore.user != null && authStore.user?.availableRoles !== null && authStore.user.availableRoles.length > 1;
+    const hasValidRole : boolean = authStore.user?.activeRole !== UserRole.NoRoleSelected;
+    
+    return hasAvailableRoles && hasValidRole;
   };
 
   // to switch role
