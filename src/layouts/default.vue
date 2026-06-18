@@ -42,13 +42,6 @@
               to="/auth/sign-in"
               class="text-none ml-4"
             >Sign In</v-btn>
-            <v-btn
-              color="secondary"
-              variant="elevated"
-              rounded="lg"
-              to="/auth/sign-up"
-              class="text-none ml-2"
-            >Sign Up</v-btn>
           </template>
 
           <template v-else>
@@ -78,7 +71,7 @@
                 theme="light"
               >
                 <v-list-item
-                  v-for="role in authStore.user.availableRoles"
+                  v-for="role in authStore.user?.availableRoles"
                   :key="role"
                   @click="handleRoleSwitch(role)"
                   :active="role === authStore.currentRole"
