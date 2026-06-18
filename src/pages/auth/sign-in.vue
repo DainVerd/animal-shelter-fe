@@ -136,13 +136,14 @@ const onSubmit = handleSubmit(async (values) => {
 
     if (response.isSuccess) {
     const roles = authStore.user?.availableRoles || [];
-debugger;
+
     if (roles.length > 1) {
       // if many roles navigate user to page for selecting roles
       router.push("/auth/select-role");
     } else if (roles.length === 1) {
       // if only one role select it by default
       await authStore.switchContext(roles[0]);
+      router.push("/");
     } else {
       router.push("/");
     }

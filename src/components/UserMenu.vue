@@ -1,9 +1,10 @@
-<template>
+<template >
   <v-menu
     rounded="xl"
     transition="slide-y-transition"
     :close-on-content-click="true"
     offset="8"
+    v-if="showUserMenu()"
   >
     <template v-slot:activator="{ props }">
       <v-btn
@@ -18,7 +19,7 @@
               class="text-body-2 font-weight-bold text-white"
               style="line-height: 1.2;"
             >
-              {{ authStore.user?.fullName || 'Shelter User' }}
+              {{ authStore.user?.fullName || authStore.user?.userName || 'Shelter User' }}
             </span>
             <span class="text-caption text-white opacity-70">
               {{ authStore.user?.email || 'user@pets.lv' }}
@@ -26,7 +27,7 @@
           </div>
           
           <AvatarIcon
-            :name="authStore.user?.fullName"
+            :name="authStore.user?.fullName || authStore.user?.userName || `John Doe`"
             size="40"
           />
         </div>
@@ -42,24 +43,40 @@
       theme="light"
     >
       <v-card-text class="text-center pt-6 pb-4">
-        <AvatarIcon :name="authStore.user?.fullName" size="64" class="mb-3 elevation-2" />
+        <AvatarIcon
+          :name="authStore.user?.fullName || authStore.user?.userName || `John Doe`"
+          size="64"
+          class="mb-3 elevation-2"
+        />
         
         <div class="text-h6 font-weight-bold text-main-black">
-          {{ authStore.user?.fullName || 'Shelter User' }}
+          {{ authStore.user?.fullName || authStore.user?.userName || `Shelter User` }}
         </div>
         
         <div class="text-body-2 text-main-grey mb-3">
           {{ authStore.user?.email || 'user@pets.lv' }}
         </div>
 
-        <v-chip size="small" color="primary" variant="tonal" class="font-weight-bold px-4">
+        <v-chip
+          size="small"
+          color="primary"
+          variant="tonal"
+          class="font-weight-bold px-4"
+        >
           {{ formatRoleName(authStore.currentRole) }}
         </v-chip>
       </v-card-text>
 
-      <v-divider class="mx-4 mb-2" color="border-grey"></v-divider>
+      <v-divider
+        class="mx-4 mb-2"
+        color="border-grey"
+      />
 
-      <v-list density="compact" nav class="px-2 bg-white">
+      <v-list
+        density="compact"
+        nav
+        class="px-2 bg-white"
+      >
         <v-list-item
           prepend-icon="mdi-account-cog-outline"
           title="Account Settings"
@@ -84,17 +101,22 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '../stores/auth-store';
-import AvatarIcon from './AvatarIcon.vue';
-import { formatRoleName } from '../utils/role-formatter';
+import { useRouter } from "vue-router";
+import { useAuthStore } from "../stores/auth-store";
+import AvatarIcon from "./AvatarIcon.vue";
+import { formatRoleName } from "../utils/role-formatter";
+import UserRole from "../enums/user-role.ts";
 
 const router = useRouter();
 const authStore = useAuthStore();
 
+const showUserMenu = (): boolean => {
+  return authStore.user?.activeRole !== UserRole.NoRoleSelected;
+};
+
 const handleLogout = async () => {
   await authStore.logout();
-  router.push('/auth/sign-in');
+  router.push("/auth/sign-in");
 };
 </script>
 
