@@ -14,7 +14,10 @@
       >
         <div class="d-flex align-center gap-3">
           <div class="d-none d-sm-flex flex-column align-end text-right">
-            <span class="text-body-2 font-weight-bold text-white" style="line-height: 1.2;">
+            <span
+              class="text-body-2 font-weight-bold text-white"
+              style="line-height: 1.2;"
+            >
               {{ authStore.user?.fullName || 'Shelter User' }}
             </span>
             <span class="text-caption text-white opacity-70">
@@ -22,7 +25,10 @@
             </span>
           </div>
           
-          <AvatarIcon :name="authStore.user?.fullName" size="40" />
+          <AvatarIcon
+            :name="authStore.user?.fullName"
+            size="40"
+          />
         </div>
       </v-btn>
     </template>
