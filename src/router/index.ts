@@ -13,7 +13,7 @@ import UserRole from "../enums/user-role";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: setupLayouts(routes),
+  routes: setupLayouts(routes)
 });
 
 router.beforeEach(async (to, from , next) => {
@@ -47,6 +47,14 @@ router.beforeEach(async (to, from , next) => {
     to.path === "/auth/select-role"
   ) {
     return next("/dashboard"); 
+  }
+
+  // if not correct role navigate user to forbidden
+  if (to.meta.allowedRoles && Array.isArray(to.meta.allowedRoles)) {
+    const isAllowed = to.meta.allowedRoles.includes(authStore.currentRole);
+    
+    if (!isAllowed)
+      return next("/forbidden");
   }
 
   next();
