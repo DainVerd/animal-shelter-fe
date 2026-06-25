@@ -78,7 +78,7 @@ import { lookupService } from "../services/lookup-service";
 import { SelectListItem } from "../models/select-list-item";
 
 const props = defineProps<{
-  animalId?: string;
+  animalId?: number;
   isEditMode: boolean;
 }>();
 
@@ -100,7 +100,6 @@ const lookups = ref<{genders: SelectListItem[];
 
 onMounted(async () => {
   lookups.value = await lookupService.getAnimalLookups();
-  console.log(lookups.value);
   if (props.isEditMode && props.animalId) {
     // TODO: Загрузка данных животного для редактирования
   }
