@@ -13,17 +13,17 @@
     :breadcrumbs="breadcrumbs"
     withCard
   >
-    <!-- <AnimalUpsertForm 
+    <AnimalUpsertForm 
       :animal-id="animalId" 
       :is-edit-mode="isEditMode" 
-    /> -->
+    /> 
   </PageWrapper>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-//import AnimalUpsertForm from "@/components/animals/AnimalUpsertForm.vue";
+import AnimalUpsertForm from "../../../forms/AnimalUpsertForm.vue";
 import type { BreadcrumbItem } from "../../../models/bread-crumb-item";
 
 const route = useRoute();

@@ -11,7 +11,7 @@ export const lookupService = {
     enumName: string,
   ): Promise<BaseResponse<SelectListItem[]>> {
     const response = await apiClient.get<BaseResponse<SelectListItem[]>>(
-      `/api/lookup/${enumName}`
+      `/v1/lookup/${enumName}`
     );
     
     return response.data;
