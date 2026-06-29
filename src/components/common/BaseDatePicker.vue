@@ -16,6 +16,7 @@
         variant="outlined"
         hide-details="auto"
         density="compact"
+        :error-messages="errorMessages"
       />
     </template>
     
@@ -35,6 +36,7 @@ const props = defineProps<{
   modelValue: string | Date | null;
   label: string;
   max?: string; // Format "YYYY-MM-DD"
+  errorMessages?: string | string[];
 }>();
 
 const emit = defineEmits(["update:modelValue"]);

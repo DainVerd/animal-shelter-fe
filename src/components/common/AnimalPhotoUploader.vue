@@ -7,7 +7,7 @@
       prepend-icon="mdi-camera"
       multiple
       accept="image/*"
-      :error-messages="errorMessages"
+      :error-messages="props.errorMessages || internalErrors"
       @update:model-value="handleFileChange"
     />
 
@@ -47,12 +47,13 @@ import { ref } from "vue";
 const props = defineProps<{ 
   modelValue: File[];
   maxFiles?: number; 
+  errorMessages?: string | string[];
 }>();
 
 const emit = defineEmits(["update:modelValue"]);
 
 const previewUrls = ref<string[]>([]);
-const errorMessages = ref<string[]>([]);
+const internalErrors = ref<string[]>([]);
 const inputKey = ref(0); 
 
 const handleFileChange = (newFiles: File[] | null) => {
@@ -61,10 +62,10 @@ const handleFileChange = (newFiles: File[] | null) => {
   let updatedFiles = [...props.modelValue, ...newFiles];
 
   if (props.maxFiles && updatedFiles.length > props.maxFiles) {
-    errorMessages.value = [`Максимум ${props.maxFiles} фото.`];
+    internalErrors.value = [`Максимум ${props.maxFiles} фото.`];
     updatedFiles = updatedFiles.slice(0, props.maxFiles);
   } else {
-    errorMessages.value = [];
+    internalErrors.value = [];
   }
 
   previewUrls.value.forEach(url => URL.revokeObjectURL(url));
@@ -79,7 +80,6 @@ const removeFile = (index: number) => {
   const newFiles = [...props.modelValue];
   newFiles.splice(index, 1);
   
-  // Очищаем конкретную ссылку
   URL.revokeObjectURL(previewUrls.value[index]);
   previewUrls.value.splice(index, 1);
   

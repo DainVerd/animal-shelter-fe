@@ -1,47 +1,74 @@
 <template>
-  <v-form @submit.prevent="handleSubmit">
+  <v-form @submit.prevent="onSubmit">
     <h3 class="text-subtitle-1 font-weight-bold mb-4">General Information</h3>
     <v-row>
-      <v-col cols="12" md="4">
-        <v-text-field v-model="form.name" label="Name" variant="outlined" density="compact" />
-        <v-text-field v-model="form.breed" label="Breed" variant="outlined" density="compact" />
+      <v-col
+        cols="12"
+        md="4"
+      >
+        <v-text-field
+          v-model="name"
+          label="Name"
+          variant="outlined"
+          density="compact"
+          :error-messages="errors.name"
+        />
+        <v-text-field
+          v-model="breed"
+          label="Breed"
+          variant="outlined"
+          density="compact"
+          :error-messages="errors.breed"
+        />
       </v-col>
       <v-col
         cols="12"
         md="4"
       >
         <v-select
-          v-model="form.gender"
+          v-model="gender"
           :items="lookups.genders"
           label="Gender"
           variant="outlined"
           density="compact"
           item-title="text"
           item-value="value"
+          :error-messages="errors.gender"
+          required
         />
-        <BaseDatePicker v-model="form.dob" label="Date of Birth" :max="new Date().toISOString().substring(0, 10)" />
+        <BaseDatePicker
+          v-model="dob"
+          label="Date of Birth"
+          :max="new Date().toISOString().substring(0, 10)"
+          :error-messages="errors.dob"
+          required
+        />
       </v-col>
       <v-col
         cols="12"
         md="4"
       >
         <v-select
-          v-model="form.size"
+          v-model="size"
           :items="lookups.sizes"
           label="Size"
           variant="outlined"
           density="compact"
           item-title="text"
           item-value="value"
+          :error-messages="errors.size"
+          required
         />
         <v-select
-          v-model="form.temperament"
+          v-model="temperament"
           :items="lookups.temperaments"
           label="Temperament"
           variant="outlined"
           density="compact"
           item-title="text"
           item-value="value"
+          :error-messages="errors.temperament"
+          required
         />
       </v-col>
     </v-row>
@@ -55,16 +82,18 @@
         md="4"
       >
         <v-checkbox
-          v-model="form.isVaccinated"
+          v-model="isVaccinated"
           label="Is Vaccinated"
           color="primary"
           density="compact"
+          :error-messages="errors.isVaccinated"
         />
         <v-checkbox
-          v-model="form.isSterilized"
+          v-model="isSterilized"
           label="Is Sterilized"
           color="primary"
           density="compact"
+          :error-messages="errors.isSterilized"
         />
       </v-col>
       <v-col
@@ -75,7 +104,10 @@
           label="Health Notes"
           variant="outlined"
           density="compact"
-          rows="2" />
+          rows="2"
+          :error-messages="errors.healthNote"
+          v-model="healthNote"
+        />
       </v-col>
     </v-row>
 
@@ -84,19 +116,24 @@
     <v-row>
       <v-col cols="12">
         <v-textarea
-          v-model="form.description"
+          v-model="description"
           label="Description of the Animal"
           variant="outlined"
           density="compact"
           rows="5"
           required
+          :error-messages="errors.description"
         />
       </v-col>
     </v-row>
     <!-- pictures -->
     <v-divider class="my-6" />
     <h3 class="text-subtitle-1 font-weight-bold mb-4">Add Images of the Pet</h3>
-    <AnimalPhotoUploader v-model="form.photos" />
+    <AnimalPhotoUploader
+      v-model="photos"
+      :error-messages="errors.photos"
+      required
+      />
     <v-row>
       
     </v-row>
@@ -117,23 +154,50 @@
 import { ref, onMounted } from "vue";
 import { lookupService } from "../services/lookup-service";
 import { SelectListItem } from "../models/select-list-item";
+import { useForm, useField } from "vee-validate";
+import { animalSchema } from "../schemas/animal-upsert-schema";
 
 const props = defineProps<{
   animalId?: number;
   isEditMode: boolean;
 }>();
-const form = ref({
-  breed: "",
-  name: "",
-  gender: null,
-  size: null,
-  temperament: null,
-  dob: null as Date | null,
-  isVaccinated: false,
-  isSterilized: false,
-  description: "",
-  photos: [] as File[]
+
+
+const { handleSubmit, errors } = useForm({
+  validationSchema: animalSchema,
+  initialValues: {
+    name: "",
+    breed: "",
+    gender: null,
+    size: null,
+    temperament: null,
+    dob: null,
+    isVaccinated: false,
+    isSterilized: false,
+    description: "",
+    photos: [],
+    healthNote: ""
+  }
 });
+
+const createField = (name: string) => {
+  const { value } = useField(name);
+  return value; 
+};
+
+const name = createField("name");
+const breed = createField("breed");
+const gender = createField("gender");
+const size = createField("size");
+const temperament = createField("temperament");
+const dob = createField("dob");
+const isVaccinated = createField("isVaccinated");
+const isSterilized = createField("isSterilized");
+const description = createField("description");
+const photos = createField("photos");
+const healthNote = createField("healthNote");
+
+
 
 const lookups = ref<{
   genders: SelectListItem[];
@@ -147,14 +211,15 @@ const lookups = ref<{
 
 onMounted(async () => {
   lookups.value = await lookupService.getAnimalLookups();
-  if (props.isEditMode && props.animalId) {
+  if (props.isEditMode && props.animalId !== 0) {
     // TODO: Загрузка данных животного для редактирования
   }
 });
 
-const handleSubmit = async () => {
-  console.log(`Form data:`, form.value);
-  // Здесь будет вызов animalService.create или update
-};
+const onSubmit = handleSubmit((values) => {
+  console.log("Valid form data:", values);
+},(ctx) => {
+    console.log("Ошибки валидации, форма не отправлена:", ctx.errors);
+  });
 
 </script>

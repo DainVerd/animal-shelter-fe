@@ -15,6 +15,7 @@ import { createApp } from "vue";
 
 
 import "leaflet/dist/leaflet.css";
+import "../src/styles/global.scss";
 
 const app = createApp(App);
 
