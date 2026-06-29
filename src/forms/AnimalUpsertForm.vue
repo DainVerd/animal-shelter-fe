@@ -163,14 +163,18 @@ import { useForm, useField } from "vee-validate";
 import { animalSchema } from "../schemas/animal-upsert-schema";
 import { animalService } from "../services/animal-service";
 import { formatDateForApi } from "../utils/time-util";
+import { useNotificationStore } from "../stores/notification-store";
+import router from "../router";
+
 
 const props = defineProps<{
   animalId?: number;
   isEditMode: boolean;
 }>();
 
-let isSubmitting = ref<boolean>(false);
+const isSubmitting = ref<boolean>(false);
 const uploaderRef = ref();
+const notification = useNotificationStore();
 
 const { handleSubmit, errors, resetForm } = useForm({
   validationSchema: animalSchema,
@@ -256,12 +260,15 @@ const onSubmit = handleSubmit(async (values) => {
   }
 
   try {
-    const result = await animalService.createAnimal(formData);
-    console.log("submit form result", result);
+    await animalService.createAnimal(formData);
+    notification.notify("Added animal"); 
+
     resetForm();
     uploaderRef.value?.reset();
+    router.push("/animals");
   } catch (err) {
     console.error(err);
+    notification.notify("Error to create animal try again.", "error");
   } finally {
     isSubmitting.value = false;
   }

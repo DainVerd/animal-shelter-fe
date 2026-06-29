@@ -150,7 +150,7 @@
     </v-expand-transition>
 
     <v-navigation-drawer
-      v-if="showSideMenu()"
+      v-if="showSideMenu"
       v-model="isSidebarOpen"
       :rail="isRail"
       permanent
@@ -206,11 +206,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from "vue";
+  import { ref, computed } from "vue";
   import { useRouter } from "vue-router";
   import { useAuthStore } from "../stores/auth-store";
   import { formatRoleName } from "../utils/role-formatter";
-import UserRole from "../enums/user-role";
+  import UserRole from "../enums/user-role";
 
   const router = useRouter();
   const authStore = useAuthStore();
@@ -220,16 +220,16 @@ import UserRole from "../enums/user-role";
   const isSidebarOpen = ref(true); 
   const isRail = ref(false);      
 
-  const showSideMenu = (): boolean => {
+  const showSideMenu = computed(() => {
     if (!authStore.isAuthenticated)
       return false;
-
+    
     const currentPath = router.currentRoute.value.path;
-    if (currentPath.includes(`/auth/`))
+    if (currentPath.startsWith("/auth"))
       return false;
 
-    return Boolean(authStore.currentRole && authStore.currentRole.length > 0);
-  };
+    return Boolean(authStore.currentRole);
+  });
 
   const closeMenuAndNavigate = (path: string) => {
     isMenuOpen.value = false;
@@ -254,10 +254,10 @@ import UserRole from "../enums/user-role";
 </script>
 
 <style scoped>
-.gap-4 {
-  gap: 16px;
-}
-.gap-3 {
-  gap: 12px;
-}
+  .gap-4 {
+    gap: 16px;
+  }
+  .gap-3 {
+    gap: 12px;
+  }
 </style>
