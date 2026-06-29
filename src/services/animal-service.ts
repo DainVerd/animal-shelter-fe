@@ -1,6 +1,9 @@
 import { GenericAbortSignal } from "axios";
 import BaseResponse from "../models/base-response";
 import apiClient from "../api/api-clients";
+import PaginationParamsViewModel from "../models/views/pagination-params-view";
+import Animal from "../models/animal";
+import { PaginatedList } from "../models/paginated-list";
 
 export const animalService = {
   /**
@@ -23,4 +26,14 @@ export const animalService = {
 
     return response.data;
   },
+  async getAnimals(
+  model: PaginationParamsViewModel, 
+  signal?: GenericAbortSignal
+): Promise<BaseResponse<PaginatedList<Animal>>> {
+  const response = await apiClient.get("/v1/animals", {
+    params: { ...model },
+    signal: signal,
+  });
+  return response.data;
+}
 };

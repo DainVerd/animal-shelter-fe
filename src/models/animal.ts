@@ -1,10 +1,10 @@
 export interface Animal {
   id: number;
   name: string;
-  gender: string;
-  temperament: string;
+  gender: number;
+  temperament: number;
   breed: string;
-  size: string;
+  size: number;
   isVaccinated: boolean;
   isSterilized: boolean;
 }
