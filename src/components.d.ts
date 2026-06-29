@@ -7,9 +7,11 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AnimalPhotoUploader: typeof import('./components/common/AnimalPhotoUploader.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     AppLogo: typeof import('./components/AppLogo.vue')['default']
     AvatarIcon: typeof import('./components/AvatarIcon.vue')['default']
+    BaseDatePicker: typeof import('./components/common/BaseDatePicker.vue')['default']
     HeroSection: typeof import('./components/sections/HeroSection.vue')['default']
     HowToSection: typeof import('./components/sections/HowToSection.vue')['default']
     JoinUsSection: typeof import('./components/sections/JoinUsSection.vue')['default']

@@ -102,7 +102,6 @@ const backendError = ref<string | null>(null);
 const router = useRouter();
 const authStore = useAuthStore();
 
-// 1. Define Validation Schema with Yup
 const schema = yup.object({
   email: yup
     .string()

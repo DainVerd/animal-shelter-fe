@@ -1,0 +1,91 @@
+// src/styles/global.scss
+
+:root {
+  --v-font-family: "Nunito", sans-serif;
+}
+
+.text-h1,
+.brand-logo {
+  font-family: "Unbounded", sans-serif !important;
+  font-size: 4rem !important;       // 64px
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.text-h2 {
+  font-family: "Unbounded", sans-serif !important;
+  font-size: 2.5rem !important;     // 40px
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+}
+
+.text-h3 {
+  font-family: "Unbounded", sans-serif !important;
+  font-size: 1.25rem !important;    // 20px
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+}
+
+.text-h4 {
+  font-family: "Unbounded", sans-serif !important;
+  font-size: 2rem !important;       // 32px
+  font-weight: 700 !important;
+}
+
+.text-h5 {
+  font-family: "Unbounded", sans-serif !important;
+  font-size: 1.5rem !important;     // 24px
+  font-weight: 700 !important;
+}
+
+.text-h6 {
+  font-family: "Unbounded", sans-serif !important;
+  font-size: 1rem !important;       // 16px
+  font-weight: 700 !important;
+}
+
+// ─── BODY — Nunito ───────────────────────────────────────
+
+.text-body-1 {
+  font-family: "Nunito", sans-serif !important;
+  font-size: 1.25rem !important;    // 20px
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+}
+
+.text-body-2 {
+  font-family: "Nunito", sans-serif !important;
+  font-size: 1rem !important;       // 16px
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+}
+
+.text-caption {
+  font-family: "Nunito", sans-serif !important;
+  font-size: 0.9375rem !important;  // 15px
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+}
+
+.text-body-l {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.5rem;                // 24px
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.text-label {
+  font-family: "Nunito", sans-serif;
+  font-size: 1rem;                  // 16px
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.v-btn {
+  font-family: "Nunito", sans-serif !important;
+  font-size: 1.125rem !important;   
+  font-weight: 500 !important;
+  text-transform: none !important; 
+  letter-spacing: 0 !important;
+}
