@@ -140,11 +140,15 @@
     <!-- actions of the form -->
     <v-card-actions class="mt-4">
       <v-spacer />
-      <v-btn to="/animals">Cancel</v-btn>
+      <v-btn
+        to="/animals"
+        :loading="isSubmitting"
+      >Cancel</v-btn>
       <v-btn
         type="submit"
         color="primary"
         variant="elevated"
+        :loading="isSubmitting"
       >Save</v-btn>
     </v-card-actions>
   </v-form>
@@ -156,14 +160,17 @@ import { lookupService } from "../services/lookup-service";
 import { SelectListItem } from "../models/select-list-item";
 import { useForm, useField } from "vee-validate";
 import { animalSchema } from "../schemas/animal-upsert-schema";
+import { animalService } from "../services/animal-service";
+import { formatDateForApi } from "../utils/time-util";
 
 const props = defineProps<{
   animalId?: number;
   isEditMode: boolean;
 }>();
 
+let isSubmitting = ref<boolean>(false);
 
-const { handleSubmit, errors } = useForm({
+const { handleSubmit, errors, resetForm } = useForm({
   validationSchema: animalSchema,
   initialValues: {
     name: "",
@@ -212,14 +219,50 @@ const lookups = ref<{
 onMounted(async () => {
   lookups.value = await lookupService.getAnimalLookups();
   if (props.isEditMode && props.animalId !== 0) {
-    // TODO: Загрузка данных животного для редактирования
+    // TODO: load data for animal to edit
   }
 });
 
-const onSubmit = handleSubmit((values) => {
+
+const onSubmit = handleSubmit(async (values) => {
   console.log("Valid form data:", values);
-},(ctx) => {
-    console.log("Ошибки валидации, форма не отправлена:", ctx.errors);
-  });
+  isSubmitting.value = true;
+
+  if (props.isEditMode && props.animalId !== 0) {
+    
+    return;
+  }
+  const formData = new FormData();
+
+  formData.append("Model.Name", values.name);
+  formData.append("Model.Breed", values.breed || "");
+  formData.append("Model.Description", values.description);
+  formData.append("Model.Gender", values.gender || "");
+  formData.append("Model.Size", values.size || "");
+  formData.append("Model.Temperament", values.temperament || "");
+  formData.append("Model.IsSterilized", String(values.isSterilized));
+  formData.append("Model.IsVaccinated", String(values.isVaccinated));
+  
+  if (values.dob) 
+    formData.append("Model.DateOfBirth", formatDateForApi(values.dob as Date));
+
+
+  if (values.photos && values.photos.length > 0) {
+    values.photos.forEach((file: File) => {
+      formData.append("Model.Photos", file);
+    });
+  }
+
+  try {
+    const result = await animalService.createAnimal(formData);
+    console.log("submit form result", result);
+    resetForm();
+    photos.value = [];
+  } catch (err) {
+    console.error(err);
+  } finally {
+    isSubmitting.value = false;
+  }
+});
 
 </script>
