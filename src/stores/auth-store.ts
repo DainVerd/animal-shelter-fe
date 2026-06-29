@@ -4,8 +4,6 @@ import type { UserProfile } from "../models/user-profile";
 import { authService } from "../services/auth-service";
 import { meService } from "../services/me-service";
 
-import router from "../router";
-
 export const useAuthStore = defineStore(
   "auth",
   () => {
