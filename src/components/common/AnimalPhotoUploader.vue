@@ -85,4 +85,14 @@ const removeFile = (index: number) => {
   
   emit("update:modelValue", newFiles);
 };
+
+const reset = () => {
+  previewUrls.value.forEach(url => URL.revokeObjectURL(url));
+  previewUrls.value = [];
+  internalErrors.value = [];
+  inputKey.value++;
+  emit("update:modelValue", []);
+};
+
+defineExpose({ reset });
 </script>

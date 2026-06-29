@@ -133,6 +133,7 @@
       v-model="photos"
       :error-messages="errors.photos"
       required
+      ref="uploaderRef"
       />
     <v-row>
       
@@ -169,6 +170,7 @@ const props = defineProps<{
 }>();
 
 let isSubmitting = ref<boolean>(false);
+const uploaderRef = ref();
 
 const { handleSubmit, errors, resetForm } = useForm({
   validationSchema: animalSchema,
@@ -257,7 +259,7 @@ const onSubmit = handleSubmit(async (values) => {
     const result = await animalService.createAnimal(formData);
     console.log("submit form result", result);
     resetForm();
-    photos.value = [];
+    uploaderRef.value?.reset();
   } catch (err) {
     console.error(err);
   } finally {
