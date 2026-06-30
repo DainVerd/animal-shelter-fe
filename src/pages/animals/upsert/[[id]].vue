@@ -14,7 +14,7 @@
     withCard
   >
     <AnimalUpsertForm 
-      :animal-id="animalId" 
+      :animal-id="parseInt(animalId || ``)" 
       :is-edit-mode="isEditMode" 
     /> 
   </PageWrapper>

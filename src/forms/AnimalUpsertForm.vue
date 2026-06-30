@@ -156,7 +156,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { lookupService } from "../services/lookup-service";
 import { SelectListItem } from "../models/select-list-item";
 import { useForm, useField } from "vee-validate";
@@ -172,18 +172,19 @@ const props = defineProps<{
   isEditMode: boolean;
 }>();
 
+const controller = new AbortController();
 const isSubmitting = ref<boolean>(false);
 const uploaderRef = ref();
 const notification = useNotificationStore();
 
-const { handleSubmit, errors, resetForm } = useForm({
+const { handleSubmit, errors, resetForm, setValues } = useForm({
   validationSchema: animalSchema,
   initialValues: {
     name: "",
     breed: "",
-    gender: null,
-    size: null,
-    temperament: null,
+    gender: null as string | null,
+    size: null as string | null,
+    temperament: null as string | null,
     dob: null,
     isVaccinated: false,
     isSterilized: false,
@@ -195,6 +196,7 @@ const { handleSubmit, errors, resetForm } = useForm({
 
 const createField = (name: string) => {
   const { value } = useField(name);
+
   return value; 
 };
 
@@ -224,11 +226,33 @@ const lookups = ref<{
 
 onMounted(async () => {
   lookups.value = await lookupService.getAnimalLookups();
+  console.log("Lookups:", lookups.value);
   if (props.isEditMode && props.animalId !== 0) {
     // TODO: load data for animal to edit
+    
+    const response = await animalService.getAnimalWithImages(props.animalId as number, controller.signal);
+    if (response.isSuccess && response.data) {
+      const data = response.data;
+      
+      setValues({
+        name: data.name,
+        breed: data.breed,
+        gender: String(data.gender),
+        size: String(data.size),
+        temperament: String(data.temperament),
+        dob: data.dateOfBirth,
+        isVaccinated: data.isVaccinated,
+        isSterilized: data.isSterilized,
+        description: data.description,
+        healthNote: data.healthNote,
+        photos: []
+      });
+    }
   }
 });
-
+onUnmounted(() => {
+  controller.abort();
+});
 
 const onSubmit = handleSubmit(async (values) => {
   console.log("Valid form data:", values);

@@ -7,5 +7,8 @@ export interface Animal {
   size: number;
   isVaccinated: boolean;
   isSterilized: boolean;
+  description: string;
+  healthNote?: string;
+  dateOfBirth: string;
 }
 export default Animal;

@@ -35,5 +35,15 @@ export const animalService = {
     signal: signal,
   });
   return response.data;
-}
+},
+  async getAnimalWithImages(
+    animalId: number, 
+    signal?: GenericAbortSignal
+  ): Promise<BaseResponse<Animal>> {
+    const response = await apiClient.get(`/v1/animals/${animalId}`,{
+    signal: signal},
+  );
+
+    return response.data;
+  }
 };
