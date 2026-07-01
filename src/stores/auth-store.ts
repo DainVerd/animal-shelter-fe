@@ -131,6 +131,8 @@ export const useAuthStore = defineStore(
     };
   },
   {
-    persist: true,
-  } as any
+    persist: {
+      pick: ["user"],
+    },
+  }
 );
