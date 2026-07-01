@@ -3,7 +3,8 @@ import { ref, computed } from "vue";
 import type { UserProfile } from "../models/user-profile";
 import { authService } from "../services/auth-service";
 import { meService } from "../services/me-service";
-import SignInViewModel from "../models/views/sign-in-view";
+import { SignInRequest } from "../models/requests/sign-in-request";
+import UserRole from "../enums/user-role";
 
 export const useAuthStore = defineStore(
   "auth",
@@ -15,6 +16,12 @@ export const useAuthStore = defineStore(
     // --- Getters (now is computed) ---
     const isAuthenticated = computed(() => !!accessToken.value);
     const currentRole = computed(() => user.value?.activeRole || null);
+    const needsRoleSelection = computed(
+      () => !!user.value && user.value.activeRole === UserRole.NoRoleSelected
+    );
+    const isFullyAuthenticated = computed(
+      () => isAuthenticated.value && !needsRoleSelection.value
+    );
 
     // --- Actions ---
     function setAuthData(token: string, userData: UserProfile) {
@@ -26,14 +33,14 @@ export const useAuthStore = defineStore(
       try {
         const response = await meService.getCurrentUser(signal);
         if (response.isSuccess && response.data) {
-          user.value = response.data as UserProfile;
+          user.value = response.data;
         }
       } catch (e) {
         console.error(e);
       }
     }
 
-    async function login(model: SignInViewModel) {
+    async function login(model: SignInRequest) {
       const response = await authService.signIn(model);
       
       if (response.isSuccess && response.data) {
@@ -62,7 +69,7 @@ export const useAuthStore = defineStore(
       }
     }
 
-   async function switchContext(targetRole: string) {
+   async function switchContext(targetRole: UserRole) {
       if (!user.value || !user.value.availableRoles.includes(targetRole)) {
         return;
       }
@@ -118,7 +125,9 @@ export const useAuthStore = defineStore(
       login,
       logout,
       switchContext,
-      refreshAccessToken
+      refreshAccessToken,
+      isFullyAuthenticated,
+      needsRoleSelection 
     };
   },
   {
