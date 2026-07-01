@@ -63,4 +63,14 @@ export const animalService = {
 
     return response.data;
   },
+   async deleteAnimal(
+    animalId: number, 
+    signal?: GenericAbortSignal
+  ): Promise<BaseResponse<Animal>> {
+    const response = await apiClient.delete(`/v1/animals/${animalId}`,{
+    signal: signal},
+  );
+
+    return response.data;
+  },
 };

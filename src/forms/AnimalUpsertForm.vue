@@ -290,7 +290,7 @@ const onSubmit = handleSubmit(async (values) => {
      formData.append("Model.Id", Number(props.animalId).toString());
 
     try {
-      await animalService.updateAnimal(formData);
+      await animalService.updateAnimal(formData, controller.signal);
       notification.notify("Updated animal"); 
 
       resetForm();
@@ -306,7 +306,7 @@ const onSubmit = handleSubmit(async (values) => {
   }
 
   try {
-    await animalService.createAnimal(formData);
+    await animalService.createAnimal(formData, controller.signal);
     notification.notify("Added animal"); 
 
     resetForm();
