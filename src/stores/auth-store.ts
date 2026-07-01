@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import type { UserProfile } from "../models/user-profile";
 import { authService } from "../services/auth-service";
 import { meService } from "../services/me-service";
+import SignInViewModel from "../models/views/sign-in-view";
 
 export const useAuthStore = defineStore(
   "auth",
@@ -32,7 +33,7 @@ export const useAuthStore = defineStore(
       }
     }
 
-    async function login(model: any) {
+    async function login(model: SignInViewModel) {
       const response = await authService.signIn(model);
       
       if (response.isSuccess && response.data) {

@@ -165,6 +165,7 @@ import { animalService } from "../services/animal-service";
 import { formatDateForApi } from "../utils/time-util";
 import { useNotificationStore } from "../stores/notification-store";
 import router from "../router";
+import { AnimalPhoto } from "../models/animal-photo";
 
 
 const props = defineProps<{
@@ -185,11 +186,11 @@ const { handleSubmit, errors, resetForm, setValues } = useForm({
     gender: null as string | null,
     size: null as string | null,
     temperament: null as string | null,
-    dob: null,
+    dob: null as Date | null,
     isVaccinated: false,
     isSterilized: false,
     description: "",
-    photos: [],
+    photos: [] as AnimalPhoto[],
     healthNote: ""
   }
 });
@@ -228,7 +229,6 @@ onMounted(async () => {
   lookups.value = await lookupService.getAnimalLookups();
   console.log("Lookups:", lookups.value);
   if (props.isEditMode && props.animalId !== 0) {
-    // TODO: load data for animal to edit
     
     const response = await animalService.getAnimalWithImages(props.animalId as number, controller.signal);
     if (response.isSuccess && response.data) {
@@ -240,12 +240,17 @@ onMounted(async () => {
         gender: String(data.gender),
         size: String(data.size),
         temperament: String(data.temperament),
-        dob: data.dateOfBirth,
+        dob: new Date(data.dateOfBirth),
         isVaccinated: data.isVaccinated,
         isSterilized: data.isSterilized,
         description: data.description,
         healthNote: data.healthNote,
-        photos: []
+        photos: data.images.map(img => ({ 
+          id: img.id, 
+          key: img.key, 
+          url: img.url, 
+          isNew: false 
+        }))
       });
     }
   }
@@ -258,10 +263,6 @@ const onSubmit = handleSubmit(async (values) => {
   console.log("Valid form data:", values);
   isSubmitting.value = true;
 
-  if (props.isEditMode && props.animalId !== 0) {
-    
-    return;
-  }
   const formData = new FormData();
 
   formData.append("Model.Name", values.name);
@@ -277,10 +278,31 @@ const onSubmit = handleSubmit(async (values) => {
     formData.append("Model.DateOfBirth", formatDateForApi(values.dob as Date));
 
 
-  if (values.photos && values.photos.length > 0) {
-    values.photos.forEach((file: File) => {
-      formData.append("Model.Photos", file);
-    });
+  values.photos.forEach((photo: AnimalPhoto) => {
+    if (photo.isNew && photo.file) {
+      formData.append("Model.NewPhotos", photo.file);
+    } else if (photo.id) {
+      formData.append("Model.ExistingPhotoIds", photo.id.toString());
+    }
+  });
+
+  if (props.isEditMode && props.animalId !== 0) {
+     formData.append("Model.Id", Number(props.animalId).toString());
+
+    try {
+      await animalService.updateAnimal(formData);
+      notification.notify("Updated animal"); 
+
+      resetForm();
+      uploaderRef.value?.reset();
+      router.push("/animals");
+    } catch (err) {
+      console.error(err);
+      notification.notify("Error to update animal try again.", "error");
+    } finally {
+      isSubmitting.value = false;
+    }
+      return;
   }
 
   try {
