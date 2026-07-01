@@ -18,6 +18,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from , next) => {
   const authStore = useAuthStore();
+  await authStore.initialize();
 
   const hasValidRole = authStore.currentRole && authStore.currentRole !== UserRole.NoRoleSelected;
 

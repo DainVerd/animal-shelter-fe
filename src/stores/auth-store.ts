@@ -13,6 +13,7 @@ export const useAuthStore = defineStore(
     // --- State  ---
     const accessToken = ref<string | null>(null);
     const user = ref<UserProfile | null>(null);
+    let initPromise: Promise<void> | null = null;
    
     // --- Getters (now is computed) ---
     const isAuthenticated = computed(() => !!accessToken.value);
@@ -75,29 +76,29 @@ export const useAuthStore = defineStore(
       }
     }
 
-  async function switchContext(targetRole: UserRole): Promise<ActionResult> {
-    if (!user.value || !user.value.availableRoles.includes(targetRole)) {
-      return { success: false, errorMessages: ["Role is not available"] };
-    }
+    async function switchContext(targetRole: UserRole): Promise<ActionResult> {
+      if (!user.value || !user.value.availableRoles.includes(targetRole)) {
+        return { success: false, errorMessages: ["Role is not available"] };
+      }
 
-    if (user.value.activeRole === targetRole) {
-      return { success: true };
-    }
-
-    try {
-      const response = await meService.selectRole(targetRole);
-
-      if (response.isSuccess && response.data) {
-        accessToken.value = response.data.token;
-        user.value.activeRole = targetRole;
+      if (user.value.activeRole === targetRole) {
         return { success: true };
       }
-      return { success: false, errorMessages: response.errorMessages };
-    } catch (e) {
-      console.error("Error in role change:", e);
-      return { success: false, errorMessages: ["Failed to change role"] };
+
+      try {
+        const response = await meService.selectRole(targetRole);
+
+        if (response.isSuccess && response.data) {
+          accessToken.value = response.data.token;
+          user.value.activeRole = targetRole;
+          return { success: true };
+        }
+        return { success: false, errorMessages: response.errorMessages };
+      } catch (e) {
+        console.error("Error in role change:", e);
+        return { success: false, errorMessages: ["Failed to change role"] };
+      }
     }
-  }
 
     async function refreshAccessToken() {
       try {
@@ -121,6 +122,17 @@ export const useAuthStore = defineStore(
       return false;
     }
 
+    function initialize(): Promise<void> {
+      if (!initPromise) {
+        initPromise = (async () => {
+          if (user.value) {
+            await refreshAccessToken();
+          }
+        })();
+      }
+      return initPromise;
+    }
+
     return {
       accessToken,
       user,
@@ -133,7 +145,8 @@ export const useAuthStore = defineStore(
       switchContext,
       refreshAccessToken,
       isFullyAuthenticated,
-      needsRoleSelection 
+      needsRoleSelection ,
+      initialize
     };
   },
   {
