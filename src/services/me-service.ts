@@ -1,9 +1,9 @@
 import apiClient from "../api/api-clients";
 import { BaseResponse } from "../models/base-response";
 import TokenResponse from "../models/token-response";
-import Role from "../models/role";
-import User from "../models/user";
 import type { GenericAbortSignal } from "axios";
+import { UserProfile } from "../models/user-profile";
+import Role from "../models/role";
 
 export const meService = {
   /**
@@ -30,7 +30,7 @@ export const meService = {
   ): Promise<BaseResponse<TokenResponse>> {
     const response = await apiClient.post<BaseResponse<TokenResponse>>(
       "/v1/me/select-role",
-       {roleCode: roleCode},
+      { roleCode: roleCode },
       { signal: signal },
     );
 
@@ -41,10 +41,13 @@ export const meService = {
    */
   async getCurrentUser(
     signal?: GenericAbortSignal,
-  ): Promise<BaseResponse<User>> {
-    const response = await apiClient.get<BaseResponse<User>>("/v1/me/profile", {
-      signal: signal,
-    });
+  ): Promise<BaseResponse<UserProfile>> {
+    const response = await apiClient.get<BaseResponse<UserProfile>>(
+      "/v1/me/profile",
+      {
+        signal: signal,
+      },
+    );
 
     return response.data;
   },

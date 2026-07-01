@@ -2,7 +2,7 @@ import apiClient from "../api/api-clients";
 import { BaseResponse } from "../models/base-response";
 import type { GenericAbortSignal } from "axios";
 import { SignInResponse } from "../models/sign-in-response";
-import SignInViewModel from "../models/views/sign-in-view";
+import SignInViewModel from "../models/requests/sign-in-request";
 
 export const authService = {
   /**

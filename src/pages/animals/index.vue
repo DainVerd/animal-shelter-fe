@@ -100,15 +100,6 @@
     max-width="500"
     v-model="openDialog"
   >
-    <template v-slot:activator="{ props: activatorProps }">
-      <v-btn
-        v-bind="activatorProps"
-        color="surface-variant"
-        text="Open Dialog"
-        variant="flat"
-      ></v-btn>
-    </template>
-
     <template v-slot:default="{ isActive }">
       <v-card title="Delete Animal?">
         <v-card-text>
@@ -197,9 +188,6 @@ const confirmDelete = (item: Animal) => {
 };
 
 const deleteAnimal = async () => {
-
-  console.log("animal to Delete", selectedAnimalId.value);
-  
   if(!selectedAnimalId.value)
     return;
 

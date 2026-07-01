@@ -3,7 +3,9 @@ import { ref, computed } from "vue";
 import type { UserProfile } from "../models/user-profile";
 import { authService } from "../services/auth-service";
 import { meService } from "../services/me-service";
-import SignInViewModel from "../models/views/sign-in-view";
+import { SignInRequest } from "../models/requests/sign-in-request";
+import UserRole from "../enums/user-role";
+import { ActionResult } from "../models/action-result";
 
 export const useAuthStore = defineStore(
   "auth",
@@ -11,10 +13,17 @@ export const useAuthStore = defineStore(
     // --- State  ---
     const accessToken = ref<string | null>(null);
     const user = ref<UserProfile | null>(null);
+    let initPromise: Promise<void> | null = null;
    
     // --- Getters (now is computed) ---
     const isAuthenticated = computed(() => !!accessToken.value);
     const currentRole = computed(() => user.value?.activeRole || null);
+    const needsRoleSelection = computed(
+      () => !!user.value && user.value.activeRole === UserRole.NoRoleSelected
+    );
+    const isFullyAuthenticated = computed(
+      () => isAuthenticated.value && !needsRoleSelection.value
+    );
 
     // --- Actions ---
     function setAuthData(token: string, userData: UserProfile) {
@@ -22,29 +31,34 @@ export const useAuthStore = defineStore(
       user.value = userData;
     }
 
-    async function fetchUserProfile(signal?: AbortSignal) {
+    async function fetchUserProfile(signal?: AbortSignal): Promise<ActionResult> {
       try {
         const response = await meService.getCurrentUser(signal);
         if (response.isSuccess && response.data) {
-          user.value = response.data as UserProfile;
+          user.value = response.data;
+          return { success: true };
         }
+        return { success: false, errorMessages: response.errorMessages };
       } catch (e) {
-        console.error(e);
+        console.error("Error fetching user profile:", e);
+        return { success: false, errorMessages: ["Failed to load profile"] };
       }
     }
 
-    async function login(model: SignInViewModel) {
-      const response = await authService.signIn(model);
-      
-      if (response.isSuccess && response.data) {
-        // 1. save token
-        accessToken.value = response.data.accessToken;
-        
-        // 2. load user profile from BE
-        await fetchUserProfile();
+    async function login(model: SignInRequest): Promise<ActionResult> {
+      try {
+        const response = await authService.signIn(model);
+
+        if (response.isSuccess && response.data) {
+          accessToken.value = response.data.accessToken;
+          await fetchUserProfile();
+          return { success: true };
+        }
+        return { success: false, errorMessages: response.errorMessages };
+      } catch (e) {
+        console.error("Error during login:", e);
+        return { success: false, errorMessages: ["Ошибка сети при входе"] };
       }
-      
-      return response;
     }
 
     function logoutStateOnly() {
@@ -62,13 +76,13 @@ export const useAuthStore = defineStore(
       }
     }
 
-   async function switchContext(targetRole: string) {
+    async function switchContext(targetRole: UserRole): Promise<ActionResult> {
       if (!user.value || !user.value.availableRoles.includes(targetRole)) {
-        return;
+        return { success: false, errorMessages: ["Role is not available"] };
       }
 
       if (user.value.activeRole === targetRole) {
-        return;
+        return { success: true };
       }
 
       try {
@@ -76,13 +90,13 @@ export const useAuthStore = defineStore(
 
         if (response.isSuccess && response.data) {
           accessToken.value = response.data.token;
-          
-          // update current role of user
           user.value.activeRole = targetRole;
-          
+          return { success: true };
         }
+        return { success: false, errorMessages: response.errorMessages };
       } catch (e) {
-        console.error("Error in role change", e);
+        console.error("Error in role change:", e);
+        return { success: false, errorMessages: ["Failed to change role"] };
       }
     }
 
@@ -108,6 +122,17 @@ export const useAuthStore = defineStore(
       return false;
     }
 
+    function initialize(): Promise<void> {
+      if (!initPromise) {
+        initPromise = (async () => {
+          if (user.value) {
+            await refreshAccessToken();
+          }
+        })();
+      }
+      return initPromise;
+    }
+
     return {
       accessToken,
       user,
@@ -118,10 +143,15 @@ export const useAuthStore = defineStore(
       login,
       logout,
       switchContext,
-      refreshAccessToken
+      refreshAccessToken,
+      isFullyAuthenticated,
+      needsRoleSelection ,
+      initialize
     };
   },
   {
-    persist: true,
-  } as any
+    persist: {
+      pick: ["user"],
+    },
+  }
 );
