@@ -211,9 +211,11 @@
   import { useAuthStore } from "../stores/auth-store";
   import { formatRoleName } from "../utils/role-formatter";
   import UserRole from "../enums/user-role";
+  import { useNotificationStore } from "../stores/notification-store";
 
   const router = useRouter();
   const authStore = useAuthStore();
+  const notificationStore = useNotificationStore();
 
   const isMenuOpen = ref(false);
   
@@ -244,12 +246,19 @@
   };
 
   // to switch role
-  const handleRoleSwitch = async (targetRole: string) => {
-    if (targetRole === authStore.currentRole) {
+  const handleRoleSwitch = async (targetRole: UserRole) => {
+    if (targetRole === authStore.currentRole)
       return;
-    }
     
-    await authStore.switchContext(targetRole);
+    const result = await authStore.switchContext(targetRole);
+    if (result.success) {
+      notificationStore.notify("Role switched successfully", "success");
+    } else {
+      notificationStore.notify(
+        result.errorMessages?.join(", ") ?? "Failed to switch role",
+        "error"
+      );
+    }
   };
 </script>
 

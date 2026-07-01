@@ -126,30 +126,24 @@ const { value: password } = useField<string>("password");
 const onSubmit = handleSubmit(async (values) => {
   backendError.value = null;
 
-  try {
+  const result = await authStore.login({
+    email: values.email,
+    password: values.password,
+  });
 
-    const response = await authStore.login({
-      email: values.email,
-      password: values.password
-    });
-
-    if (response.isSuccess) {
+  if (result.success) {
     const roles = authStore.user?.availableRoles || [];
 
     if (roles.length > 1) {
-      // if many roles navigate user to page for selecting roles
       router.push("/auth/select-role");
     } else if (roles.length === 1) {
-      // if only one role select it by default
       await authStore.switchContext(roles[0]);
       router.push("/");
     } else {
       router.push("/");
     }
-  }
-  } catch (error) {
-    console.error("Backend login error", error);
-    backendError.value = "Unable to connect to the server. Please try again later.";
+  } else {
+    backendError.value = result.errorMessages?.join(", ") ?? "Unable to sign in. Please try again later.";
   }
 });
 </script>

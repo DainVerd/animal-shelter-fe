@@ -5,6 +5,7 @@ import { authService } from "../services/auth-service";
 import { meService } from "../services/me-service";
 import { SignInRequest } from "../models/requests/sign-in-request";
 import UserRole from "../enums/user-role";
+import { ActionResult } from "../models/action-result";
 
 export const useAuthStore = defineStore(
   "auth",
@@ -29,29 +30,34 @@ export const useAuthStore = defineStore(
       user.value = userData;
     }
 
-    async function fetchUserProfile(signal?: AbortSignal) {
+    async function fetchUserProfile(signal?: AbortSignal): Promise<ActionResult> {
       try {
         const response = await meService.getCurrentUser(signal);
         if (response.isSuccess && response.data) {
           user.value = response.data;
+          return { success: true };
         }
+        return { success: false, errorMessages: response.errorMessages };
       } catch (e) {
-        console.error(e);
+        console.error("Error fetching user profile:", e);
+        return { success: false, errorMessages: ["Failed to load profile"] };
       }
     }
 
-    async function login(model: SignInRequest) {
-      const response = await authService.signIn(model);
-      
-      if (response.isSuccess && response.data) {
-        // 1. save token
-        accessToken.value = response.data.accessToken;
-        
-        // 2. load user profile from BE
-        await fetchUserProfile();
+    async function login(model: SignInRequest): Promise<ActionResult> {
+      try {
+        const response = await authService.signIn(model);
+
+        if (response.isSuccess && response.data) {
+          accessToken.value = response.data.accessToken;
+          await fetchUserProfile();
+          return { success: true };
+        }
+        return { success: false, errorMessages: response.errorMessages };
+      } catch (e) {
+        console.error("Error during login:", e);
+        return { success: false, errorMessages: ["Ошибка сети при входе"] };
       }
-      
-      return response;
     }
 
     function logoutStateOnly() {
@@ -69,29 +75,29 @@ export const useAuthStore = defineStore(
       }
     }
 
-   async function switchContext(targetRole: UserRole) {
-      if (!user.value || !user.value.availableRoles.includes(targetRole)) {
-        return;
-      }
-
-      if (user.value.activeRole === targetRole) {
-        return;
-      }
-
-      try {
-        const response = await meService.selectRole(targetRole);
-
-        if (response.isSuccess && response.data) {
-          accessToken.value = response.data.token;
-          
-          // update current role of user
-          user.value.activeRole = targetRole;
-          
-        }
-      } catch (e) {
-        console.error("Error in role change", e);
-      }
+  async function switchContext(targetRole: UserRole): Promise<ActionResult> {
+    if (!user.value || !user.value.availableRoles.includes(targetRole)) {
+      return { success: false, errorMessages: ["Role is not available"] };
     }
+
+    if (user.value.activeRole === targetRole) {
+      return { success: true };
+    }
+
+    try {
+      const response = await meService.selectRole(targetRole);
+
+      if (response.isSuccess && response.data) {
+        accessToken.value = response.data.token;
+        user.value.activeRole = targetRole;
+        return { success: true };
+      }
+      return { success: false, errorMessages: response.errorMessages };
+    } catch (e) {
+      console.error("Error in role change:", e);
+      return { success: false, errorMessages: ["Failed to change role"] };
+    }
+  }
 
     async function refreshAccessToken() {
       try {

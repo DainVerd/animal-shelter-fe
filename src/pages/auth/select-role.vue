@@ -60,18 +60,28 @@
 </template>
 
 <script setup lang="ts">
-    import { useAuthStore } from "../../stores/auth-store";
-    import { useRouter } from "vue-router";
+  import UserRole from "../../enums/user-role";
+  import { useAuthStore } from "../../stores/auth-store";
+  import { useRouter } from "vue-router";
+import { useNotificationStore } from "../../stores/notification-store";
 
-    const authStore = useAuthStore();
-    const router = useRouter();
+  const authStore = useAuthStore();
+  const router = useRouter();
+  const notificationStore = useNotificationStore();
 
-    const selectRole = async (role: string) => {
-        await authStore.switchContext(role);
-        router.push("/dashboard");
-    };
-    const signOut = async() => {
-      await authStore.logout();
-      router.push("/");
-    };
+  const selectRole = async (role: UserRole) => {
+    const result = await authStore.switchContext(role);
+    if (result.success) {
+      router.push("/dashboard");
+    } else {
+      notificationStore.notify(
+        result.errorMessages?.join(", ") ?? "Failed to select role",
+        "error"
+      );
+    }
+  };
+  const signOut = async() => {
+    await authStore.logout();
+    router.push("/");
+  };
 </script>
