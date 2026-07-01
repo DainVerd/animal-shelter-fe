@@ -41,11 +41,12 @@
       >
       <template v-slot:item.gender="{ item }">
         <v-chip
-          :color="item.gender === 1 ? `blue-lighten-1` : `pink-lighten-1`"
+          :color="item.gender === Gender.Male ? `blue-lighten-1` : `pink-lighten-1`"
           size="small"
           variant="tonal"
+          :append-icon="item.gender === Gender.Male ? `mdi-gender-male` : `mdi-gender-female`"
         >
-          {{ item.gender === 0 ? `Male` : `Female` }}
+          {{ formatGenderName(item.gender)}}
         </v-chip>
       </template>
 
@@ -105,6 +106,8 @@ import { animalService } from "../../services/animal-service";
 import Animal from "../../models/animal";
 import { formatDate } from "../../utils/date-formatter";
 import { useRouter } from "vue-router";
+import Gender from "../../enums/gender";
+import { formatGenderName } from "../../utils/gender-formatter";
 
 
 const router = useRouter();
