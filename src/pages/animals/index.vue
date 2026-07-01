@@ -150,21 +150,23 @@ const openDialog = ref(false);
 const selectedAnimalId = ref<number | null>(null);
 
 const headers = [
-  { title: "Name", key: "name" },
-  { title: "Breed", key: "breed" },
-  { title: "Gender", key: "gender" },
-  { title: "Birth Date", key: "dateOfBirth" },
+  { title: "Name", key: "name", sortable: true },
+  { title: "Breed", key: "breed", sortable: true },
+  { title: "Gender", key: "gender", sortable: true },
+  { title: "Birth Date", key: "dateOfBirth", sortable: true },
   { title: "Actions", key: "actions", sortable: false, align: "end" },
 ];
 
 
-const loadData = async ({ page, itemsPerPage: size }: any) => {
+const loadData = async ({ page, itemsPerPage: size, sortBy }: any) => {
   loading.value = true;
   try {
-
+    const sort = sortBy && sortBy.length > 0 ? sortBy[0] : null;
     const response = await animalService.getAnimals({ 
         pageNumber: page -1, 
-        pageSize: size 
+        pageSize: size ,
+        sortBy: sort?.key,
+        isDescending: sort?.order === "desc"
     });
 
     if (response.isSuccess && response.data) {
@@ -172,7 +174,7 @@ const loadData = async ({ page, itemsPerPage: size }: any) => {
       totalCount.value = response.data.totalCount;
     }
   } catch (error) {
-    console.error("Ошибка загрузки:", error);
+    console.error("Error to load:", error);
   } finally {
     loading.value = false;
   }
@@ -194,18 +196,18 @@ const deleteAnimal = async () => {
   try {
     await animalService.deleteAnimal(selectedAnimalId.value, controller.signal);
     notification.notify("Deleted animal!"); 
-     animals.value = animals.value.filter(animal => animal.id !== selectedAnimalId.value);
-      totalCount.value = totalCount.value - 1;
+    animals.value = animals.value.filter((animal: Animal) => animal.id !== selectedAnimalId.value);
+    totalCount.value = totalCount.value - 1;
   } catch(err){
     notification.notify("Error to delete animal try again.", "error");
   } finally {
     selectedAnimalId.value = null;
     openDialog.value = false;
   }
+};
 
   onUnmounted(() => {
-  controller.abort();
-});
-};
+    controller.abort();
+  });
 
 </script>

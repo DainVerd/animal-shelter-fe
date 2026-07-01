@@ -16,19 +16,19 @@ export const animalService = {
     const response = await apiClient.post<BaseResponse<number>>(
       "/v1/animals",
       animalToCreate,
-      { 
+      {
         signal: signal,
         headers: {
-          "Content-Type": "multipart/form-data"
-        }
+          "Content-Type": "multipart/form-data",
+        },
       },
     );
 
     return response.data;
   },
   async getAnimals(
-    model: PaginationParamsViewModel, 
-    signal?: GenericAbortSignal
+    model: PaginationParamsViewModel,
+    signal?: GenericAbortSignal,
   ): Promise<BaseResponse<PaginatedList<Animal>>> {
     const response = await apiClient.get("/v1/animals", {
       params: { ...model },
@@ -37,12 +37,12 @@ export const animalService = {
     return response.data;
   },
   async getAnimalWithImages(
-    animalId: number, 
-    signal?: GenericAbortSignal
+    animalId: number,
+    signal?: GenericAbortSignal,
   ): Promise<BaseResponse<Animal>> {
-    const response = await apiClient.get(`/v1/animals/${animalId}`,{
-    signal: signal},
-  );
+    const response = await apiClient.get(`/v1/animals/${animalId}`, {
+      signal: signal,
+    });
 
     return response.data;
   },
@@ -53,23 +53,23 @@ export const animalService = {
     const response = await apiClient.put<BaseResponse<void>>(
       "/v1/animals",
       animalToUpdate,
-      { 
+      {
         signal: signal,
         headers: {
-          "Content-Type": "multipart/form-data"
-        }
+          "Content-Type": "multipart/form-data",
+        },
       },
     );
 
     return response.data;
   },
-   async deleteAnimal(
-    animalId: number, 
-    signal?: GenericAbortSignal
+  async deleteAnimal(
+    animalId: number,
+    signal?: GenericAbortSignal,
   ): Promise<BaseResponse<Animal>> {
-    const response = await apiClient.delete(`/v1/animals/${animalId}`,{
-    signal: signal},
-  );
+    const response = await apiClient.delete(`/v1/animals/${animalId}`, {
+      signal: signal,
+    });
 
     return response.data;
   },
