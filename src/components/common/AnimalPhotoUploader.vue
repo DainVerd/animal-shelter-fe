@@ -16,14 +16,15 @@
       v-if="previewUrls.length > 0"
     >
       <v-col
-        v-for="(url, index) in previewUrls"
-        :key="url"
+        v-for="(photo, index) in previewUrls"
+        :key="index"
         cols="3"
         md="2"
       >
         <v-card class="position-relative">
           <v-img
-            :src="url"
+            :key="photo.url"
+            :src="photo.url"
             height="120"
             cover
           />
@@ -42,57 +43,63 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+  import { ref, watch, nextTick } from "vue";
+  import { AnimalPhoto } from "../../models/animal-photo";
 
-const props = defineProps<{ 
-  modelValue: File[];
-  maxFiles?: number; 
-  errorMessages?: string | string[];
-}>();
+  const props = defineProps<{ 
+    modelValue: AnimalPhoto[];
+    maxFiles?: number; 
+    errorMessages?: string | string[];
+  }>();
 
-const emit = defineEmits(["update:modelValue"]);
+  const emit = defineEmits(["update:modelValue"]);
 
-const previewUrls = ref<string[]>([]);
-const internalErrors = ref<string[]>([]);
-const inputKey = ref(0); 
+  const previewUrls = ref<AnimalPhoto[]>([]);
+  const internalErrors = ref<string[]>([]);
+  const inputKey = ref(0); 
 
-const handleFileChange = (newFiles: File[] | null) => {
-  if (!newFiles || newFiles.length === 0) return;
+  const handleFileChange = async (newFiles: File[] | null) => {
+    if (!newFiles || newFiles.length === 0)
+      return;
 
-  let updatedFiles = [...props.modelValue, ...newFiles];
+    const newPhotos: AnimalPhoto[] = newFiles.map(file => ({
+      url: URL.createObjectURL(file),
+      file: file,
+      isNew: true
+    }));
 
-  if (props.maxFiles && updatedFiles.length > props.maxFiles) {
-    internalErrors.value = [`Максимум ${props.maxFiles} фото.`];
-    updatedFiles = updatedFiles.slice(0, props.maxFiles);
-  } else {
+    const updatedFiles = [...props.modelValue, ...newPhotos];
+    
+    emit("update:modelValue", updatedFiles);
+
+    await nextTick();
+    previewUrls.value = updatedFiles;
+    
+    inputKey.value++;
+  };
+
+  const removeFile = (index: number) => {
+    const photoToRemove = previewUrls.value[index];
+  
+
+    if (photoToRemove.url.startsWith("blob:"))
+      URL.revokeObjectURL(photoToRemove.url);
+
+    const newFiles = [...props.modelValue];
+    newFiles.splice(index, 1);
+    emit("update:modelValue", newFiles);
+  };
+
+  const reset = () => {
+    previewUrls.value.forEach(url => URL.revokeObjectURL(url));
+    previewUrls.value = [];
     internalErrors.value = [];
-  }
+    inputKey.value++;
+    emit("update:modelValue", []);
+  };
+  watch(() => props.modelValue, (newVal) => {
+    previewUrls.value = newVal || [];
+  }, { immediate: true, deep: true });
 
-  previewUrls.value.forEach(url => URL.revokeObjectURL(url));
-  previewUrls.value = updatedFiles.map(file => URL.createObjectURL(file));
-  
-  emit("update:modelValue", updatedFiles);
-  
-  inputKey.value++;
-};
-
-const removeFile = (index: number) => {
-  const newFiles = [...props.modelValue];
-  newFiles.splice(index, 1);
-  
-  URL.revokeObjectURL(previewUrls.value[index]);
-  previewUrls.value.splice(index, 1);
-  
-  emit("update:modelValue", newFiles);
-};
-
-const reset = () => {
-  previewUrls.value.forEach(url => URL.revokeObjectURL(url));
-  previewUrls.value = [];
-  internalErrors.value = [];
-  inputKey.value++;
-  emit("update:modelValue", []);
-};
-
-defineExpose({ reset });
+  defineExpose({ reset });
 </script>

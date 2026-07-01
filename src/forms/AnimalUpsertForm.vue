@@ -156,7 +156,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { lookupService } from "../services/lookup-service";
 import { SelectListItem } from "../models/select-list-item";
 import { useForm, useField } from "vee-validate";
@@ -165,6 +165,7 @@ import { animalService } from "../services/animal-service";
 import { formatDateForApi } from "../utils/time-util";
 import { useNotificationStore } from "../stores/notification-store";
 import router from "../router";
+import { AnimalPhoto } from "../models/animal-photo";
 
 
 const props = defineProps<{
@@ -172,29 +173,31 @@ const props = defineProps<{
   isEditMode: boolean;
 }>();
 
+const controller = new AbortController();
 const isSubmitting = ref<boolean>(false);
 const uploaderRef = ref();
 const notification = useNotificationStore();
 
-const { handleSubmit, errors, resetForm } = useForm({
+const { handleSubmit, errors, resetForm, setValues } = useForm({
   validationSchema: animalSchema,
   initialValues: {
     name: "",
     breed: "",
-    gender: null,
-    size: null,
-    temperament: null,
-    dob: null,
+    gender: null as string | null,
+    size: null as string | null,
+    temperament: null as string | null,
+    dob: null as Date | null,
     isVaccinated: false,
     isSterilized: false,
     description: "",
-    photos: [],
+    photos: [] as AnimalPhoto[],
     healthNote: ""
   }
 });
 
 const createField = (name: string) => {
   const { value } = useField(name);
+
   return value; 
 };
 
@@ -224,20 +227,42 @@ const lookups = ref<{
 
 onMounted(async () => {
   lookups.value = await lookupService.getAnimalLookups();
+  console.log("Lookups:", lookups.value);
   if (props.isEditMode && props.animalId !== 0) {
-    // TODO: load data for animal to edit
+    
+    const response = await animalService.getAnimalWithImages(props.animalId as number, controller.signal);
+    if (response.isSuccess && response.data) {
+      const data = response.data;
+      
+      setValues({
+        name: data.name,
+        breed: data.breed,
+        gender: String(data.gender),
+        size: String(data.size),
+        temperament: String(data.temperament),
+        dob: new Date(data.dateOfBirth),
+        isVaccinated: data.isVaccinated,
+        isSterilized: data.isSterilized,
+        description: data.description,
+        healthNote: data.healthNote,
+        photos: data.images.map(img => ({ 
+          id: img.id, 
+          key: img.key, 
+          url: img.url, 
+          isNew: false 
+        }))
+      });
+    }
   }
 });
-
+onUnmounted(() => {
+  controller.abort();
+});
 
 const onSubmit = handleSubmit(async (values) => {
   console.log("Valid form data:", values);
   isSubmitting.value = true;
 
-  if (props.isEditMode && props.animalId !== 0) {
-    
-    return;
-  }
   const formData = new FormData();
 
   formData.append("Model.Name", values.name);
@@ -253,10 +278,31 @@ const onSubmit = handleSubmit(async (values) => {
     formData.append("Model.DateOfBirth", formatDateForApi(values.dob as Date));
 
 
-  if (values.photos && values.photos.length > 0) {
-    values.photos.forEach((file: File) => {
-      formData.append("Model.Photos", file);
-    });
+  values.photos.forEach((photo: AnimalPhoto) => {
+    if (photo.isNew && photo.file) {
+      formData.append("Model.NewPhotos", photo.file);
+    } else if (photo.id) {
+      formData.append("Model.ExistingPhotoIds", photo.id.toString());
+    }
+  });
+
+  if (props.isEditMode && props.animalId !== 0) {
+     formData.append("Model.Id", Number(props.animalId).toString());
+
+    try {
+      await animalService.updateAnimal(formData);
+      notification.notify("Updated animal"); 
+
+      resetForm();
+      uploaderRef.value?.reset();
+      router.push("/animals");
+    } catch (err) {
+      console.error(err);
+      notification.notify("Error to update animal try again.", "error");
+    } finally {
+      isSubmitting.value = false;
+    }
+      return;
   }
 
   try {

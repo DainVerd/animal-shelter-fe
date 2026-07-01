@@ -27,13 +27,40 @@ export const animalService = {
     return response.data;
   },
   async getAnimals(
-  model: PaginationParamsViewModel, 
-  signal?: GenericAbortSignal
-): Promise<BaseResponse<PaginatedList<Animal>>> {
-  const response = await apiClient.get("/v1/animals", {
-    params: { ...model },
-    signal: signal,
-  });
-  return response.data;
-}
+    model: PaginationParamsViewModel, 
+    signal?: GenericAbortSignal
+  ): Promise<BaseResponse<PaginatedList<Animal>>> {
+    const response = await apiClient.get("/v1/animals", {
+      params: { ...model },
+      signal: signal,
+    });
+    return response.data;
+  },
+  async getAnimalWithImages(
+    animalId: number, 
+    signal?: GenericAbortSignal
+  ): Promise<BaseResponse<Animal>> {
+    const response = await apiClient.get(`/v1/animals/${animalId}`,{
+    signal: signal},
+  );
+
+    return response.data;
+  },
+  async updateAnimal(
+    animalToUpdate: FormData,
+    signal?: GenericAbortSignal,
+  ): Promise<BaseResponse<void>> {
+    const response = await apiClient.put<BaseResponse<void>>(
+      "/v1/animals",
+      animalToUpdate,
+      { 
+        signal: signal,
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      },
+    );
+
+    return response.data;
+  },
 };

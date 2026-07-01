@@ -1,3 +1,5 @@
+import AnimalImage from "./animal-image";
+
 export interface Animal {
   id: number;
   name: string;
@@ -7,5 +9,9 @@ export interface Animal {
   size: number;
   isVaccinated: boolean;
   isSterilized: boolean;
+  description: string;
+  healthNote?: string;
+  dateOfBirth: string;
+  images: AnimalImage[];
 }
 export default Animal;
