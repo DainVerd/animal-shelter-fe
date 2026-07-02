@@ -1,5 +1,8 @@
 <template>
-  <v-form @submit.prevent="onSubmit">
+  <v-form
+    @submit.prevent="onSubmit"
+    :disabled="isReadOnly"
+  >
     <h3 class="text-subtitle-1 font-weight-bold mb-4">General Information</h3>
     <v-row>
       <v-col
@@ -134,12 +137,16 @@
       :error-messages="errors.photos"
       required
       ref="uploaderRef"
+      :disabled="isReadOnly"
       />
     <v-row>
       
     </v-row>
     <!-- actions of the form -->
-    <v-card-actions class="mt-4">
+    <v-card-actions
+      class="mt-4"
+      v-if="showFormsActions()"
+    >
       <v-spacer />
       <v-btn
         to="/animals"
@@ -171,6 +178,7 @@ import { AnimalPhoto } from "../models/animal-photo";
 const props = defineProps<{
   animalId?: number;
   isEditMode: boolean;
+  isReadOnly?: boolean;
 }>();
 
 const controller = new AbortController();
@@ -227,8 +235,7 @@ const lookups = ref<{
 
 onMounted(async () => {
   lookups.value = await lookupService.getAnimalLookups();
-  console.log("Lookups:", lookups.value);
-  if (props.isEditMode && props.animalId !== 0) {
+  if ((props.isEditMode && props.animalId !== 0) || (props.isReadOnly && props.animalId !== 0)) {
     
     const response = await animalService.getAnimalWithImages(props.animalId as number, controller.signal);
     if (response.isSuccess && response.data) {
@@ -260,7 +267,6 @@ onUnmounted(() => {
 });
 
 const onSubmit = handleSubmit(async (values) => {
-  console.log("Valid form data:", values);
   isSubmitting.value = true;
 
   const formData = new FormData();
@@ -319,5 +325,9 @@ const onSubmit = handleSubmit(async (values) => {
     isSubmitting.value = false;
   }
 });
+
+const showFormsActions = (): boolean => {
+  return !props.isReadOnly;
+};
 
 </script>
