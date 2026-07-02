@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { publicAnimalService } from "../../services/public-animal-service";
+import { publicService } from "../../services/public-service";
 import PublicAnimal from "../../models/public-animal";
 import { useNotificationStore } from "../../stores/notification-store";
 
@@ -55,7 +55,7 @@ const notification = useNotificationStore();
 const loadAnimals = async (page: number) => {
   loading.value = true;
   try {
-    const result = await publicAnimalService.getPublicAnimalsList(
+    const result = await publicService.getPublicAnimalsList(
       { pageNumber: page, pageSize: 5 }, 
       new AbortController().signal
     );

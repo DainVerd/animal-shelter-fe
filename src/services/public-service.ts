@@ -7,7 +7,7 @@ import apiClient from "../api/api-clients";
 
 
 
-export const publicAnimalService = {
+export const publicService = {
   async getPublicAnimalsList(
     pagination: PaginationParamsRequest,
     signal?: GenericAbortSignal,
