@@ -73,7 +73,7 @@
             <v-list-item 
               prepend-icon="mdi-eye" 
               title="View" 
-              @click="editAnimal(item)"
+              @click="viewAnimal(item)"
               class="cursor-pointer"
             />
             <v-list-item 
@@ -120,6 +120,34 @@
       </v-card>
     </template>
   </v-dialog>
+  <!--dialog to view animals -->
+  <v-dialog
+    v-model="viewDialog"
+    max-width="800"
+  >
+  <v-card title="Animal Details">
+    <v-card-text>
+      <AnimalUpsertForm 
+        v-if="viewAnimalId" 
+        :animal-id="viewAnimalId" 
+        :is-read-only="true"
+        :is-edit-mode="false"
+      />
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer />
+      <v-btn
+        text="Edit"
+        color="primary"
+        @click="navigateToEditPage()"
+      />
+      <v-btn
+        text="Close"
+        @click="viewDialog = false"
+      />
+    </v-card-actions>
+  </v-card>
+</v-dialog>
   </PageWrapper>
 </template>
 
@@ -133,14 +161,12 @@ import { useRouter } from "vue-router";
 import Gender from "../../enums/gender";
 import { formatGenderName } from "../../utils/gender-formatter";
 import { useNotificationStore } from "../../stores/notification-store";
-
+import AnimalUpsertForm from "../../forms/AnimalUpsertForm.vue";
 
 const router = useRouter();
 const notification = useNotificationStore();
 const controller = new AbortController();
-const pageBreadcrumbs: BreadcrumbItem[] = [
-  { title: "Animals", to: "/animals" }
-];
+
 
 const animals = ref<Animal[]>([]);
 const totalCount = ref(0);
@@ -148,6 +174,8 @@ const loading = ref(false);
 const itemsPerPage = ref(10);
 const openDialog = ref(false);
 const selectedAnimalId = ref<number | null>(null);
+const viewDialog = ref(false);
+const viewAnimalId = ref<number | null>(null);
 
 const headers = [
   { title: "Name", key: "name", sortable: true },
@@ -156,7 +184,9 @@ const headers = [
   { title: "Birth Date", key: "dateOfBirth", sortable: true },
   { title: "Actions", key: "actions", sortable: false, align: "end" },
 ];
-
+const pageBreadcrumbs: BreadcrumbItem[] = [
+  { title: "Animals", to: "/animals" }
+];
 
 const loadData = async ({ page, itemsPerPage: size, sortBy }: any) => {
   loading.value = true;
@@ -206,8 +236,19 @@ const deleteAnimal = async () => {
   }
 };
 
-  onUnmounted(() => {
-    controller.abort();
-  });
+const viewAnimal = (item: Animal) => {
+  viewAnimalId.value = item.id;
+  viewDialog.value = true;
+};
+
+const navigateToEditPage = () => {
+  router.push(`/animals/upsert/${viewAnimalId.value}`);
+  viewDialog.value = false;
+  viewAnimalId.value = null;
+};
+
+onUnmounted(() => {
+  controller.abort();
+});
 
 </script>

@@ -35,6 +35,7 @@
             class="position-absolute"
             style="top: 4px; right: 4px"
             @click="removeFile(index)"
+            :disabled="disabled"
           />
         </v-card>
       </v-col>
@@ -50,6 +51,7 @@
     modelValue: AnimalPhoto[];
     maxFiles?: number; 
     errorMessages?: string | string[];
+    disabled?: boolean;
   }>();
 
   const emit = defineEmits(["update:modelValue"]);
