@@ -3,6 +3,7 @@ import { BaseResponse } from "../models/base-response";
 import type { GenericAbortSignal } from "axios";
 import { SignInResponse } from "../models/sign-in-response";
 import SignInViewModel from "../models/requests/sign-in-request";
+import UserRole from "../enums/user-role";
 
 export const authService = {
   /**
@@ -19,10 +20,12 @@ export const authService = {
   },
 
   async refreshToken(
+    payload: { activeRole: UserRole | null },
     signal?: GenericAbortSignal,
   ): Promise<BaseResponse<SignInResponse>> {
     const response = await apiClient.post<BaseResponse<SignInResponse>>(
       "/v1/authenticate/refresh-token",
+      payload,
       { signal: signal },
     );
 

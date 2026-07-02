@@ -101,12 +101,17 @@ export const useAuthStore = defineStore(
     }
 
     async function refreshAccessToken() {
-      try {
-        const response = await authService.refreshToken();
+     try {
+        // 1. get role if not have one set null
+        const roleToSend = user.value?.activeRole === UserRole.NoRoleSelected 
+          ? null 
+          : user.value?.activeRole || null;
 
-        // check if we got the data
+        // 2. send payload to server
+        const response = await authService.refreshToken({ activeRole: roleToSend });
+
+        // 3. check it is ok
         if (response.isSuccess && response.data) {
-          // setting new access token
           accessToken.value = response.data.accessToken;
 
           return true;
@@ -115,8 +120,6 @@ export const useAuthStore = defineStore(
         console.error("Error during token refresh:", e);
       }
 
-      // if cookie is expired or back end returned 401/500
-      // drop auth
       logoutStateOnly();
 
       return false;
