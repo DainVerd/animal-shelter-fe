@@ -7,6 +7,8 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AnimalCard: typeof import('./components/AnimalCard.vue')['default']
+    AnimalCarousel: typeof import('./components/AnimalCarousel.vue')['default']
     AnimalPhotoUploader: typeof import('./components/common/AnimalPhotoUploader.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     AppLogo: typeof import('./components/AppLogo.vue')['default']

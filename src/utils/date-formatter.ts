@@ -17,3 +17,14 @@ export const formatDate = (
 
   return format(date, formatString);
 };
+
+export const calculateAge = (birthDate: string | Date): string => {
+  const birth = new Date(birthDate);
+  const today = new Date();
+  let years = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+    years--;
+  }
+  return years === 0 ? "Under 1 year" : `${years} years`;
+};
