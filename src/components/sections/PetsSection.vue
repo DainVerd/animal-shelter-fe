@@ -57,7 +57,7 @@ const loadAnimals = async (page: number) => {
   try {
     const result = await publicService.getPublicAnimalsList(
       { pageNumber: page, pageSize: 5 }, 
-      new AbortController().signal
+      controller.signal
     );
 
     if (result.data) {
