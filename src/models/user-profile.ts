@@ -6,4 +6,5 @@ export interface UserProfile {
   userName: string;
   activeRole: UserRole;
   availableRoles: UserRole[]; 
+  requiresPasswordChange: boolean;
 }
