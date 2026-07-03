@@ -136,6 +136,10 @@ export const useAuthStore = defineStore(
       return initPromise;
     }
 
+    async function completePasswordChange(): Promise<void> {
+      await fetchUserProfile();
+    }
+
     return {
       accessToken,
       user,
@@ -149,7 +153,8 @@ export const useAuthStore = defineStore(
       refreshAccessToken,
       isFullyAuthenticated,
       needsRoleSelection ,
-      initialize
+      initialize,
+      completePasswordChange
     };
   },
   {

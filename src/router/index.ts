@@ -27,6 +27,17 @@ router.beforeEach(async (to, from , next) => {
     return next("/auth/sign-in");
   }
 
+  if (authStore.isAuthenticated && authStore.user?.requiresPasswordChange) {
+    if (to.path !== "/auth/change-password") {
+      return next("/auth/change-password");
+    }
+    return next(); 
+  }
+
+  if (authStore.isAuthenticated && !authStore.user?.requiresPasswordChange && to.path === "/auth/change-password") {
+    return next("/dashboard");
+  }
+
   // 2. if auth , but no valid role, force to select role
   if (
     authStore.isAuthenticated && 
