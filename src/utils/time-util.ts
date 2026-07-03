@@ -5,3 +5,4 @@ export const formatDateForApi = (date: Date): string => {
 
   return `${year}-${month}-${day}`;
 };
+
