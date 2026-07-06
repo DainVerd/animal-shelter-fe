@@ -47,6 +47,7 @@
           block
           :loading="loading"
           class="mt-4"
+          @onclick="signOut"
         >
           Sing Out
         </v-btn>
@@ -74,7 +75,7 @@ const submit = async () => {
   loading.value = true;
 
   try {
-    const response = await meService.changePassword({
+    const response = await authService.changePassword({
       oldPassword: oldPassword.value,
       newPassword: newPassword.value
     });
@@ -86,6 +87,23 @@ const submit = async () => {
     } else {
       error.value = response.errorMessages?.[0] || "Failed to change password!";
     }
+  } catch (e) {
+    console.error(e);
+    error.value = "Bad Request";
+  } finally {
+    loading.value = false;
+  }
+};
+
+const signOut = async () => {
+  error.value = null;
+  loading.value = true;
+
+  try {
+    await authStore.logout();
+
+    router.push("/");
+    
   } catch (e) {
     console.error(e);
     error.value = "Bad Request";
