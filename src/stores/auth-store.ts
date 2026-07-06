@@ -57,7 +57,7 @@ export const useAuthStore = defineStore(
         return { success: false, errorMessages: response.errorMessages };
       } catch (e) {
         console.error("Error during login:", e);
-        return { success: false, errorMessages: ["Ошибка сети при входе"] };
+        return { success: false, errorMessages: ["Error to sign in"] };
       }
     }
 
