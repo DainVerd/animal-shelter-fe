@@ -24,12 +24,14 @@
           label="Old Password"
           type="password"
           required
+          :error-messages="errors.oldPassword"
         />
         <v-text-field
           v-model="newPassword"
           label="New Password"
           type="password"
           required
+          :error-messages="errors.newPassword"
         />
         
         <v-btn
@@ -38,16 +40,17 @@
           block
           :loading="loading"
           class="mt-4"
+          :disabled="!meta.valid"
         >
           Update Password
         </v-btn>
         <v-btn
-          type="reset"
+          type="button"
           color="secondary"
           block
           :loading="loading"
           class="mt-4"
-          @onclick="signOut"
+          @click="signOut"
         >
           Sing Out
         </v-btn>
@@ -61,29 +64,39 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/auth-store";
 import { authService } from "../../services/auth-service";
+import { useForm, useField } from "vee-validate";
+import { passwordChangeSchema } from "../../schemas/password-shange-schema";
 
 const authStore = useAuthStore();
 const router = useRouter();
-
-const oldPassword = ref("");
-const newPassword = ref("");
 const error = ref<string | null>(null);
 const loading = ref(false);
 
-const submit = async () => {
+
+const { errors, handleSubmit, meta } = useForm({
+  validationSchema: passwordChangeSchema,
+  initialValues: {
+    oldPassword: "",
+    newPassword: ""
+  }
+});
+
+const { value: oldPassword, errorMessage: oldPasswordError } = useField<string>("oldPassword");
+const { value: newPassword, errorMessage: newPasswordError } = useField<string>("newPassword");
+
+const submit = handleSubmit(async (values) => {
   error.value = null;
   loading.value = true;
 
   try {
     const response = await authService.changePassword({
-      oldPassword: oldPassword.value,
-      newPassword: newPassword.value
+      oldPassword: values.oldPassword,
+      newPassword: values.newPassword
     });
 
     if (response.isSuccess) {
       await authStore.completePasswordChange();
-
-      router.push("/dashboard");
+      await router.push("/auth/select-role");
     } else {
       error.value = response.errorMessages?.[0] || "Failed to change password!";
     }
@@ -93,17 +106,14 @@ const submit = async () => {
   } finally {
     loading.value = false;
   }
-};
+});
 
 const signOut = async () => {
   error.value = null;
   loading.value = true;
-
   try {
     await authStore.logout();
-
-    router.push("/");
-    
+    await router.push("/");
   } catch (e) {
     console.error(e);
     error.value = "Bad Request";
