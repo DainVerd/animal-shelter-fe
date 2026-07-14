@@ -94,11 +94,11 @@ const submit = handleSubmit(async (values) => {
       newPassword: values.newPassword
     });
 
-    if (response.isSuccess) {
+    if (response) {
       await authStore.completePasswordChange();
       await router.push("/auth/select-role");
     } else {
-      error.value = response.errorMessages?.[0] || "Failed to change password!";
+      error.value = "Failed to change password!";
     }
   } catch (e) {
     console.error(e);

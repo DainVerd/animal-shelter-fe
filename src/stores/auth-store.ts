@@ -49,12 +49,12 @@ export const useAuthStore = defineStore(
       try {
         const response = await authService.signIn(model);
 
-        if (response.isSuccess && response.data) {
-          accessToken.value = response.data.accessToken;
+        if (response) {
+          accessToken.value = response.accessToken;
           await fetchUserProfile();
           return { success: true };
         }
-        return { success: false, errorMessages: response.errorMessages };
+        return { success: false, errorMessages: ["Failed to log in into system"] };
       } catch (e) {
         console.error("Error during login:", e);
         return { success: false, errorMessages: ["Error to sign in"] };
@@ -111,8 +111,8 @@ export const useAuthStore = defineStore(
         const response = await authService.refreshToken({ activeRole: roleToSend });
 
         // 3. check it is ok
-        if (response.isSuccess && response.data) {
-          accessToken.value = response.data.accessToken;
+        if (response) {
+          accessToken.value = response.accessToken;
 
           return true;
         }
