@@ -6,58 +6,59 @@ import { meService } from "../services/me-service";
 import { SignInRequest } from "../models/requests/sign-in-request";
 import UserRole from "../enums/user-role";
 import { ActionResult } from "../models/action-result";
+import { ApiError } from "../models/api-error";
 
 export const useAuthStore = defineStore(
   "auth",
   () => {
-    // --- State  ---
     const accessToken = ref<string | null>(null);
     const user = ref<UserProfile | null>(null);
     let initPromise: Promise<void> | null = null;
-   
-    // --- Getters (now is computed) ---
+
     const isAuthenticated = computed(() => !!accessToken.value);
     const currentRole = computed(() => user.value?.activeRole || null);
     const needsRoleSelection = computed(
-      () => !!user.value && user.value.activeRole === UserRole.NoRoleSelected
+      () => !!user.value && user.value.activeRole === UserRole.NoRoleSelected,
     );
     const isFullyAuthenticated = computed(
-      () => isAuthenticated.value && !needsRoleSelection.value
+      () => isAuthenticated.value && !needsRoleSelection.value,
     );
 
-    // --- Actions ---
     function setAuthData(token: string, userData: UserProfile) {
       accessToken.value = token;
       user.value = userData;
     }
 
-    async function fetchUserProfile(signal?: AbortSignal): Promise<ActionResult> {
+    async function fetchUserProfile(
+      signal?: AbortSignal,
+    ): Promise<ActionResult> {
       try {
-        const response = await meService.getCurrentUser(signal);
-        if (response) {
-          user.value = response;
-          return { success: true };
-        }
-        return { success: false, errorMessages: ["Error msg"] };
+        const profile = await meService.getCurrentUser(signal);
+        user.value = profile;
+        return { success: true };
       } catch (e) {
         console.error("Error fetching user profile:", e);
-        return { success: false, errorMessages: ["Failed to load profile"] };
+        const message =
+          e instanceof ApiError
+            ? (e.errors ?? [e.message])
+            : ["Failed to load profile"];
+        return { success: false, errorMessages: message };
       }
     }
 
     async function login(model: SignInRequest): Promise<ActionResult> {
       try {
         const response = await authService.signIn(model);
-
-        if (response) {
-          accessToken.value = response.accessToken;
-          await fetchUserProfile();
-          return { success: true };
-        }
-        return { success: false, errorMessages: ["Failed to log in into system"] };
+        accessToken.value = response.accessToken;
+        await fetchUserProfile();
+        return { success: true };
       } catch (e) {
         console.error("Error during login:", e);
-        return { success: false, errorMessages: ["Error to sign in"] };
+        const message =
+          e instanceof ApiError
+            ? (e.errors ?? [e.message])
+            : ["Error to sign in"];
+        return { success: false, errorMessages: message };
       }
     }
 
@@ -87,41 +88,36 @@ export const useAuthStore = defineStore(
 
       try {
         const response = await meService.selectRole(targetRole);
-
-        if (response) {
-          accessToken.value = response.token;
-          user.value.activeRole = targetRole;
-          return { success: true };
-        }
-        return { success: false, errorMessages: ["Err msgs"] };
+        accessToken.value = response.token;
+        user.value.activeRole = targetRole;
+        return { success: true };
       } catch (e) {
         console.error("Error in role change:", e);
-        return { success: false, errorMessages: ["Failed to change role"] };
+        const message =
+          e instanceof ApiError
+            ? (e.errors ?? [e.message])
+            : ["Failed to change role"];
+        return { success: false, errorMessages: message };
       }
     }
 
     async function refreshAccessToken() {
-     try {
-        // 1. get role if not have one set null
-        const roleToSend = user.value?.activeRole === UserRole.NoRoleSelected 
-          ? null 
-          : user.value?.activeRole || null;
+      try {
+        const roleToSend =
+          user.value?.activeRole === UserRole.NoRoleSelected
+            ? null
+            : user.value?.activeRole || null;
 
-        // 2. send payload to server
-        const response = await authService.refreshToken({ activeRole: roleToSend });
-
-        // 3. check it is ok
-        if (response) {
-          accessToken.value = response.accessToken;
-
-          return true;
-        }
+        const response = await authService.refreshToken({
+          activeRole: roleToSend,
+        });
+        accessToken.value = response.accessToken;
+        return true;
       } catch (e) {
         console.error("Error during token refresh:", e);
       }
 
       logoutStateOnly();
-
       return false;
     }
 
@@ -152,14 +148,10 @@ export const useAuthStore = defineStore(
       switchContext,
       refreshAccessToken,
       isFullyAuthenticated,
-      needsRoleSelection ,
+      needsRoleSelection,
       initialize,
-      completePasswordChange
+      completePasswordChange,
     };
   },
-  {
-    persist: {
-      pick: ["user"],
-    },
-  }
+  { persist: { pick: ["user"] } },
 );
