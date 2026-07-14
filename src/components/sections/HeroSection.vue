@@ -31,8 +31,8 @@
         class="d-flex justify-end"
       >
         <v-img
-          src="https://placehold.co/200x250"
-          alt="Happy Pets"
+          src="../../../src/assets/cat-and-dog-image.webp"
+          alt="Rude dog with small cat watching at the viewer"
           :max-width="imgMaxWidth"
           :aspect-ratio="4 / 3"
           width="100%"
