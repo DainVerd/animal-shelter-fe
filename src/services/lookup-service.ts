@@ -1,5 +1,4 @@
 import apiClient from "../api/api-clients";
-import { BaseResponse } from "../models/base-response";
 import type { SelectListItem } from "../models/select-list-item";
 
 export const lookupService = {
@@ -9,8 +8,8 @@ export const lookupService = {
    */
   async getOptions(
     enumName: string,
-  ): Promise<BaseResponse<SelectListItem[]>> {
-    const response = await apiClient.get<BaseResponse<SelectListItem[]>>(
+  ): Promise<SelectListItem[]> {
+    const response = await apiClient.get<SelectListItem[]>(
       `/v1/lookup/${enumName}`
     );
     
@@ -28,9 +27,9 @@ export const lookupService = {
     ]);
 
     return {
-      genders: genders.data || [],
-      sizes: sizes.data || [],
-      temperaments: temperaments.data || [],
+      genders: genders,
+      sizes: sizes,
+      temperaments: temperaments,
     };
   },
 };
