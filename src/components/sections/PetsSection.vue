@@ -60,9 +60,9 @@ const loadAnimals = async (page: number) => {
       controller.signal
     );
 
-    if (result.data) {
-      animals.value.push(...result.data.items);
-      petsTotalAmount.value = result.data.totalCount;
+    if (result) {
+      animals.value.push(...result.items);
+      petsTotalAmount.value = result.totalCount;
     }
   } catch (error) {
     notification.notify("Failed to load pets", "error");
