@@ -34,11 +34,11 @@ export const useAuthStore = defineStore(
     async function fetchUserProfile(signal?: AbortSignal): Promise<ActionResult> {
       try {
         const response = await meService.getCurrentUser(signal);
-        if (response.isSuccess && response.data) {
-          user.value = response.data;
+        if (response) {
+          user.value = response;
           return { success: true };
         }
-        return { success: false, errorMessages: response.errorMessages };
+        return { success: false, errorMessages: ["Error msg"] };
       } catch (e) {
         console.error("Error fetching user profile:", e);
         return { success: false, errorMessages: ["Failed to load profile"] };
@@ -88,12 +88,12 @@ export const useAuthStore = defineStore(
       try {
         const response = await meService.selectRole(targetRole);
 
-        if (response.isSuccess && response.data) {
-          accessToken.value = response.data.token;
+        if (response) {
+          accessToken.value = response.token;
           user.value.activeRole = targetRole;
           return { success: true };
         }
-        return { success: false, errorMessages: response.errorMessages };
+        return { success: false, errorMessages: ["Err msgs"] };
       } catch (e) {
         console.error("Error in role change:", e);
         return { success: false, errorMessages: ["Failed to change role"] };

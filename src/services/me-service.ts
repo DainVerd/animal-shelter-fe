@@ -1,5 +1,4 @@
 import apiClient from "../api/api-clients";
-import { BaseResponse } from "../models/base-response";
 import TokenResponse from "../models/token-response";
 import type { GenericAbortSignal } from "axios";
 import { UserProfile } from "../models/user-profile";
@@ -10,13 +9,10 @@ export const meService = {
    * Get current user roles
    * @param signal optional cancellation token
    */
-  async getAvailableRoles(
-    signal?: GenericAbortSignal,
-  ): Promise<BaseResponse<Role[]>> {
-    const response = await apiClient.get<BaseResponse<Role[]>>(
-      "/v1/me/available-roles",
-      { signal: signal },
-    );
+  async getAvailableRoles(signal?: GenericAbortSignal): Promise<Role[]> {
+    const response = await apiClient.get<Role[]>("/v1/me/available-roles", {
+      signal: signal,
+    });
 
     return response.data;
   },
@@ -27,8 +23,8 @@ export const meService = {
   async selectRole(
     roleCode: string,
     signal?: GenericAbortSignal,
-  ): Promise<BaseResponse<TokenResponse>> {
-    const response = await apiClient.post<BaseResponse<TokenResponse>>(
+  ): Promise<TokenResponse> {
+    const response = await apiClient.post<TokenResponse>(
       "/v1/me/select-role",
       { roleCode: roleCode },
       { signal: signal },
@@ -39,15 +35,10 @@ export const meService = {
   /**
    * get current user profile from token
    */
-  async getCurrentUser(
-    signal?: GenericAbortSignal,
-  ): Promise<BaseResponse<UserProfile>> {
-    const response = await apiClient.get<BaseResponse<UserProfile>>(
-      "/v1/me/profile",
-      {
-        signal: signal,
-      },
-    );
+  async getCurrentUser(signal?: GenericAbortSignal): Promise<UserProfile> {
+    const response = await apiClient.get<UserProfile>("/v1/me/profile", {
+      signal: signal,
+    });
 
     return response.data;
   },
