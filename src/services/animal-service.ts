@@ -1,7 +1,6 @@
 import { GenericAbortSignal } from "axios";
-import BaseResponse from "../models/base-response";
 import apiClient from "../api/api-clients";
-import PaginationParamsViewModel from "../models/views/pagination-params-view";
+import PaginationParamsViewModel from "../models/requests/pagination-params-request";
 import Animal from "../models/animal";
 import { PaginatedList } from "../models/paginated-list";
 
@@ -12,8 +11,8 @@ export const animalService = {
   async createAnimal(
     animalToCreate: FormData,
     signal?: GenericAbortSignal,
-  ): Promise<BaseResponse<number>> {
-    const response = await apiClient.post<BaseResponse<number>>(
+  ): Promise<number> {
+    const response = await apiClient.post<number>(
       "/v1/animals",
       animalToCreate,
       {
@@ -29,7 +28,7 @@ export const animalService = {
   async getAnimals(
     model: PaginationParamsViewModel,
     signal?: GenericAbortSignal,
-  ): Promise<BaseResponse<PaginatedList<Animal>>> {
+  ): Promise<PaginatedList<Animal>> {
     const response = await apiClient.get("/v1/animals", {
       params: { ...model },
       signal: signal,
@@ -39,7 +38,7 @@ export const animalService = {
   async getAnimalWithImages(
     animalId: number,
     signal?: GenericAbortSignal,
-  ): Promise<BaseResponse<Animal>> {
+  ): Promise<Animal> {
     const response = await apiClient.get(`/v1/animals/${animalId}`, {
       signal: signal,
     });
@@ -49,8 +48,8 @@ export const animalService = {
   async updateAnimal(
     animalToUpdate: FormData,
     signal?: GenericAbortSignal,
-  ): Promise<BaseResponse<void>> {
-    const response = await apiClient.put<BaseResponse<void>>(
+  ): Promise<void> {
+    const response = await apiClient.put<void>(
       "/v1/animals",
       animalToUpdate,
       {
@@ -66,7 +65,7 @@ export const animalService = {
   async deleteAnimal(
     animalId: number,
     signal?: GenericAbortSignal,
-  ): Promise<BaseResponse<Animal>> {
+  ): Promise<Animal> {
     const response = await apiClient.delete(`/v1/animals/${animalId}`, {
       signal: signal,
     });

@@ -199,9 +199,9 @@ const loadData = async ({ page, itemsPerPage: size, sortBy }: any) => {
         isDescending: sort?.order === "desc"
     });
 
-    if (response.isSuccess && response.data) {
-      animals.value = response.data.items || [];
-      totalCount.value = response.data.totalCount;
+    if (response) {
+      animals.value = response.items ;
+      totalCount.value = response.totalCount;
     }
   } catch (error) {
     console.error("Error to load:", error);

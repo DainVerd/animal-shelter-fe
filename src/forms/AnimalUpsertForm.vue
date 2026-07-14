@@ -238,21 +238,19 @@ onMounted(async () => {
   if ((props.isEditMode && props.animalId !== 0) || (props.isReadOnly && props.animalId !== 0)) {
     
     const response = await animalService.getAnimalWithImages(props.animalId as number, controller.signal);
-    if (response.isSuccess && response.data) {
-      const data = response.data;
-      
+    if (response) {
       setValues({
-        name: data.name,
-        breed: data.breed,
-        gender: String(data.gender),
-        size: String(data.size),
-        temperament: String(data.temperament),
-        dob: new Date(data.dateOfBirth),
-        isVaccinated: data.isVaccinated,
-        isSterilized: data.isSterilized,
-        description: data.description,
-        healthNote: data.healthNote,
-        photos: data.images.map(img => ({ 
+        name: response.name,
+        breed: response.breed,
+        gender: String(response.gender),
+        size: String(response.size),
+        temperament: String(response.temperament),
+        dob: new Date(response.dateOfBirth),
+        isVaccinated: response.isVaccinated,
+        isSterilized: response.isSterilized,
+        description: response.description,
+        healthNote: response.healthNote,
+        photos: response.images.map(img => ({ 
           id: img.id, 
           key: img.key, 
           url: img.url, 
