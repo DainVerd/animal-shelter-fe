@@ -112,24 +112,23 @@
         nav
         class="mt-2"
     >
+    <template
+      v-for="section in menuSections"
+      :key="section.title"
+    >
+    <template v-if="section.display !== false">
+      <v-list-subheader>{{ section.title }}</v-list-subheader>
+
       <v-list-item
-        prepend-icon="mdi-view-dashboard"
-        title="Dashboard"
-        to="/dashboard"
+        v-for="item in section.items"
+        :key="item.to"
+        :prepend-icon="item.prependIcon"
+        :title="item.title"
+        :to="item.to"
         color="primary"
-      ></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-paw"
-        title="Animals"
-        to="/animals"
-        color="primary"
-      ></v-list-item>
-      <v-list-item
-        prepend-icon="mdi-account-group"
-        title="Users"
-        to="/users"
-        color="primary"
-      ></v-list-item>
+      />
+    </template>
+  </template>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -150,6 +149,36 @@
 
   const isSidebarOpen = ref(true);
   const isRail = ref(false);
+
+const menuSections = computed(() => [
+  {
+    title: "General",
+    items: [
+      {
+        prependIcon: "mdi-view-dashboard",
+        title: "Dashboard",
+        to: "/dashboard",
+      },
+      {
+        prependIcon: "mdi-paw",
+        title: "Animals",
+        to: "/animals",
+      },
+    ],
+  },
+  {
+    title: "Administration",
+    items: [
+      {
+        prependIcon: "mdi-account-group",
+        title: "Users",
+        to: "/users",
+      },
+    ],
+    display: authStore.user?.activeRole === UserRole.Admin || authStore.user?.activeRole === UserRole.SuperAdmin,
+  },
+]);
+
 
   const showSideMenu = computed(() => {
     if (!authStore.isAuthenticated)
