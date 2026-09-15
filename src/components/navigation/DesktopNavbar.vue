@@ -107,29 +107,57 @@
       ></v-btn>
     </div>
 
-    <v-list
-        density="compact"
-        nav
-        class="mt-2"
-    >
-    <template
-      v-for="section in menuSections"
-      :key="section.title"
-    >
+<v-list
+  density="compact"
+  nav
+  class="mt-2"
+>
+  <template
+    v-for="section in menuSections"
+    :key="section.title"
+  >
     <template v-if="section.display !== false">
-      <v-list-subheader>{{ section.title }}</v-list-subheader>
+      <!-- Normal section -->
+      <template v-if="!section.expandable">
+        <v-list-subheader>
+          {{ section.title }}
+        </v-list-subheader>
 
-      <v-list-item
-        v-for="item in section.items"
-        :key="item.to"
-        :prepend-icon="item.prependIcon"
-        :title="item.title"
-        :to="item.to"
-        color="primary"
-      />
+        <v-list-item
+          v-for="item in section.items"
+          :key="item.to"
+          :prepend-icon="item.prependIcon"
+          :title="item.title"
+          :to="item.to"
+          color="primary"
+        />
+      </template>
+
+      <!-- Expandable section -->
+      <v-list-group
+        v-else
+        :value="section.title"
+      >
+        <template #activator="{ props }">
+          <v-list-item
+            v-bind="props"
+            :prepend-icon="section.prependIcon"
+            :title="section.title"
+          />
+        </template>
+
+        <v-list-item
+          v-for="item in section.items"
+          :key="item.to"
+          :prepend-icon="item.prependIcon"
+          :title="item.title"
+          :to="item.to"
+          color="primary"
+        />
+      </v-list-group>
     </template>
   </template>
-    </v-list>
+</v-list>
   </v-navigation-drawer>
 </template>
 
@@ -150,34 +178,44 @@
   const isSidebarOpen = ref(true);
   const isRail = ref(false);
 
-const menuSections = computed(() => [
-  {
-    title: "General",
-    items: [
-      {
-        prependIcon: "mdi-view-dashboard",
-        title: "Dashboard",
-        to: "/dashboard",
-      },
-      {
-        prependIcon: "mdi-paw",
-        title: "Animals",
-        to: "/animals",
-      },
-    ],
-  },
-  {
-    title: "Administration",
-    items: [
-      {
-        prependIcon: "mdi-account-group",
-        title: "Users",
-        to: "/users",
-      },
-    ],
-    display: authStore.user?.activeRole === UserRole.Admin || authStore.user?.activeRole === UserRole.SuperAdmin,
-  },
-]);
+  const menuSections = computed(() => [
+    {
+      title: "General",
+      expandable: false,
+      items: [
+        {
+          prependIcon: "mdi-view-dashboard",
+          title: "Dashboard",
+          to: "/dashboard",
+        },
+        {
+          prependIcon: "mdi-paw",
+          title: "Animals",
+          to: "/animals",
+        },
+      ],
+    },
+    {
+      title: "Administration",
+      prependIcon: "mdi-shield-account",
+      expandable: true,
+      items: [
+        {
+          prependIcon: "mdi-account-group",
+          title: "Users",
+          to: "/admin/users",
+        },
+        {
+          prependIcon: "mdi-account-plus",
+          title: "Invitations",
+          to: "/admin/invites",
+        },
+      ],
+      display:
+        authStore.user?.activeRole === UserRole.Admin ||
+        authStore.user?.activeRole === UserRole.SuperAdmin,
+    },
+  ]);
 
 
   const showSideMenu = computed(() => {
