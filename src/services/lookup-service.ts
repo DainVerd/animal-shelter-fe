@@ -32,4 +32,15 @@ export const lookupService = {
       temperaments: temperaments,
     };
   },
+  /**
+   * Get roles that the current user is allowed to assign
+   * when creating an invitation.
+   */
+  async getAvailableUserRoles(): Promise<SelectListItem[]> {
+    const response = await apiClient.get<SelectListItem[]>(
+      "/v1/lookup/user-roles"
+    );
+
+    return response.data;
+  },
 };
