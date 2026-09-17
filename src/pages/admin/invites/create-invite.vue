@@ -66,6 +66,7 @@ import { lookupService } from "../../../services/lookup-service";
 import type { SelectListItem } from "../../../models/select-list-item";
 import { useNotificationStore } from "../../../stores/notification-store";
 import type { BreadcrumbItem } from "../../../models/bread-crumb-item";
+import { invitationService } from "../../../services/invitation-service";
 
 const notificationStore = useNotificationStore();
 
@@ -126,9 +127,11 @@ const onSubmit = handleSubmit(async (values) => {
   isSubmitting.value = true;
 
   try {
-    console.log(values);
 
-    // await invitationService.createInvite(values);
+    await invitationService.sendInvite({
+      email: values.email,
+      roles: values.roles,
+    });
 
     notificationStore.notify(
       "Invitation sent successfully.",
