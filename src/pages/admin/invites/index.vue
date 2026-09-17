@@ -19,7 +19,7 @@
       <v-btn
         color="primary"
         prepend-icon="mdi-plus"
-        to="/invites/upsert"
+        to="/admin/invites/create-invite"
       >
         Invite User
       </v-btn>
