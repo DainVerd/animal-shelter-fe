@@ -31,6 +31,7 @@ declare module 'vue-router/auto-routes' {
     '/find-a-pet': RouteRecordInfo<'/find-a-pet', '/find-a-pet', Record<never, never>, Record<never, never>>,
     '/forbidden': RouteRecordInfo<'/forbidden', '/forbidden', Record<never, never>, Record<never, never>>,
     '/privacy-policy': RouteRecordInfo<'/privacy-policy', '/privacy-policy', Record<never, never>, Record<never, never>>,
+    '/register': RouteRecordInfo<'/register', '/register', Record<never, never>, Record<never, never>>,
     '/terms-of-use': RouteRecordInfo<'/terms-of-use', '/terms-of-use', Record<never, never>, Record<never, never>>,
   }
 }
