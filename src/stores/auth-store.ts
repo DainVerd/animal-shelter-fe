@@ -7,6 +7,7 @@ import { SignInRequest } from "../models/requests/sign-in-request";
 import UserRole from "../enums/user-role";
 import { ActionResult } from "../models/action-result";
 import { ApiError } from "../models/api-error";
+import { invitationService } from "../services/invitation-service";
 
 export const useAuthStore = defineStore(
   "auth",
@@ -76,6 +77,47 @@ export const useAuthStore = defineStore(
         logoutStateOnly();
       }
     }
+
+    async function acceptInvite(
+      token: string,
+      password: string,
+    ): Promise<ActionResult> {
+    try {
+      const response = await invitationService.acceptInvite({
+        token,
+        password,
+      });
+
+      accessToken.value = response.accessToken;
+
+      const profileResult = await fetchUserProfile();
+
+      if (!profileResult.success) {
+        logoutStateOnly();
+
+        return {
+          success: false,
+          errorMessages: profileResult.errorMessages,
+        };
+      }
+
+      return { success: true };
+    } catch (e) {
+      console.error("Error during invitation acceptance:", e);
+
+      const message =
+        e instanceof ApiError
+          ? (e.errors ?? [e.message])
+          : ["Failed to create account"];
+
+      logoutStateOnly();
+
+      return {
+        success: false,
+        errorMessages: message,
+      };
+    }
+  }
 
     async function switchContext(targetRole: UserRole): Promise<ActionResult> {
       if (!user.value || !user.value.availableRoles.includes(targetRole)) {
@@ -151,6 +193,7 @@ export const useAuthStore = defineStore(
       needsRoleSelection,
       initialize,
       completePasswordChange,
+      acceptInvite
     };
   },
   { persist: { pick: ["user"] } },

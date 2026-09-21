@@ -20,6 +20,16 @@ router.beforeEach(async (to, from , next) => {
   const authStore = useAuthStore();
   await authStore.initialize();
 
+  // 0. routes that require an invitation token
+  if (to.meta.requiresInviteToken) {
+    const token = to.query.token;
+
+    if (typeof token !== "string" || !token.trim()) {
+      return next("/");
+    }
+  }
+
+
   const hasValidRole = authStore.currentRole && authStore.currentRole !== UserRole.NoRoleSelected;
 
   // 1. protect routes without auth
