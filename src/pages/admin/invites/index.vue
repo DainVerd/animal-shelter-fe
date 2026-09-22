@@ -42,8 +42,9 @@
             :key="role"
             size="small"
             variant="tonal"
+            :color="getRoleColor(role)"
           >
-            {{ role }}
+            {{ formatRoleName(role) }}
           </v-chip>
         </div>
       </template>
@@ -53,6 +54,7 @@
           size="small"
           variant="tonal"
           :color="getStatusColor(item.status)"
+          :prepend-icon="getStatusIcon(item.status)"
         >
           {{ formatInviteStatusName(item.status) }}
         </v-chip>
@@ -89,7 +91,8 @@
   import type { UserInvite } from "../../../models/user-invite";
   import { invitationService } from "../../../services/invitation-service";
   import { formatDate } from "../../../utils/date-formatter";
-  import { formatInviteStatusName, getStatusColor } from "../../../utils/invite-status-formatter.ts";
+  import { formatInviteStatusName, getStatusColor, getStatusIcon } from "../../../utils/invite-status-formatter.ts";
+  import { formatRoleName, getRoleColor } from "../../../utils/role-formatter.ts";
 
   const breadcrumbs: BreadcrumbItem[] = [
     {

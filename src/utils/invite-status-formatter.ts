@@ -33,3 +33,22 @@ export const getStatusColor = (status: InviteStatus): string => {
       return "grey";
   }
 };
+
+export const getStatusIcon = (status: InviteStatus): string => {
+  switch (status) {
+    case InviteStatus.Pending:
+      return "mdi-clock-outline";
+
+    case InviteStatus.Accepted:
+      return "mdi-check-circle-outline";
+
+    case InviteStatus.Expired:
+      return "mdi-clock-alert-outline";
+
+    case InviteStatus.Revoked:
+      return "mdi-close-circle-outline";
+
+    default:
+      return "mdi-help-circle-outline";
+  }
+};
