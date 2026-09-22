@@ -38,7 +38,7 @@
       <template #item.roles="{ item }">
         <div class="d-flex flex-wrap ga-1">
           <v-chip
-            v-for="role in item.roles"
+            v-for="role in sortRoles(item.roles)"
             :key="role"
             size="small"
             variant="tonal"
@@ -92,7 +92,7 @@
   import { invitationService } from "../../../services/invitation-service";
   import { formatDate } from "../../../utils/date-formatter";
   import { formatInviteStatusName, getStatusColor, getStatusIcon } from "../../../utils/invite-status-formatter.ts";
-  import { formatRoleName, getRoleColor } from "../../../utils/role-formatter.ts";
+  import { formatRoleName, getRoleColor, sortRoles } from "../../../utils/role-formatter.ts";
 
   const breadcrumbs: BreadcrumbItem[] = [
     {
