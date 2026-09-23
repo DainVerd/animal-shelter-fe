@@ -2,6 +2,7 @@ import apiClient from "../api/api-clients";
 import type { PaginatedList } from "../models/paginated-list";
 import type { UserInvite } from "../models/user-invite";
 import type PaginationParamsRequest from "../models/requests/pagination-params-request";
+import InviteStatus from "../enums/invite-status";
 
 export interface SendInviteRequest {
   email: string;
@@ -21,7 +22,7 @@ export interface SignInResponseDto {
 export interface GetInvitesRequest extends PaginationParamsRequest {
   emailSearchText?: string;
   roleInclude?: string;
-  status?: string;
+  status?: InviteStatus;
 }
 
 export const invitationService = {
