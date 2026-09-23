@@ -27,6 +27,7 @@
     <v-data-table-server
       v-model:page="page"
       v-model:items-per-page="itemsPerPage"
+      v-model:sort-by="sortBy"
       :headers="headers"
       :items="invites"
       :items-length="totalCount"
@@ -93,6 +94,7 @@
   import { formatDate } from "../../../utils/date-formatter";
   import { formatInviteStatusName, getStatusColor, getStatusIcon } from "../../../utils/invite-status-formatter.ts";
   import { formatRoleName, getRoleColor, sortRoles } from "../../../utils/role-formatter.ts";
+  import DataTableSortItem from "../../../models/data-table-sort-item.ts";
 
   const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -109,7 +111,7 @@
     {
       title: "Email",
       key: "email",
-      sortable: false,
+      sortable: true,
     },
     {
       title: "Roles",
@@ -119,24 +121,26 @@
     {
       title: "Status",
       key: "status",
-      sortable: false,
+      sortable: true,
     },
     {
       title: "Invited By",
       key: "invitedBy",
-      sortable: false,
+      sortable: true,
     },
     {
       title: "Created",
       key: "createdAt",
-      sortable: false,
+      sortable: true,
     },
     {
       title: "Expires",
       key: "expiresAt",
-      sortable: false,
+      sortable: true,
     },
   ];
+
+  const sortBy = ref<DataTableSortItem[]>([]);
 
   const invites = ref<UserInvite[]>([]);
   const totalCount = ref(0);
@@ -148,11 +152,13 @@
 
   const loadInvites = async () => {
     isLoading.value = true;
-
+    const sort = sortBy.value[0];
     try {
       const response = await invitationService.getInvites({
         pageNumber: page.value -1,
         pageSize: itemsPerPage.value,
+        sortBy: sort?.key,
+        isDescending: sort?.order === "desc",
       });
 
       invites.value = response.items;
@@ -163,13 +169,13 @@
   };
 
   watch(
-    [page, itemsPerPage],
-    () => {
-      loadInvites();
-    },
-    {
-      immediate: true,
-    },
-  );
+  [page, itemsPerPage, sortBy],
+  () => {
+    loadInvites();
+  },
+  {
+    immediate: true,
+  },
+);
 
 </script>
