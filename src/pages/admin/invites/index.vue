@@ -24,6 +24,11 @@
       </v-btn>
     </div>
 
+    <UserInviteFilters
+      @apply="applyFilters"
+      @clear="clearFilters"
+    />
+
     <v-data-table-server
       v-model:page="page"
       v-model:items-per-page="itemsPerPage"
@@ -95,6 +100,8 @@
   import { formatInviteStatusName, getStatusColor, getStatusIcon } from "../../../utils/invite-status-formatter.ts";
   import { formatRoleName, getRoleColor, sortRoles } from "../../../utils/role-formatter.ts";
   import DataTableSortItem from "../../../models/data-table-sort-item.ts";
+  import UserInviteFilters from "../../../forms/UserInviteFilters.vue";
+import InviteStatus from "../../../enums/invite-status.ts";
 
   const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -139,7 +146,13 @@
       sortable: true,
     },
   ];
+  interface UserInviteFilterValues {
+    emailSearchText?: string;
+    roleInclude?: string;
+    status?: InviteStatus;
+  }
 
+  const filters = ref<UserInviteFilterValues>({});
   const sortBy = ref<DataTableSortItem[]>([]);
 
   const invites = ref<UserInvite[]>([]);
@@ -159,6 +172,7 @@
         pageSize: itemsPerPage.value,
         sortBy: sort?.key,
         isDescending: sort?.order === "desc",
+        ...filters.value
       });
 
       invites.value = response.items;
@@ -168,8 +182,19 @@
     }
   };
 
+  const applyFilters = (newFilters: UserInviteFilterValues) => {
+    filters.value = newFilters;
+    page.value = 1;
+  };
+
+  const clearFilters = () => {
+    filters.value = {};
+    page.value = 1;
+  };
+
+
   watch(
-  [page, itemsPerPage, sortBy],
+  [page, itemsPerPage, sortBy, filters],
   () => {
     loadInvites();
   },
