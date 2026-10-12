@@ -6,6 +6,7 @@ BackEnd part of the project could be found in [this repository](https://github.c
 
 - [About](#about)
 - [How to launch project locally](#how-to-launch-project-locally)
+- [How to launch with Docker Desktop](#how-to-launch-with-docker-desktop)
 - [Figma moq](#visual-identica-and-appierence)
 - [Naming convention of the project](#naming-convention)
 - [Tech stack](#tech-stack)
@@ -32,6 +33,30 @@ To launch project:
   ```
 
 6. open in browser `localhost:3000`
+
+## How to launch with Docker Desktop
+
+The Docker setup runs the Vite development server directly and does not use Nginx.
+
+1. Install and start [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+2. Clone this repository and open a terminal in the project directory.
+3. Build and start the container:
+
+   ```bash
+   docker compose up --build
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+The frontend uses `VITE_API_URL` from `.env`. By default it sends API requests to `http://localhost:5117/api`, so start the backend on that address when API functionality is needed.
+
+To stop the project, press `Ctrl+C` in the terminal and run:
+
+```bash
+docker compose down
+```
+
+After dependency or source changes, run `docker compose up --build` again to rebuild the image.
 
 ## Visual identica and appierence
 
