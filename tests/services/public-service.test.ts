@@ -3,6 +3,7 @@ import apiClient from "../../src/api/api-clients";
 import { publicService } from "../../src/services/public-service";
 import type { PaginatedList } from "../../src/models/paginated-list";
 import type PublicAnimal from "../../src/models/public-animal";
+import Gender from "../../src/enums/gender";
 
 vi.mock("../../src/api/api-clients", () => ({
   default: {
@@ -30,7 +31,7 @@ describe("publicService", () => {
           {
             id: 7,
             name: "Milo",
-            gender: 1,
+            gender: Gender.Female,
             dateOfBirth: "2022-04-03",
             url: "https://example.com/milo.jpg",
           },
