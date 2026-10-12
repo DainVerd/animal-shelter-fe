@@ -7,6 +7,7 @@ BackEnd part of the project could be found in [this repository](https://github.c
 - [About](#about)
 - [How to launch project locally](#how-to-launch-project-locally)
 - [How to launch with Docker Desktop](#how-to-launch-with-docker-desktop)
+- [How to run unit tests](#how-to-run-unit-tests)
 - [Figma moq](#visual-identica-and-appierence)
 - [Naming convention of the project](#naming-convention)
 - [Tech stack](#tech-stack)
@@ -57,6 +58,34 @@ docker compose down
 ```
 
 After dependency or source changes, run `docker compose up --build` again to rebuild the image.
+
+## How to run unit tests
+
+The project uses [Vitest](https://vitest.dev/) for unit testing. Install the project dependencies before running the tests:
+
+```bash
+npm install
+```
+
+Run the complete unit test suite once:
+
+```bash
+npm test
+```
+
+Run tests in watch mode while developing. Vitest will rerun affected tests when files change:
+
+```bash
+npm run test:watch
+```
+
+Run a specific test file by passing its path after `--`:
+
+```bash
+npm test -- tests/utils/time-util.test.ts
+```
+
+Pull requests also run the complete unit test suite automatically through GitHub Actions.
 
 ## Visual identica and appierence
 
