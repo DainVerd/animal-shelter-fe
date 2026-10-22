@@ -1,13 +1,13 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-import type { UserProfile } from "../models/user-profile";
-import { authService } from "../services/auth-service";
-import { meService } from "../services/me-service";
-import { SignInRequest } from "../models/requests/sign-in-request";
-import UserRole from "../enums/user-role";
-import { ActionResult } from "../models/action-result";
-import { ApiError } from "../models/api-error";
-import { invitationService } from "../services/invitation-service";
+import type { UserProfile } from "@/models/user-profile";
+import { authService } from "@/services/auth-service";
+import { meService } from "@/services/me-service";
+import { SignInRequest } from "@/models/requests/sign-in-request";
+import UserRole from "@/enums/user-role";
+import { ActionResult } from "@/models/action-result";
+import { ApiError } from "@/models/api-error";
+import { invitationService } from "@/services/invitation-service";
 
 export const useAuthStore = defineStore(
   "auth",

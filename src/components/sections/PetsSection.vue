@@ -39,9 +39,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { publicService } from "../../services/public-service";
-import PublicAnimal from "../../models/public-animal";
-import { useNotificationStore } from "../../stores/notification-store";
+import { publicService } from "@/services/public-service";
+import PublicAnimal from "@/models/public-animal";
+import { useNotificationStore } from "@/stores/notification-store";
 
 const controller = new AbortController();
 

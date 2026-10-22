@@ -164,12 +164,12 @@
 <script lang="ts" setup>
   import { ref, computed } from "vue";
   import { useRouter } from "vue-router";
-  import { useAuthStore } from "../../stores/auth-store";
-  import { formatRoleName } from "../../utils/role-formatter";
-  import UserRole from "../../enums/user-role";
-  import { useNotificationStore } from "../../stores/notification-store";
-  import AppLogo from "../AppLogo.vue";
-  import UserMenu from "../UserMenu.vue";
+  import { useAuthStore } from "@/stores/auth-store";
+  import { formatRoleName } from "@/utils/role-formatter";
+  import UserRole from "@/enums/user-role";
+  import { useNotificationStore } from "@/stores/notification-store";
+  import AppLogo from "@/components/AppLogo.vue";
+  import UserMenu from "@/components/UserMenu.vue";
 
   const router = useRouter();
   const authStore = useAuthStore();

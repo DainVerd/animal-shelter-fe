@@ -92,16 +92,16 @@
 <script setup lang="ts">
   import { ref, watch } from "vue";
 
-  import PageWrapper from "../../../components/PageWrapper.vue";
-  import type { BreadcrumbItem } from "../../../models/bread-crumb-item";
-  import type { UserInvite } from "../../../models/user-invite";
-  import { invitationService } from "../../../services/invitation-service";
-  import { formatDate } from "../../../utils/date-formatter";
-  import { formatInviteStatusName, getStatusColor, getStatusIcon } from "../../../utils/invite-status-formatter.ts";
-  import { formatRoleName, getRoleColor, sortRoles } from "../../../utils/role-formatter.ts";
-  import DataTableSortItem from "../../../models/data-table-sort-item.ts";
-  import UserInviteFilters from "../../../forms/UserInviteFilters.vue";
-import InviteStatus from "../../../enums/invite-status.ts";
+  import PageWrapper from "@/components/PageWrapper.vue";
+  import type { BreadcrumbItem } from "@/models/bread-crumb-item";
+  import type { UserInvite } from "@/models/user-invite";
+  import { invitationService } from "@/services/invitation-service";
+  import { formatDate } from "@/utils/date-formatter";
+  import { formatInviteStatusName, getStatusColor, getStatusIcon } from "@/utils/invite-status-formatter.ts";
+  import { formatRoleName, getRoleColor, sortRoles } from "@/utils/role-formatter.ts";
+  import DataTableSortItem from "@/models/data-table-sort-item.ts";
+  import UserInviteFilters from "@/forms/UserInviteFilters.vue";
+import InviteStatus from "@/enums/invite-status.ts";
 
   const breadcrumbs: BreadcrumbItem[] = [
     {

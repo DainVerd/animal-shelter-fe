@@ -1,8 +1,8 @@
-import apiClient from "../api/api-clients";
-import TokenResponse from "../models/token-response";
+import apiClient from "@/api/api-clients";
+import TokenResponse from "@/models/token-response";
 import type { GenericAbortSignal } from "axios";
-import { UserProfile } from "../models/user-profile";
-import Role from "../models/role";
+import { UserProfile } from "@/models/user-profile";
+import Role from "@/models/role";
 
 export const meService = {
   /**

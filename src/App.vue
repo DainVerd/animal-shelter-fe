@@ -19,6 +19,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { useNotificationStore } from "./stores/notification-store";
+  import { useNotificationStore } from "@/stores/notification-store";
   const notification = useNotificationStore();
 </script>

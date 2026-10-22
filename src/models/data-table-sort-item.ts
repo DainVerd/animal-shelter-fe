@@ -1,4 +1,4 @@
-import SortOrder from "../types/sort-order";
+import SortOrder from "@/types/sort-order";
 
 interface DataTableSortItem {
   key: string;

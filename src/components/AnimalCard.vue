@@ -48,10 +48,10 @@
 </template>
 
 <script setup lang="ts">
-import PublicAnimal from "../models/public-animal";
-import { formatGenderName } from "../utils/gender-formatter";
-import { calculateAge } from "../utils/date-formatter";
-import { useFavoritesStore } from "../stores/favorites-store";
+import PublicAnimal from "@/models/public-animal";
+import { formatGenderName } from "@/utils/gender-formatter";
+import { calculateAge } from "@/utils/date-formatter";
+import { useFavoritesStore } from "@/stores/favorites-store";
 
 defineProps<{ animal: PublicAnimal }>();
 const favoritesStore = useFavoritesStore();

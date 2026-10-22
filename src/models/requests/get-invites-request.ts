@@ -1,4 +1,4 @@
-import type InviteStatus from "../../enums/invite-status";
+import type InviteStatus from "@/enums/invite-status";
 import type PaginationParamsRequest from "./pagination-params-request";
 
 export interface GetInvitesRequest extends PaginationParamsRequest {

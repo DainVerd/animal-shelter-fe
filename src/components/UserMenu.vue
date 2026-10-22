@@ -102,10 +102,10 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import { useAuthStore } from "../stores/auth-store";
+import { useAuthStore } from "@/stores/auth-store";
 import AvatarIcon from "./AvatarIcon.vue";
-import { formatRoleName } from "../utils/role-formatter";
-import UserRole from "../enums/user-role.ts";
+import { formatRoleName } from "@/utils/role-formatter";
+import UserRole from "@/enums/user-role.ts";
 
 const router = useRouter();
 const authStore = useAuthStore();

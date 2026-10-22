@@ -14,5 +14,5 @@
 </template>
 
 <script lang="ts" setup>
-  import AppNavbar from "../components/navigation/AppNavbar.vue";
+  import AppNavbar from "@/components/navigation/AppNavbar.vue";
 </script>

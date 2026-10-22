@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { PASSWORD_POLICY } from "../../src/constants";
+import { PASSWORD_POLICY } from "@/constants";
 
 export const passwordChangeSchema = yup.object({
   oldPassword: yup.string().required("Old password is required"),

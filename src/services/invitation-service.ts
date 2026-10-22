@@ -1,10 +1,10 @@
-import apiClient from "../api/api-clients";
-import type { PaginatedList } from "../models/paginated-list";
-import type { UserInvite } from "../models/user-invite";
-import type { SignInResponse } from "../models/sign-in-response";
-import type SendInviteRequest from "../models/requests/send-invite-request";
-import type AcceptInviteRequest from "../models/requests/accept-invite-request";
-import type GetInvitesRequest from "../models/requests/get-invites-request";
+import apiClient from "@/api/api-clients";
+import type { PaginatedList } from "@/models/paginated-list";
+import type { UserInvite } from "@/models/user-invite";
+import type { SignInResponse } from "@/models/sign-in-response";
+import type SendInviteRequest from "@/models/requests/send-invite-request";
+import type AcceptInviteRequest from "@/models/requests/accept-invite-request";
+import type GetInvitesRequest from "@/models/requests/get-invites-request";
 
 export const invitationService = {
   async sendInvite(

@@ -61,12 +61,12 @@ import { onMounted, ref } from "vue";
 import { useForm, useField } from "vee-validate";
 import * as yup from "yup";
 
-import PageWrapper from "../../../components/PageWrapper.vue";
-import { lookupService } from "../../../services/lookup-service";
-import type { SelectListItem } from "../../../models/select-list-item";
-import { useNotificationStore } from "../../../stores/notification-store";
-import type { BreadcrumbItem } from "../../../models/bread-crumb-item";
-import { invitationService } from "../../../services/invitation-service";
+import PageWrapper from "@/components/PageWrapper.vue";
+import { lookupService } from "@/services/lookup-service";
+import type { SelectListItem } from "@/models/select-list-item";
+import { useNotificationStore } from "@/stores/notification-store";
+import type { BreadcrumbItem } from "@/models/bread-crumb-item";
+import { invitationService } from "@/services/invitation-service";
 
 const notificationStore = useNotificationStore();
 

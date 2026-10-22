@@ -1,8 +1,8 @@
 import axios, { AxiosError } from "axios";
-import { useAuthStore } from "../stores/auth-store";
-import { ApiError } from "../models/api-error";
-import type { ProblemDetails } from "../models/problem-details";
-import router from "../router";
+import { useAuthStore } from "@/stores/auth-store";
+import { ApiError } from "@/models/api-error";
+import type { ProblemDetails } from "@/models/problem-details";
+import router from "@/router";
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "https://localhost:7001/api",

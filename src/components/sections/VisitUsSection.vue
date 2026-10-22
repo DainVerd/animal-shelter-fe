@@ -55,5 +55,5 @@
   </section>
 </template>
 <script setup lang="ts">
-  import LeafletMap from "../LeafletMap.vue";
+  import LeafletMap from "@/components/LeafletMap.vue";
 </script>

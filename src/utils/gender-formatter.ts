@@ -1,4 +1,4 @@
-import Gender from "../enums/gender";
+import Gender from "@/enums/gender";
 
 const genderDisplayMap = new Map<number, string>([
   [Gender.Male, "Male"],

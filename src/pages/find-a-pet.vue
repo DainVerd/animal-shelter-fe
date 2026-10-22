@@ -9,8 +9,8 @@
 </template>
 
 <script setup lang="ts">
-import PageWrapper from "../components/PageWrapper.vue";
-import { BreadcrumbItem } from "../models/bread-crumb-item.ts";
+import PageWrapper from "@/components/PageWrapper.vue";
+import { BreadcrumbItem } from "@/models/bread-crumb-item.ts";
 
 const pageBreadcrumbs: BreadcrumbItem[] = [
   { title: "Home", to: "/" },

@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
   import { ref, watch, nextTick } from "vue";
-  import { AnimalPhoto } from "../../models/animal-photo";
+  import { AnimalPhoto } from "@/models/animal-photo";
 
   const props = defineProps<{ 
     modelValue: AnimalPhoto[];
@@ -93,7 +93,7 @@
   };
 
   const reset = () => {
-    previewUrls.value.forEach(url => URL.revokeObjectURL(url));
+    previewUrls.value.forEach(photo => URL.revokeObjectURL(photo.url));
     previewUrls.value = [];
     internalErrors.value = [];
     inputKey.value++;

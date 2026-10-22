@@ -152,16 +152,16 @@
 </template>
 
 <script setup lang="ts">
-import { BreadcrumbItem } from "../../models/bread-crumb-item";
+import { BreadcrumbItem } from "@/models/bread-crumb-item";
 import { ref, onUnmounted } from "vue";
-import { animalService } from "../../services/animal-service";
-import Animal from "../../models/animal";
-import { formatDate } from "../../utils/date-formatter";
+import { animalService } from "@/services/animal-service";
+import Animal from "@/models/animal";
+import { formatDate } from "@/utils/date-formatter";
 import { useRouter } from "vue-router";
-import Gender from "../../enums/gender";
-import { formatGenderName } from "../../utils/gender-formatter";
-import { useNotificationStore } from "../../stores/notification-store";
-import AnimalUpsertForm from "../../forms/AnimalUpsertForm.vue";
+import Gender from "@/enums/gender";
+import { formatGenderName } from "@/utils/gender-formatter";
+import { useNotificationStore } from "@/stores/notification-store";
+import AnimalUpsertForm from "@/forms/AnimalUpsertForm.vue";
 
 const router = useRouter();
 const notification = useNotificationStore();
@@ -183,7 +183,7 @@ const headers = [
   { title: "Gender", key: "gender", sortable: true },
   { title: "Birth Date", key: "dateOfBirth", sortable: true },
   { title: "Actions", key: "actions", sortable: false, align: "end" },
-];
+] as const;
 const pageBreadcrumbs: BreadcrumbItem[] = [
   { title: "Animals", to: "/animals" }
 ];

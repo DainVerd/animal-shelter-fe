@@ -1,8 +1,8 @@
 import { GenericAbortSignal } from "axios";
-import apiClient from "../api/api-clients";
-import PaginationParamsViewModel from "../models/requests/pagination-params-request";
-import Animal from "../models/animal";
-import { PaginatedList } from "../models/paginated-list";
+import apiClient from "@/api/api-clients";
+import PaginationParamsViewModel from "@/models/requests/pagination-params-request";
+import Animal from "@/models/animal";
+import { PaginatedList } from "@/models/paginated-list";
 
 export const animalService = {
   /**
