@@ -119,11 +119,11 @@
 </template>
 
 <script setup lang="ts">
-  import AvatarIcon from "../components/AvatarIcon.vue";
-import UserRole from "../enums/user-role";
-  import { BreadcrumbItem } from "../models/bread-crumb-item";
-  import { useAuthStore } from "../stores/auth-store";
-  import { formatRoleName } from "../utils/role-formatter";
+  import AvatarIcon from "@/components/AvatarIcon.vue";
+import UserRole from "@/enums/user-role";
+  import { BreadcrumbItem } from "@/models/bread-crumb-item";
+  import { useAuthStore } from "@/stores/auth-store";
+  import { formatRoleName } from "@/utils/role-formatter";
 
   const authStore = useAuthStore();
 

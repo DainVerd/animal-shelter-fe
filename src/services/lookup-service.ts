@@ -1,5 +1,5 @@
-import apiClient from "../api/api-clients";
-import type { SelectListItem } from "../models/select-list-item";
+import apiClient from "@/api/api-clients";
+import type { SelectListItem } from "@/models/select-list-item";
 
 export const lookupService = {
   /**

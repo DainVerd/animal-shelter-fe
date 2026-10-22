@@ -60,10 +60,10 @@
 </template>
 
 <script setup lang="ts">
-  import UserRole from "../../enums/user-role";
-  import { useAuthStore } from "../../stores/auth-store";
+  import UserRole from "@/enums/user-role";
+  import { useAuthStore } from "@/stores/auth-store";
   import { useRouter } from "vue-router";
-import { useNotificationStore } from "../../stores/notification-store";
+import { useNotificationStore } from "@/stores/notification-store";
 
   const authStore = useAuthStore();
   const router = useRouter();

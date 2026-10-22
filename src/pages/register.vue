@@ -59,11 +59,11 @@
   import { useRoute } from "vue-router";
   import { useField, useForm } from "vee-validate";
   import { useRouter } from "vue-router";
-  import { useAuthStore } from "../stores/auth-store";
-  import { useNotificationStore } from "../stores/notification-store";
+  import { useAuthStore } from "@/stores/auth-store";
+  import { useNotificationStore } from "@/stores/notification-store";
   import * as yup from "yup";
 
-  import PageWrapper from "../components/PageWrapper.vue";
+  import PageWrapper from "@/components/PageWrapper.vue";
 
   const route = useRoute();
   const router = useRouter();

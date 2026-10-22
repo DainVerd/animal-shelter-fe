@@ -1,9 +1,9 @@
-import apiClient from "../api/api-clients";
+import apiClient from "@/api/api-clients";
 import type { GenericAbortSignal } from "axios";
-import { SignInResponse } from "../models/sign-in-response";
-import SignInViewModel from "../models/requests/sign-in-request";
-import ChangePasswordRequest from "../models/requests/change-password-request";
-import UserRole from "../enums/user-role";
+import { SignInResponse } from "@/models/sign-in-response";
+import SignInViewModel from "@/models/requests/sign-in-request";
+import ChangePasswordRequest from "@/models/requests/change-password-request";
+import UserRole from "@/enums/user-role";
 
 export const authService = {
   /**

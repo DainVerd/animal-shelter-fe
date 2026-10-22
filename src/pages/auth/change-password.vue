@@ -62,10 +62,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "../../stores/auth-store";
-import { authService } from "../../services/auth-service";
+import { useAuthStore } from "@/stores/auth-store";
+import { authService } from "@/services/auth-service";
 import { useForm, useField } from "vee-validate";
-import { passwordChangeSchema } from "../../schemas/password-shange-schema";
+import { passwordChangeSchema } from "@/schemas/password-shange-schema";
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -81,8 +81,8 @@ const { errors, handleSubmit, meta } = useForm({
   }
 });
 
-const { value: oldPassword, errorMessage: oldPasswordError } = useField<string>("oldPassword");
-const { value: newPassword, errorMessage: newPasswordError } = useField<string>("newPassword");
+const { value: oldPassword } = useField<string>("oldPassword");
+const { value: newPassword } = useField<string>("newPassword");
 
 const submit = handleSubmit(async (values) => {
   error.value = null;

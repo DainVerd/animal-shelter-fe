@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { BreadcrumbItem } from "../models/bread-crumb-item";
+import { BreadcrumbItem } from "@/models/bread-crumb-item";
 
 const props = withDefaults(
   defineProps<{

@@ -1,4 +1,4 @@
-import UserRole from "../enums/user-role";
+import UserRole from "@/enums/user-role";
 
 const roleDisplayMap = new Map<string, string>([
   [UserRole.Admin, "Administrator"],

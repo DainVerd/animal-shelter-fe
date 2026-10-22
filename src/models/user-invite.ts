@@ -1,4 +1,4 @@
-import  InviteStatus from "../enums/invite-status";
+import  InviteStatus from "@/enums/invite-status";
 
 export interface InviteUser {
   id: number;

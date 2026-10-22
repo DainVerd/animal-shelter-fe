@@ -23,8 +23,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import AnimalUpsertForm from "../../../forms/AnimalUpsertForm.vue";
-import type { BreadcrumbItem } from "../../../models/bread-crumb-item";
+import AnimalUpsertForm from "@/forms/AnimalUpsertForm.vue";
+import type { BreadcrumbItem } from "@/models/bread-crumb-item";
 
 const route = useRoute();
 const animalId = computed(() => route.params.id as string | undefined);

@@ -68,9 +68,9 @@
 import { onMounted, ref } from "vue";
 import { useField, useForm } from "vee-validate";
 
-import type { SelectListItem } from "../models/select-list-item";
-import InviteStatus from "../enums/invite-status";
-import { lookupService } from "../services/lookup-service";
+import type { SelectListItem } from "@/models/select-list-item";
+import InviteStatus from "@/enums/invite-status";
+import { lookupService } from "@/services/lookup-service";
 
 interface UserInviteFilterValues {
   emailSearchText?: string;

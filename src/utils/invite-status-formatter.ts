@@ -1,4 +1,4 @@
-import InviteStatus from "../enums/invite-status";
+import InviteStatus from "@/enums/invite-status";
 
 const InviteStatusDisplayMap = new Map<number, string>([
   [InviteStatus.Accepted, "Accepted"],

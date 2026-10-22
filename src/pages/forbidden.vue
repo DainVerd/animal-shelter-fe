@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-  import { BreadcrumbItem } from "../models/bread-crumb-item";
+  import { BreadcrumbItem } from "@/models/bread-crumb-item";
 
   const pageBreadcrumbs: BreadcrumbItem[] = [
   { title: "Animals", to: "/animals" }

@@ -199,7 +199,7 @@
 <script setup lang="ts">
   import { computed, ref } from "vue";
   import { useField, useForm } from "vee-validate";
-  import { useAuthStore } from "../stores/auth-store";
+  import { useAuthStore } from "@/stores/auth-store";
   import AppLogo from "./AppLogo.vue";
 
   const authStore = useAuthStore();

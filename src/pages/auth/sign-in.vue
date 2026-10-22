@@ -93,7 +93,7 @@ import { ref } from "vue";
 import { useForm, useField } from "vee-validate";
 import * as yup from "yup";
 import { useRouter } from "vue-router";
-import { useAuthStore } from "../../stores/auth-store";
+import { useAuthStore } from "@/stores/auth-store";
 
 // UI Toggles & State
 const showPassword = ref(false);

@@ -164,15 +164,15 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { lookupService } from "../services/lookup-service";
-import { SelectListItem } from "../models/select-list-item";
+import { lookupService } from "@/services/lookup-service";
+import { SelectListItem } from "@/models/select-list-item";
 import { useForm, useField } from "vee-validate";
-import { animalSchema } from "../schemas/animal-upsert-schema";
-import { animalService } from "../services/animal-service";
-import { formatDateForApi } from "../utils/time-util";
-import { useNotificationStore } from "../stores/notification-store";
-import router from "../router";
-import { AnimalPhoto } from "../models/animal-photo";
+import { animalSchema } from "@/schemas/animal-upsert-schema";
+import { animalService } from "@/services/animal-service";
+import { formatDateForApi } from "@/utils/time-util";
+import { useNotificationStore } from "@/stores/notification-store";
+import router from "@/router";
+import { AnimalPhoto } from "@/models/animal-photo";
 
 
 const props = defineProps<{
@@ -186,7 +186,21 @@ const isSubmitting = ref<boolean>(false);
 const uploaderRef = ref();
 const notification = useNotificationStore();
 
-const { handleSubmit, errors, resetForm, setValues } = useForm({
+interface AnimalFormValues {
+  name: string;
+  breed: string;
+  gender: string | null;
+  size: string | null;
+  temperament: string | null;
+  dob: Date | null;
+  isVaccinated: boolean;
+  isSterilized: boolean;
+  description: string;
+  photos: AnimalPhoto[];
+  healthNote: string | null;
+}
+
+const { handleSubmit, errors, resetForm, setValues } = useForm<AnimalFormValues>({
   validationSchema: animalSchema,
   initialValues: {
     name: "",
@@ -203,8 +217,8 @@ const { handleSubmit, errors, resetForm, setValues } = useForm({
   }
 });
 
-const createField = (name: string) => {
-  const { value } = useField(name);
+const createField = <K extends keyof AnimalFormValues>(name: K) => {
+  const { value } = useField<AnimalFormValues[K]>(name);
 
   return value; 
 };
