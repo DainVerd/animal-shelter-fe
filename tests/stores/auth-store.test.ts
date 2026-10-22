@@ -152,7 +152,7 @@ describe("auth store", () => {
       const profile = createProfile();
       mockedAuthService.signIn.mockResolvedValueOnce({
         accessToken: "access-token",
-        accessTokenExpiresAt: new Date("2026-10-12T16:00:00Z"),
+        accessTokenExpiresAt: "2026-10-12T16:00:00Z",
       });
       mockedMeService.getCurrentUser.mockResolvedValueOnce(profile);
 
@@ -336,7 +336,7 @@ describe("auth store", () => {
       store.setAuthData("old-token", createProfile());
       mockedAuthService.refreshToken.mockResolvedValueOnce({
         accessToken: "new-token",
-        accessTokenExpiresAt: new Date("2026-10-12T16:00:00Z"),
+        accessTokenExpiresAt: "2026-10-12T16:00:00Z",
       });
 
       await expect(store.refreshAccessToken()).resolves.toBe(true);
@@ -355,7 +355,7 @@ describe("auth store", () => {
       );
       mockedAuthService.refreshToken.mockResolvedValueOnce({
         accessToken: "new-token",
-        accessTokenExpiresAt: new Date("2026-10-12T16:00:00Z"),
+        accessTokenExpiresAt: "2026-10-12T16:00:00Z",
       });
 
       await store.refreshAccessToken();
@@ -392,7 +392,7 @@ describe("auth store", () => {
       store.user = createProfile();
       mockedAuthService.refreshToken.mockResolvedValueOnce({
         accessToken: "new-token",
-        accessTokenExpiresAt: new Date("2026-10-12T16:00:00Z"),
+        accessTokenExpiresAt: "2026-10-12T16:00:00Z",
       });
 
       const firstInitialization = store.initialize();

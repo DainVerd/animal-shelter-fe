@@ -47,7 +47,7 @@ describe("authService", () => {
       const payload = { activeRole: UserRole.Admin };
       const responseData: SignInResponse = {
         accessToken: "refreshed-access-token",
-        accessTokenExpiresAt: new Date("2026-10-12T16:00:00Z"),
+        accessTokenExpiresAt: "2026-10-12T16:00:00Z",
       };
       mockedPost.mockResolvedValueOnce({ data: responseData });
 
@@ -83,7 +83,7 @@ describe("authService", () => {
       };
       const responseData: SignInResponse = {
         accessToken: "access-token",
-        accessTokenExpiresAt: new Date("2026-10-12T16:00:00Z"),
+        accessTokenExpiresAt: "2026-10-12T16:00:00Z",
       };
       mockedPost.mockResolvedValueOnce({ data: responseData });
 

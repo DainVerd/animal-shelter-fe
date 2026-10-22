@@ -1,29 +1,10 @@
 import apiClient from "../api/api-clients";
 import type { PaginatedList } from "../models/paginated-list";
 import type { UserInvite } from "../models/user-invite";
-import type PaginationParamsRequest from "../models/requests/pagination-params-request";
-import InviteStatus from "../enums/invite-status";
-
-export interface SendInviteRequest {
-  email: string;
-  roles: string[];
-}
-
-export interface AcceptInviteRequest {
-  token: string;
-  password: string;
-}
-
-export interface SignInResponseDto {
-  accessToken: string;
-  accessTokenExpiresAt: string;
-}
-
-export interface GetInvitesRequest extends PaginationParamsRequest {
-  emailSearchText?: string;
-  roleInclude?: string;
-  status?: InviteStatus;
-}
+import type { SignInResponse } from "../models/sign-in-response";
+import type SendInviteRequest from "../models/requests/send-invite-request";
+import type AcceptInviteRequest from "../models/requests/accept-invite-request";
+import type GetInvitesRequest from "../models/requests/get-invites-request";
 
 export const invitationService = {
   async sendInvite(
@@ -39,8 +20,8 @@ export const invitationService = {
 
   async acceptInvite(
     request: AcceptInviteRequest,
-  ): Promise<SignInResponseDto> {
-    const response = await apiClient.post<SignInResponseDto>(
+  ): Promise<SignInResponse> {
+    const response = await apiClient.post<SignInResponse>(
       "/v1/invites/accept",
       request,
     );
