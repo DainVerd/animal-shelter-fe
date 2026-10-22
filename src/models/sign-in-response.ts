@@ -1,6 +1,6 @@
 export interface SignInResponse {
   accessToken: string;
-  accessTokenExpiresAt: Date; 
+  accessTokenExpiresAt: string;
 }
 
 export default SignInResponse;

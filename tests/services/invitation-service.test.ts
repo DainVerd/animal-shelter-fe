@@ -1,11 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import apiClient from "../../src/api/api-clients";
-import {
-  invitationService,
-  type SignInResponseDto,
-} from "../../src/services/invitation-service";
+import { invitationService } from "../../src/services/invitation-service";
 import InviteStatus from "../../src/enums/invite-status";
 import type { PaginatedList } from "../../src/models/paginated-list";
+import type { SignInResponse } from "../../src/models/sign-in-response";
 import type { UserInvite } from "../../src/models/user-invite";
 
 vi.mock("../../src/api/api-clients", () => ({
@@ -57,7 +55,7 @@ describe("invitationService", () => {
         token: "invite-token",
         password: "SecurePassword123!",
       };
-      const responseData: SignInResponseDto = {
+      const responseData: SignInResponse = {
         accessToken: "access-token",
         accessTokenExpiresAt: "2026-10-12T15:00:00Z",
       };
